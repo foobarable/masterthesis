@@ -1,0 +1,91 @@
+\documentclass{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{textcomp}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage[numbers,sort&compress]{natbib}
+
+\usepackage[ngerman]{babel}
+\usepackage{babelbib}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage{gensymb}
+\usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\usepackage{longtable}
+\usepackage[font={small,sf},format=plain,labelfont={bf,up}]{caption} %im text \textbf könnte raus
+\usepackage{adjustbox}
+\usepackage{etoolbox}
+
+%use (a) for numbering subsections
+%\renewcommand*\thesubsection{(\alph{subsection})}
+\title{Improving automatic task tree generation with alignment algorithms}
+\author{Ralph Krimmel}
+
+\begin{document}
+
+\maketitle
+
+%\usepackage[format=boldLabel]{caption}
+%\DeclareCaptionFormat{boldLabel}{#3}
+
+%Tabellen & Abbildungen des Anhang in Roemisch nummerieren
+\newcommand{\beginsupplement}{%
+	\setcounter{table}{0}
+	\renewcommand{\thetable}{\Roman{table}}%
+	\setcounter{figure}{0}
+	\renewcommand{\thefigure}{\Roman{figure}}%
+}
+
+
+
+\pagenumbering{gobble}
+\clearpage
+\thispagestyle{empty}
+\input{./title/document}
+
+\pagenumbering{arabic}
+\setcounter{page}{3}
+\tableofcontents
+
+
+\clearpage
+\section{Introduction}
+\input{./chapters/introduction/introduction}
+
+\clearpage
+\section{Implementation}
+\input{./chapters/implementation/implementation}
+
+\clearpage
+\section{Results}
+\label{sec:ergebnisse}
+\input{./chapters/results/results}
+
+\clearpage
+\section{Discussion}
+\input{./chapters/discussion/discussion}
+
+%\section{Perspective}
+%\input{}
+
+%\section{Summary}
+%\input{./}
+
+\clearpage
+\section*{Literature}
+\addcontentsline{toc}{section}{Literature}
+\bibliographystyle{apalike}
+\bibliography{literature}
+
+
+
+\end{document}
