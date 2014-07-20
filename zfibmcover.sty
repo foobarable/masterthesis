@@ -1,0 +1,182 @@
+%% -*-Mode: LaTeX;-*-
+%%
+%% LaTeX2e bachelor and master thesis cover page style file
+%% for Center for Informatics, Universitaet Goettingen, Germany
+%% 
+%% Autor:   Michael Ebner (ebner@informatik.uni-goettingen.de)
+%% Date:    03. October 2003
+%% Version: 1.1
+%%
+%% --
+%%
+%% CVS: $Id: zfibmcover.sty,v 1.1 2004/09/24 18:23:58 ebner Exp $
+%%  
+%% Do not change anything within this file. You may freely copy and
+%% modify it, if you are not satisfied by the results. Distribution of changed
+%% versions is allowed if you rename the package.
+%% 
+%% If you want to report any bugs, please send me an email: 
+%% ebner@informatik.uni-goettingen.de
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\coverdate{2006/03/19}% update this whenever this file changes
+\def\coverversion{1.11}%   update this whenever a new version is ready
+
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{%
+  zfibmcover%
+  }%
+  [\coverdate v\coverversion LaTeX2e Center for Informatics Bachelor and Master Thesis Cover Page Style]
+\typeout{Package zfibmcover, \coverdate  v\coverversion}
+
+% required packages
+\RequirePackage{graphicx}
+\RequirePackage{array}
+%\RequirePackage{ae}                % almost european fonts, for pdf
+\RequirePackage{mathpazo} % palatino und math font for palatino 
+\RequirePackage[scaled=.95]{helvet} % scale smaller for palatino
+
+% define customizing variables
+\def\Authors#1{\gdef\@Authors{#1}}
+\def\Title#1{\gdef\@Title{#1}}
+\def\Number#1{\gdef\@Number{#1}}
+\def\Date#1{\gdef\@Date{#1}}
+\def\ThesisType#1{\gdef\@ThesisType{#1}}
+\def\Department#1{\gdef\@Department{#1}}
+\def\DepartmentType#1{\gdef\@DepartmentType{#1}}
+\def\Subject#1{\gdef\@Subject{#1}}
+
+% default values
+\ThesisType{Bachelorarbeit}
+\DepartmentType{Lehrstuhl}
+\Subject{Angewandte Informatik}
+\Date{\today}
+
+% package options
+\DeclareOption{bachelor}{\ThesisType{Bachelorarbeit}}
+\DeclareOption{master}{\ThesisType{Masterarbeit}}
+\DeclareOption{lehrstuhl}{\DepartmentType{Lehrstuhl}}
+\DeclareOption{institut}{\DepartmentType{Institut}}
+
+\ProcessOptions\relax
+
+% define new command \makecover
+\def\makecover{
+\begingroup
+\@makecover 
+\let\makecover\relax% do not use \makecover again after first use
+ \let\@makecover\relax%do not use \@makecover again after first use
+\endgroup
+}
+
+\def\endmakecover{%\if@restonecol\twocolumn\columnsep=3ex 
+%\else \newpage \fi
+}
+
+%define own boxes
+%\def\Titlebox{\vbox to 9cm}
+%\def\Coverbox{\vbox to 26cm}
+\def\Titlebox{\vbox to 0.4\textheight}
+\def\Coverbox{\vbox to \textheight}
+
+
+%define cover page
+\def\@makecover{
+\sffamily\Large
+\thispagestyle{empty}
+
+\setcounter{page}{-3}
+
+\noindent\Coverbox{
+\newlength{\unitextlength}
+\newlength{\logoheight}
+%\setlength{\logoheight}{1.8cm}%3 zeilen wie ausdrücken
+\setlength{\logoheight}{2.7\baselineskip}
+\settowidth{\unitextlength}{Georg-August-Universit\"at}%
+%\vspace*{1cm}
+\noindent\includegraphics[clip,height=\logoheight]{gaug-logo}
+\parbox[t]{\unitextlength}{
+\vspace*{-\logoheight}
+Georg-August-Universit\"at\\ 
+G\"ottingen\\
+Zentrum f\"ur Informatik
+}%parbox end
+\hfill
+\begin{minipage}[t]{0.4\textwidth}
+\vspace*{-\logoheight}
+\raggedleft
+\begin{tabular}{@{}lr@{}}
+ISSN & 1612-6793\\
+Nummer & ZFI-BM-\@Number\\
+\end{tabular}
+\end{minipage}
+%\vskip 3cm
+\vss
+\centering
+\noindent{\huge\bfseries\@ThesisType}\\[1ex] im Studiengang "\@Subject"
+%\vskip 3cm
+\vss
+\noindent\parbox{0.9\textwidth}{\Titlebox{%\vss
+\centering
+{\bfseries\huge \@Title \par}
+\vss
+\@Authors
+\vss
+am \@DepartmentType~f\"ur \\[1ex] \@Department
+}% end of Titlebox
+}% end of parbox
+\vss
+{%\bfseries
+Bachelor- und Masterarbeiten\\
+des Zentrums für Informatik\\
+an der Georg-August-Universit\"at G\"ottingen}\\\medskip
+
+\@Date
+}% end of Coverbox
+\newpage
+\null% necessary to get \vfill below to work!!!
+\vfill
+\noindent Georg-August-Universit\"at G\"ottingen\\
+Zentrum f\"ur Informatik\\[1ex]
+Lotzestra\ss e 16-18\\
+37083 G\"ottingen\\
+Germany\\[2ex]
+{
+\begin{tabular}{@{}ll}
+Tel. & +49~(5\,51)~39-1\,44\,14\\[0.5ex]
+Fax  & +49~(5\,51)~39-1\,44\,15\\[0.5ex]
+Email & office@informatik.uni-goettingen.de\\[0.5ex]
+WWW   & www.informatik.uni-goettingen.de\\[0.5ex]
+\end{tabular}
+%\vspace{2cm}
+\vspace{3em}
+}
+
+
+\thispagestyle{empty}
+\newpage
+
+\thispagestyle{empty} 
+\null
+\vfill
+\hbox to \textwidth{\hrulefill}
+\par
+\noindent Ich erkl\"are hiermit, dass ich die vorliegende Arbeit
+selbst\"andig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel verwendet habe.
+
+%\vspace{0.5cm}
+\vspace{1em}
+
+\noindent G\"ottingen, den \@Date
+%\vspace{2cm}
+\vspace{3em}
+
+\newpage
+\thispagestyle{empty} 
+~ % force a empty page
+\newpage
+
+\endmakecover
+}% end of @makecover
+
+\endinput

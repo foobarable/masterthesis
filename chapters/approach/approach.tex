@@ -1,13 +1,57 @@
-\subsection{Improving Task Tree Generation}
+\section{Improving Task Tree Generation}
 Find similar sequences with bioinformatics algorithms
 
-\subsection{Alignments}
+\section{Alignments}
 What are alignments? Why do aligmnents help here?
 
-\subsection{Smith Waterman Algorithm}
-How does it even work?
+Simple examples of alignment here
 
-\subsection{Feng Doolitle Algorithm}
-How does this work? Please tell!
+\section{Substitution matrix}
+What are they good for? How are they created? In Biology popular matrices are generated from real DNA data (PAM, BLOSUM)
+
+
+
+\section{Needleman Wunsch Algorithm}
+Very popular algorithm, finds global alignment (from start to end of both sequences)
+
+Steps:
+
+\subsection{Intialization}:
+Fill first row and first col with gappenalty*index of position
+
+\subsection{Recursion}
+Build dynamic programmic matrix: Fill each field with this recursion formula
+
+\subsection{Traceback}
+Go back from last cell to first cell to get final alignment
+
+
+
+\section{Smith Waterman Algorithm}
+Similar to needleman wunsch algorithm, finds best local alignment
+
+\subsection{Intialization}:
+Fill first row and first col with 0
+
+\subsection{Recursion}
+Build dynamic programmic matrix: Fill each field with this sligtly modified recursion formula
+
+\subsection{Traceback}
+Go back from highest score cell to first cell that has 0 
+
+
+
+\section{Smith Waterman Algorithm with repeated matches}
+Finds all local alignments of two sequences that reach a threshold score
+
+
+\subsection{Intialization}:
+Fill first col with 0, first row has a different meaning in this algorithm (score of the last matched subsequence)
+
+\subsection{Recursion}
+Build dynamic programmic matrix: Fill each field with this again sligtly modified recursion formula
+
+\subsection{Traceback}
+Go back from the addition cell in the first row to first cell to get alignment
 
 

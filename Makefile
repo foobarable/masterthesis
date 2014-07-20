@@ -28,6 +28,6 @@ pictures/%.pdf: pictures%.eps
 clean:
 	-rm -f ./tmp/*~ ./tmp/*.bak ./tmp/*.aux ./tmp/*.log ./tmp/*.toc ./tmp/*.out ./tmp/*.nav ./tmp/*.snm ./tmp/*.bbl ./tmp/*.blg
 	-rm -f ./tmp/*.pdf
-	-rm -f *.pdf
+#	-rm -f *.pdf
 
 all-evince: show
