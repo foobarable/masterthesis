@@ -1,21 +1,38 @@
-\documentclass{scrartcl}
-\usepackage[utf8]{inputenc}
+\documentclass[
+    pagesize,%         put paper size information into document (for ps and pdf!)
+    a4paper,%          use a5paper for ISO A5; use a4paper for ISO A4
+            %          adapt also pdf paper size!
+%    BCOR12mm,%         set extra margin for book fixation
+%    DIV11,%            set DIV for good linewidth explicitly
+%    DIVcalc,%            typearea has to calculate DIV for good linewidth
+    headsepline,%      use headinclude also! (see M. Kohm)
+    footsepline,%      use footinclude also! (see M. Kohm)
+    headinclude,%      count head to text body (not to margin) 
+    footinclude,%      count foot to text body (not to margin) 
+    bibtotoc,%         write bibliography-chapter to table of contents
+%    idxtotoc,           % Stichwortverzeichnis ebenso
+%    liststotoc,%       abbildungs- und tabellenverzeichnis ebenso
+    cleardoubleplain,% \cleardoublepage generates pages with pagestyle plain
+    tablecaptionabove,% setzt tabel caption besser ab 
+%    final%            final version
+%    draft%            draft version
+]{scrreprt}
+
+
+
+\usepackage[latin9]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{textcomp}
 \usepackage{multirow}
 \usepackage{color}
-\usepackage[numbers,sort&compress]{natbib}
-
-\usepackage[ngerman]{babel}
 \usepackage{babelbib}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-
 \usepackage{setspace}
 \usepackage{booktabs}
-\usepackage{natbib}
 \usepackage{gensymb}
 \usepackage{pdflscape}
 \usepackage{multirow}
@@ -24,15 +41,58 @@
 \usepackage[font={small,sf},format=plain,labelfont={bf,up}]{caption} %im text \textbf könnte raus
 \usepackage{adjustbox}
 \usepackage{etoolbox}
+\usepackage[master,institut]{zfibmcover}        % load cover
+\usepackage[sort]{natbib} % base bib style
 
-%use (a) for numbering subsections
-%\renewcommand*\thesubsection{(\alph{subsection})}
-\title{Improving automatic task tree generation with alignment algorithms}
-\author{Ralph Krimmel}
 
-\begin{document}
+% The following package makes code look a little nicer, but it may not be present on all systems.
+\IfFileExists{cmtt.sty}{\usepackage[override]{cmtt}}{}% better typewriter font
+% \usepackage{ae}      % erzeuge lesbare Schriften in pdf (almost european
+                       % font)
 
-\maketitle
+
+
+
+% ---------------------
+% some default settings
+% ---------------------
+
+% caption font settings
+\setkomafont{captionlabel}{\usekomafont{section}\footnotesize}
+\setkomafont{caption}{\normalfont\itshape\footnotesize}
+
+% Keine Serifenlose fuer description-Umgebungen
+%
+\renewcommand{\descfont}{\normalfont\bfseries}
+
+% serifenlose und kleinere Schrift in Kopf und Fuss
+\setkomafont{pagehead}{\normalcolor\sffamily\small}% what about \itshape?
+
+\raggedbottom % Tanzender Fuss, tanzende fussnoten
+
+
+
+\renewcommand{\cite}{\citep*}% change citation default command
+\newcommand{\cites}{\citet*}% use for citation in sentence
+
+\bibpunct{(}{)}{;}{a}{}{,~} % configure citation style
+
+\bibfont{\small} % smaller font for bibliography
+
+
+\usepackage[NewCommands]{ragged2e} % overwrite old commands with new ones
+\renewcommand*{\raggedsection}{\RaggedRight} % ragged right headings
+
+% we want a flushleft bibliography (siehe typography rules)
+\setbibpreamble{\RaggedRight}%
+
+\setcounter{secnumdepth}{2} % Numerierung auch für \subsubsection
+\setcounter{tocdepth}{1}    % nimm auch \subsubsections ins Inhaltsverz. auf
+
+
+% Trennhinweise fuer Woerter hier beschreiben
+%\hyphenation{
+%}
 
 %\usepackage[format=boldLabel]{caption}
 %\DeclareCaptionFormat{boldLabel}{#3}
@@ -45,38 +105,56 @@
 	\renewcommand{\thefigure}{\Roman{figure}}%
 }
 
+%use (a) for numbering subsections
+%\renewcommand*\thesubsection{(\alph{subsection})}
+
+\begin{document}
+
+\Number{2014-01} % enter here the actual year and number of your thesis. 
+\Title{Improving automatic task tree generation with alignment algorithms}
+\Authors{Ralph Krimmel}
+%\DepartmentType{}% use only if it is not "Lehrstuhl" or "Institut"
+\Department{Institut f\"ur Informatik}
+
+\Date{30.September 2014}
+
+\areaset[1cm]{17cm}{27cm}% set format for cover page
+\makecover
+
+%\typearea[BCOR]{DIV}
+%\typearea[10mm]{11}
+\typearea{11}% set format for document
 
 
-\pagenumbering{gobble}
-\clearpage
-\thispagestyle{empty}
-\input{./title/document}
+\pagestyle{headings}
 
-\pagenumbering{arabic}
-\setcounter{page}{3}
 \tableofcontents
 
 
+\pagenumbering{arabic}
+\setcounter{page}{3}
+
+
 \clearpage
-\section{Introduction}
+\chapter{Introduction}
 \input{./chapters/introduction/introduction}
 
-\section{Approach}
+\chapter{Approach}
 \input{./chapters/approach/approach}
 
 \clearpage
-\section{Implementation}
+\chapter{Implementation}
 \input{./chapters/implementation/implementation}
 
 \clearpage
-\section{Case Study}
+\chapter{Case Study}
 \input{./chapters/casestudy/casestudy}
 
 \clearpage
-\section{Discussion}
+\chapter{Discussion}
 \input{./chapters/discussion/discussion}
 
-\section{Conclusion}
+\chapter{Conclusion}
 \input{./chapters/conclusion/conclusion}
 
 %\section{Perspective}
@@ -86,7 +164,7 @@
 %\input{./}
 
 \clearpage
-\section*{Literature}
+\chapter{Literature}
 \addcontentsline{toc}{section}{Literature}
 \bibliographystyle{apalike}
 \bibliography{literature}
