@@ -2,12 +2,33 @@
 Find similar sequences with bioinformatics algorithms
 
 \section{Alignments}
-What are alignments? Why do aligmnents help here?
-
-Simple examples of alignment here
-
+\textit{Maybe this should go to introduction?}
+What are alignments? 
+\begin{itemize}
+	\item String algorithm often used in bioinformatics 
+	\item arranging sequences of DNA, RNA, Peptids to identify meaningful regions.
+	\item Meaningful regions are conserved, little mutations in sequences
+	\item Representation: Sequences in rows, aligned 
+	\item 2 Main categories: global local alignments 
+	\item global: find best alignment end to end: better for very similar sequences
+	\item local: find best alignment of subsequence: better for finding conserved regions of not so similar sequences
+	\iten Basic Algorithms: NeedleMan Wunsch(global), Smith Waterman(local) \(just cite them\)
+\end{itemize} 
 \section{Substitution matrix}
-What are they good for? How are they created? In Biology popular matrices are generated from real DNA data (PAM, BLOSUM)
+\begin{itemize}
+	\item Representation of how similar two elements in a sequence are. 
+	\item Alignment algorithms use this information to arrange the two sequences 
+	\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b 
+\end{itemize}
+\subsection{Biological background}
+In Biology popular matrices are generated from real DNA data \(PAM, BLOSUM\) \(cite\)
+\subsection{Objectdistance Substitution Matrix}
+\textit{Not sure if this belongs here, i need all the vocabulary  like eventtaskinstaces, Task
+\begin{itemize}
+	\item The substitution used here is based on the distance of elements in the GUI model of events
+	\item What is a GUI Model? Small example and description here
+	\item Algorithm of creation: For eventtaskinstances:  substition score of \(a,b\) = distanceInGuiModel\(a,b\) 
+\end{itemize}
 
 \section{Smith Waterman Algorithm with repeated matches}
 Finds all local alignments of two sequences that reach a threshold score
