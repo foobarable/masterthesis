@@ -6,4 +6,66 @@ What are task trees? Terminolog? Terminology used by Pharms
 \section{Trace Based Task Tree Generation}
 How does Pharms generate Task trees? What is the disadvantage? (tl,dr: Just exact sequence matching)
 
+\section{Introduction}
+Definition of a task tree: variant of task models which describe user actions
+    -> e.g. used in Goals, Operators, Methods and Selection Rules (GOMS), TaskMODL and ConcurTastTrees (Zitat?)
+Aim: analyze and compare effective and expected user interactions, semi-automatic (add more details)
+2 possible variants of task trees based on: 
+  - expected actions (e.g. with HTML (more details...))
+      -> Tools/Software: Critique, ReverseAllUI (based on models of GUI) (sources...)
+      -> Problem: simplified or complete task tree
+  - effective actions (e.g. event driven software)
+      -> Programming by example: effective user actions recorded, next steps can be supposed for the user
+      -> Problem: usability improved only on a local area
+=> global view on software: usability can be improved, software can be optimized 
+Mention Paper
+Structure of the thesis
 
+\subsection{Terminology based on the paper}
+Components of a task tree: (with picture)
+  - root node: represents the overall task which contains all subtasks, is the goal/aim of the user action
+    -> e.g.: order something online
+  - intermediate nodes: subtasks which are steps towards the overall task
+    -> e.g.: create a new account/log in, but something in the basket
+  - leaf nodes: actions (e.g. click, scroll, textinput) which cause an event (e.g. onclick (click) or onchange (textinput)
+    -> e.g.: enter a product name in a text field and click on the "search"-button
+temporal relationship: the order of the executed actions is important, so it is saved in the task tree
+  - different ways to work with temporal relationship; used by patrick: 
+    -> sequences: children executed in specific order
+    -> iteration: only one child, executed once or not
+    -> selection: only one of the children is executed
+Trace: recorded sequence of events
+  - monitoring module records events caused by user actions, stored 
+  - add example (table)
+
+\subsection{Trace Based Task Tree Generation}
+oriented to the paper "Trace based task tree generation"
+Basic approach: 4 possible designs, 3 of them used in the task trees (?)
+  - conceptual design: describes types of entities/objects which are to be edited with a software (umformulieren!) and their relationship towards each other
+    -> not used in task tree generation
+  - semantic design: defines functions of the conceptual design
+    -> complies with root node: one task tree is build per function (overall task)
+  - syntactical design: instruction to execute the funktions of the semantic design
+    -> complies with intermediate note: subtasks, temporal relationship
+  - lexical design: necessary physical actions to execute the syntactical instructions
+    -> complies with leaf nodes (comply with event tasks: no children, not defining temporal relationship): actions
+Procedure: start with leaf nodes to creat a task tree
+  -> for every event in a trace: crate an event task
+  -> event tasks stored in recorded order
+Iteration detection:
+  - identical tasks, which often repeat directly (e.g.: click on the same button a few times): Iteration
+    -> generate a new task mode of tyoe iteration: iterated event task as single child
+  - replace every occured iteration of the event task with the iteration task node (umformulieren?)
+Sequence detection:
+  - task list scanned for identical subsequences
+    -> most occured and longest subsequence: propably a logical and useful subtask
+      -> new task node type sequence generated
+    -> every identical subsequence replaced with the new task node 
+    -> if same length and count of subsequence: first subsequence will be replaced (always only one subsequence replaced!
+    -> minimal length of a subsequence: 2 actions/ event tasks
+Repetition of Detections:
+  - iteration and sequence detection repeatet until their are no matches anymore
+  - replaced sequences may already contain iterations/sequences 
+  - in the end: list with task trees and event tasks that does not fit in as an iteration or sequence
+  - Problem: some event tasks are used only once (e.g. login) or very seldom by one user
+    -> solution: compare data of more users -> no logical event tasks will be lost
