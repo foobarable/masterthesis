@@ -1,71 +1,96 @@
-Related Work, Work of Pharms, Goal: Usability Evaluation \citep{harms2013}
-Task trees what are they good for, Goal of the thesis
-\section{Task Trees}
-hier kommen neue dinge hin
-What are task trees? Terminolog? Terminology used by Pharms
-\section{Trace Based Task Tree Generation}
-How does Pharms generate Task trees? What is the disadvantage? (tl,dr: Just exact sequence matching)
+\begin{itemize}
+	\item Definition of a task tree: type of task model which describe user actions
+    	\begin{itemize}
+		\item  e.g. used in Goals, Operators, Methods and Selection Rules (GOMS), TaskMODL and ConcurTastTrees (Zitat?)
+	\end{itemize}
+	\item Aim: analyze and compare effective and expected user interactions, semi-automatic usability evaluation
+	\item two possible variants of task tree generation 
+ 	\begin{itemize}
+		\item - generated from expected actions at design time
+      		\begin{itemize}
+			\item Tools/Software: Critique, ReverseAllUI (based on models of GUI) (sources...)
+      			\item Problem: simplified or complete task tree
+		\end{itemize}
+		\item Actual user interactions (e.g. from event driven software)
+     		\begin{itemize} 
+			\item Programming by example: effective user actions recorded
+			\item Problem: usability improved only on a local area
+		\end{itemize}
+	\end{itemize}
+	\item Harms tries to get a more global view on software: usability could be improved by that (cite) \citep{harms2013}
+	\item Disadvantages from harms method here!
+	\item In this work I will cover the following aspects...
+\end{itemize}
 
-\section{Introduction}
-Definition of a task tree: variant of task models which describe user actions
-    -> e.g. used in Goals, Operators, Methods and Selection Rules (GOMS), TaskMODL and ConcurTastTrees (Zitat?)
-Aim: analyze and compare effective and expected user interactions, semi-automatic (add more details)
-2 possible variants of task trees based on: 
-  - expected actions (e.g. with HTML (more details...))
-      -> Tools/Software: Critique, ReverseAllUI (based on models of GUI) (sources...)
-      -> Problem: simplified or complete task tree
-  - effective actions (e.g. event driven software)
-      -> Programming by example: effective user actions recorded, next steps can be supposed for the user
-      -> Problem: usability improved only on a local area
-=> global view on software: usability can be improved, software can be optimized 
-Mention Paper
-Structure of the thesis
 
-\subsection{Terminology based on the paper}
-Components of a task tree: (with picture)
-  - root node: represents the overall task which contains all subtasks, is the goal/aim of the user action
-    -> e.g.: order something online
-  - intermediate nodes: subtasks which are steps towards the overall task
-    -> e.g.: create a new account/log in, but something in the basket
-  - leaf nodes: actions (e.g. click, scroll, textinput) which cause an event (e.g. onclick (click) or onchange (textinput)
-    -> e.g.: enter a product name in a text field and click on the "search"-button
-temporal relationship: the order of the executed actions is important, so it is saved in the task tree
-  - different ways to work with temporal relationship; used by patrick: 
-    -> sequences: children executed in specific order
-    -> iteration: only one child, executed once or not
-    -> selection: only one of the children is executed
-Trace: recorded sequence of events
-  - monitoring module records events caused by user actions, stored 
-  - add example (table)
+\section{Terminology}
+\begin{itemize} 
+	\item Components of a task tree: (with picture)
+	\begin{itemize}
+		\item root node: represents the overall task which contains all subtasks, the user wants to "reach" this node by his actions/his input
+		\begin{itemize}
+    			\item Order something in a webshop
+		\end{itemize}
+		\item intermediate nodes: subtasks which are steps towards the overall task
+		\begin{itemize}
+			\item e.g.: create a new account/log in, put something into the basket
+		\end{itemize}
+		\item leaf nodes: actions (e.g. click, scroll, textinput) which cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput)
+		\begin{itemize}
+			\item e.g.: enter a product name in a text field and click on the "search"-button
+		\end{itemize}
+	\end{itemize}
+	\item Where should i write about the difference between tasks and taskinstances? 	
+	\item temporal relationship: the order of the executed actions is important, so it is saved in the task tree
+	\item different ways of temporal relationship used by harms: 
+	\begin{itemize}
+		\item sequences: children executed in specific order
+		\item iteration: only one child, executed zero or more times
+		\item selection: only one of the children is executed
+		\item optional:  only one child, executed once or not
+	\end{itemize}	
+	\item Trace: recorded sequence of events: monitoring module records events caused by user actions, stored 
+	\item add example of a trace (maybe this goes to case study)
+\end{itemize}
+\section{Trace Based Task Tree Generation by Harms}
+%Basic approach: 4 possible designs, 3 of them used in the task trees (?)
+%  - conceptual design: describes types of entities/objects which are to be edited with a software (umformulieren!) and their relationship towards each other
+%    -> not used in task tree generation
+%  - semantic design: defines functions of the conceptual design
+%
+%    -> complies with root node: one task tree is build per function (overall task)
+%  - syntactical design: instruction to execute the funktions of the semantic design
+%    -> complies with intermediate note: subtasks, temporal relationship
+%  - lexical design: necessary physical actions to execute the syntactical instructions
+%    -> complies with leaf nodes (comply with event tasks: no children, not defining temporal relationship): actions
+\begin{itemize}
+	
+	\item Procedure: start with leaf nodes to creat a task tree
+ 	\item for every event in a trace: crate an event task instance
+  	\item event tasks instances stored in recorded order
 
-\subsection{Trace Based Task Tree Generation}
-oriented to the paper "Trace based task tree generation"
-Basic approach: 4 possible designs, 3 of them used in the task trees (?)
-  - conceptual design: describes types of entities/objects which are to be edited with a software (umformulieren!) and their relationship towards each other
-    -> not used in task tree generation
-  - semantic design: defines functions of the conceptual design
-    -> complies with root node: one task tree is build per function (overall task)
-  - syntactical design: instruction to execute the funktions of the semantic design
-    -> complies with intermediate note: subtasks, temporal relationship
-  - lexical design: necessary physical actions to execute the syntactical instructions
-    -> complies with leaf nodes (comply with event tasks: no children, not defining temporal relationship): actions
-Procedure: start with leaf nodes to creat a task tree
-  -> for every event in a trace: crate an event task
-  -> event tasks stored in recorded order
-Iteration detection:
-  - identical tasks, which often repeat directly (e.g.: click on the same button a few times): Iteration
-    -> generate a new task mode of tyoe iteration: iterated event task as single child
-  - replace every occured iteration of the event task with the iteration task node (umformulieren?)
-Sequence detection:
-  - task list scanned for identical subsequences
-    -> most occured and longest subsequence: propably a logical and useful subtask
-      -> new task node type sequence generated
-    -> every identical subsequence replaced with the new task node 
-    -> if same length and count of subsequence: first subsequence will be replaced (always only one subsequence replaced!
-    -> minimal length of a subsequence: 2 actions/ event tasks
-Repetition of Detections:
-  - iteration and sequence detection repeatet until their are no matches anymore
-  - replaced sequences may already contain iterations/sequences 
-  - in the end: list with task trees and event tasks that does not fit in as an iteration or sequence
-  - Problem: some event tasks are used only once (e.g. login) or very seldom by one user
-    -> solution: compare data of more users -> no logical event tasks will be lost
+	\item Iteration detection:
+	\begin{itemize} 
+		\item identical tasks, which often repeat directly (e.g.: click on the same button a few times): Iteration
+		\item generate a new task model of tyoe iteration: iterated event task as single child
+		\item replace every occured iteration of the event task with the iteration task node 
+	\end{itemize}
+
+	\item Sequence detection:
+	\begin{itemize}
+		\item task list scanned for identical subsequences
+    		\item most occured and longest subsequence: propably a logical and useful subtask
+		\item new task node type sequence generated
+		\item every identical subsequence replaced with the new task node 
+		\item if same length and count of subsequence: first subsequence will be replaced (always only one subsequence replaced!
+    		\item minimal length of a subsequence: 2 actions/ event tasks
+	\end{itemize}
+	\item Repetition of Detections:
+	\begin{itemize}
+		\item iteration and sequence detection repeatet until there are no matches anymore
+  		\item replaced sequences may already contain iterations/sequences 
+		\item in the end: list with task trees and event tasks that does not fit in as an iteration or sequence
+		\item Problem: some event tasks are used only once (e.g. login) or very seldom by one user
+		\item solution: compare data of more users 
+	\end{itemize}
+\end{itemize}

@@ -1,6 +1,33 @@
 \section{Improving Task Tree Generation}
+Summarize harms methdos downside and give an overview about how i generate  a tasktree
+Use this description of my algorithm as a guide through this chapter
+\section{Task Tree Generation}
+	\begin{itemize}
+		\item Similar to harms method, just sequence detection changed
+		\item Harmonization of user sessions
+		\item Creation of Substitution matrix
+		\item Main Loop
+		\begin{itemize}
+			\item Iteration detection (no changes made)
+			\item Sequence detection made my alignment algorithm 
 
-Find similar sequences with bioinformatics algorithms
+			\begin{itemize}
+				\item align each user session with any other user session (section alighments)  (if not mentioned, mention complexity of $O(n^2)$
+				\item retrieve matches that reach a defined threshold from each alignment pair
+				\item for each found match:
+				\begin{itemize}
+					\item Search match in all user sessions
+					\item Sort matches by occurency count
+					\item From the most to the least found match:
+					\begin{itemize}
+						\item Generate Model From Match 
+						\item Replace each model in the user sessions
+					\end{itemize}
+				\end{itemize}
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+
  
 \section{Alignments}
 \textit{Maybe this should go to introduction?}
@@ -21,7 +48,7 @@ What are alignments?
 \begin{itemize}
 	\item Representation of how similar two elements in a sequence are. 
 	\item Alignment algorithms use this information to arrange the two sequences 
-	\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b 
+	\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b  
 \end{itemize}
 \subsection{Biological background}
 In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
@@ -31,6 +58,8 @@ In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite
 	\item The substitution used here is based on the distance of elements in the GUI model of events
 	\item What is a GUI Model? Small example and description here
 	\item Algorithm of creation: For eventtaskinstances:  substition score of (a,b) = distanceInGuiModel(a,b) 
+	\item Problem: Size of substitution matrix can grow large in this problem set. Memory Usage: O(n*(n+1)/2) (n=number of unique tasks)
+
 \end{itemize}
 
 \section{Smith Waterman Algorithm For Repeated Matches}
@@ -75,7 +104,5 @@ Go back from the addition cell in the first row to first cell to get alignment
 		\item Search and store  each match that scored more than the threshold
 		\item Due the nature of this algoritm, all matches that can be found have this minimal score
 	\end{itemize}
-
-\section{Task Tree Generation}
 
 
