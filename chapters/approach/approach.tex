@@ -1,36 +1,75 @@
 \section{Improving Task Tree Generation}
-Summarize harms methdos downside and give an overview about how i generate  a tasktree
+Summarize harms methdos downside and give an overview about how i generate a tasktree
 Use this description of my algorithm as a guide through this chapter
 \section{Task Tree Generation}
 	\begin{itemize}
-		\item Similar to harms method, just sequence detection changed
-		\item Harmonization of user sessions
+		\item Similar to pharms method
+		\item Harmonization of user session
 		\item Creation of Substitution matrix
-		\item Main Loop
+		\item Main Loop:
 		\begin{itemize}
 			\item Iteration detection (no changes made)
-			\item Sequence detection made my alignment algorithm 
-
-			\begin{itemize}
-				\item align each user session with any other user session (section alighments)  (if not mentioned, mention complexity of $O(n^2)$
-				\item retrieve matches that reach a defined threshold from each alignment pair
-				\item for each found match:
-				\begin{itemize}
-					\item Search match in all user sessions
-					\item Sort matches by occurency count
-					\item From the most to the least found match:
-					\begin{itemize}
-						\item Generate Model From Match 
-						\item Replace each model in the user sessions
-					\end{itemize}
-				\end{itemize}
-			\end{itemize}
-		\end{itemize}
+			\item Optional: Updating the substitution Matrix
+			\item Sequence detection
+		\item Repetition of Iteration Detection and Sequence Detection (Main Loop)
 	\end{itemize}
 
- 
-\section{Alignments}
-\textit{Maybe this should go to introduction?}
+\section{Harmonization}
+Describe Event Task Instance Harmonization
+\begin{itemize}
+	\item For each Session, For each EventTaskInstance in Session:
+	\item Remember Tasks that occured already
+	\item Unify Task of a new EventTaskInstance if it has a task that already occured
+	\item Result is also a List of all unique Tasks (needed for substitution matrix generation)
+\end{itemize}
+
+\section{Substitution Matrix}
+	\begin{itemize}
+		\item Representation of how similar two elements in a sequence are. 
+		\item Alignment algorithms use this information to arrange the two sequences 
+		\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b  
+	\end{itemize}
+	\paragraph{Biological background}
+	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
+	\paragraph{Objectdistance Substitution Matrix}
+	\textit{Not sure if this belongs here, I need all the vocabulary  like eventtaskinstaces, Task}
+	\begin{itemize}
+		\item The substitution used here is based on the distance of elements in the GUI model of events
+		\item What is a GUI Model? Small example and description here
+		\item Algorithm of creation: For Every unique EventTask: substition score of (a,b) = distanceInGuiModel(a,b) 
+		\item Problem: Size of substitution matrix can grow large in this problem set. Memory Usage: O(n*(n+1)/2) (n=number of unique tasks)
+	\end{itemize}
+
+\section{Iteration Detection and Substitution Matrix update}
+\begin{itemize}
+	\item Iteration Detection does not differ from harms method
+	\item Optional: Substitution Matrix Update 
+	\begin{itemize}
+		\item Calculate distances from newly created tasks (either from iteration or sequence detection) to all the old unique tasks
+		\item Add newly created tasks to the unique Tasks
+		\item Reset newlycreated Tasks
+		\item This step is currently skipped due to perfomance issues, details about this in the case study section
+	\end{itemize}
+\end{itemize}
+
+
+\section{Sequence Detection}
+\begin{itemize}
+	\item Sequence Detection is separated in 3 steps
+	\begin{itemize}
+		\item Search for significant regions
+		\item Model generation
+		\item Replacement
+	\end{itemize}
+\end{itemize}
+\subsection{Search for signification regions}		
+\begin{itemize}
+	\item For sequence detection a method called alignments is used
+	\item It can be used for approximate string matching. 
+	\item This is useful for this problem, because we also want to detect similar interactions of different users, not just equal interactions
+	\item align each user session with any other user session (section alighments)  (if not mentioned, mention complexity of $O(n^2)$
+\end{itemize}
+\subsubsection{Alignments}
 What are alignments? 
 \begin{itemize}
 	\item String algorithm often used in bioinformatics 
@@ -42,27 +81,9 @@ What are alignments?
 	\item global: find best alignment end to end: better for very similar sequences
 	\item local: find best alignment of subsequence: better for finding conserved regions of not so similar sequences
 	\item Basic Algorithms: NeedleMan Wunsch(global), Smith Waterman(local) 
-	\item 
 \end{itemize} 
-\section{Substitution matrix}
-\begin{itemize}
-	\item Representation of how similar two elements in a sequence are. 
-	\item Alignment algorithms use this information to arrange the two sequences 
-	\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b  
-\end{itemize}
-\subsection{Biological background}
-In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
-\subsection{Objectdistance Substitution Matrix}
-\textit{Not sure if this belongs here, I need all the vocabulary  like eventtaskinstaces, Task}
-\begin{itemize}
-	\item The substitution used here is based on the distance of elements in the GUI model of events
-	\item What is a GUI Model? Small example and description here
-	\item Algorithm of creation: For eventtaskinstances:  substition score of (a,b) = distanceInGuiModel(a,b) 
-	\item Problem: Size of substitution matrix can grow large in this problem set. Memory Usage: O(n*(n+1)/2) (n=number of unique tasks)
 
-\end{itemize}
-
-\section{Smith Waterman Algorithm For Repeated Matches}
+\paragraph{Smith Waterman Algorithm For Repeated Matches}
 \begin{itemize}
 	\item Modified Version of the smith waterman algorithm
 	\item Finds all local alignments of two sequences that reach a threshold score, not just the best
@@ -82,13 +103,13 @@ In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite
 	\item d is the gap penalty
 \end{itemize}
 
-\subsection{Intialization}:
+\subparagraph{Intialization}:
 	\begin{itemize}
 		\item \[F(0,0) = 0\]
 %		\item Fill first col with 0, 
 	\end{itemize}
 
-\subsection{Recursion}
+\subparagraph{Recursion}
 	\begin{itemize}
 		\item Build dynamic programmic matrix
 		\item  \[F(i,0) = max \left\{ \begin{array}{lr}F(i-1,0)&\\F(i-1,j)-T& j=1,\dots,m\end{array}\right. \]
@@ -96,13 +117,29 @@ In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite
 		\item Explain each choice we can take here
 		\item Store every choice we took
 	\end{itemize}
-\subsection{Traceback}
+\subparagraph{Traceback}
 Go back from the addition cell in the first row to first cell to get alignment
 
-\subsection{Match retrival}
+\subparagraph{Match retrival}
 	\begin{itemize}
 		\item Search and store  each match that scored more than the threshold
 		\item Due the nature of this algoritm, all matches that can be found have this minimal score
 	\end{itemize}
+		\item retrieve matches that reach a defined threshold from each alignment pair
+		\item for each found match:
+\subsubsection{Model generation}
+\subsubsection{Replacement}
+	\begin{itemize}
+		\item Search match in all user sessions
+		\item Sort matches by occurency count
+		\item From the most to the least found match:
+		\item Generate Model From Match 
+		\item Replace each model in the user sessions
+	\end{itemize}
+	\begin{itemize}
+		\item Detection of significant patterns in the user sequences
+		\item 
+	\end{itemize}
+
 
 
