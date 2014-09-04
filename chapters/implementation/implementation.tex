@@ -5,7 +5,6 @@
 	\item Basically just branched the autoquest-core-tasktree package
 	\item Input data: User Sessions with EventTaskInstances and corresponding event Tasks
 	\item Output: Generated Task Model
-	\item This implementation is striclty sequential, but there is a huge potential of parallelizing sub-problems
 \end{itemize}
 \section{Substitution Matrix}
 \subsection{Generation}
@@ -28,7 +27,7 @@
 \section{Alignments, Match Count, and Sorting}
 \begin{itemize}
 	\item Both the pairwise alignment of each of the sessions and the occurence count are actions that have been implemented as parallel algorithms
-	\item Huge speedup possible, still very time and ram consuming on large datasets
+	\item Huge speedup was achieved, still very time and ram consuming on large datasets
 	\item The Results of the match count has to be sorted
 \end{itemize}
 
