@@ -11,6 +11,7 @@ Use this description of my algorithm as a guide through this chapter
 			\item Iteration detection (no changes made)
 			\item Optional: Updating the substitution Matrix
 			\item Sequence detection
+		\end{itemize}
 		\item Repetition of Iteration Detection and Sequence Detection (Main Loop)
 	\end{itemize}
 
@@ -32,12 +33,15 @@ Describe Event Task Instance Harmonization
 	\paragraph{Biological background}
 	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
 	\paragraph{Objectdistance Substitution Matrix}
-	\textit{Not sure if this belongs here, I need all the vocabulary  like eventtaskinstaces, Task}
 	\begin{itemize}
 		\item The substitution used here is based on the distance of elements in the GUI model of events
 		\item What is a GUI Model? Small example and description here
-		\item Algorithm of creation: For Every unique EventTask: substition score of (a,b) = distanceInGuiModel(a,b) 
-		\item Problem: Size of substitution matrix can grow large in this problem set. Memory Usage: O(n*(n+1)/2) (n=number of unique tasks)
+		\item Algorithm of creation: For Every unique EventTask: substition score of (a,b) = -1*distanceInGuiModel(a,b)+k, with k the maximum value the score can take.
+		\item The k Parameter is dependent on the underlying gui model. A large k should be chosen vor very deeply, nested gui-models, whereas for flat gui models a smaller k seems better. 
+		\item Another Problem: Size of substitution matrix can grow large for a huge number of EventTasks. Memory Usage: O(n*(n+1)/2) 
+		\item For non EventTasks (which don't have a GUI model) the following procedure of distance calculation is proposed:
+		\item distance = The mean distance between all children of each Task, that are EventTasks
+		\item This step is implemented, but not used due to problem size. Thus, all non-EventTask-Tasks have a score of 0 to any other Task/EventTask
 	\end{itemize}
 
 \section{Iteration Detection and Substitution Matrix update}
@@ -62,7 +66,7 @@ Describe Event Task Instance Harmonization
 		\item Replacement
 	\end{itemize}
 \end{itemize}
-\subsection{Search for signification regions}		
+\subsection{Search for significant regions}		
 \begin{itemize}
 	\item For sequence detection a method called alignments is used
 	\item It can be used for approximate string matching. 
@@ -120,26 +124,41 @@ What are alignments?
 \subparagraph{Traceback}
 Go back from the addition cell in the first row to first cell to get alignment
 
+\subparagraph{Scoring}
+Describe how each match is scored
+
 \subparagraph{Match retrival}
 	\begin{itemize}
-		\item Search and store  each match that scored more than the threshold
-		\item Due the nature of this algoritm, all matches that can be found have this minimal score
-	\end{itemize}
 		\item retrieve matches that reach a defined threshold from each alignment pair
+		\item Due the nature of this algoritm, all matches that can be found have this minimal score
+		\item A match consists of 2 sequences of numbers. 
 		\item for each found match:
+		\item Search match in all user sessions
+		\item From the most to the least found match:
+	\end{itemize}
 \subsubsection{Model generation}
+	\begin{itemize}
+		\item Generate Model From Match is done the following way:
+		\item For each position of the Match: 
+		\item (remind, that each match has 2 Sequences of aligned numbers)
+		\begin{itemize}
+			\item If Both numbers are equal: The model at this position is the Task refered by this number
+			\item If one sequence has a gap at this position: The other EventTask is inserted as an optional
+			\item If both numbers differ a selection is inserted. Which kind of selection depends on what the following task is. We don't want to have 2 selections next to each other, instead, create one selection and add each sequence as a sequence
+			\begin{itemize}
+				\item If the next position also would be a selection, the selection has 2 sequences as a child. those sequences consists of the tasks of each sequence of the match until there is no more selection found 
+				\item If the next position is something else we just have a single selection, just add the tasks of the match at this position as childs to the selection
+				\item (This description here is really bad, will need some examples)
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+
 \subsubsection{Replacement}
 	\begin{itemize}
-		\item Search match in all user sessions
-		\item Sort matches by occurency count
-		\item From the most to the least found match:
-		\item Generate Model From Match 
 		\item Replace each model in the user sessions
 	\end{itemize}
-	\begin{itemize}
-		\item Detection of significant patterns in the user sequences
-		\item 
-	\end{itemize}
+
+\subsection{Repetition}
 
 
 

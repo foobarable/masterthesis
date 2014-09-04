@@ -1,0 +1,40 @@
+\begin{itemize}
+	\item Approach was implemented in Autoquest (cite)
+	\item What is autoquest? Proof of concept implementation of pharms
+	\item Can Process Platform indepentent, abstract events
+	\item Basically just branched the autoquest-core-tasktree package
+	\item Input data: User Sessions with EventTaskInstances and corresponding event Tasks
+	\item Output: Generated Task Model
+	\item This implementation is striclty sequential, but there is a huge potential of parallelizing sub-problems
+\end{itemize}
+\section{Substitution Matrix}
+\subsection{Generation}
+\begin{itemize}
+	\item No problems for limited number of tasks
+	\item For large numbers of Tasks, efficient implementation needed
+	\item Implemented as Triangle Matrix of float values, stored in a single float[] (to save overhead of n*sizeof(float[])
+	\item Calculation of distances between Tasks is well parallelizable, storing it to the matrix is not (yet).
+\end{itemize}
+\subsection{Updating}
+\begin{itemize}
+	\item The procedure of updating the substitution matrix is implemented but has just been tested on a very small data set. 
+	\item Since the Matrix grows with O(n*(n+1)/2), for large data sets the calculation of non EventTasks is switched off, because each generated tasks increases n.
+	\item Also, the computation of non-EventTasks is complex itself. First, for each Task all EventTasks have to be searched (done via visitor pattern). 
+	\item Then for each found EventTasks, distances have to be calculated (or read from Substitution Matrix)
+	\item THis process could as well be parallelized, still, storing in the matrix has to be synchronous. Also, when the matrix is updated, it's size has to be enlarged. The problem with this is, that then a data structure with a dynamic size has to be used, which itself is not very memory efficient. 
+	\item A solution is to allocate a very large matrix from start and for increasing allocate an even larger matrix and copy the old matrix to the new. This procedure has a high peak memory usage but will reduce mean memory usage of the object distribution matrix (Numbers of the sizes of Float, ArrayList<Float> and float[] here)
+\end{itemize}
+
+\section{Alignments, Match Count, and Sorting}
+\begin{itemize}
+	\item Both the pairwise alignment of each of the sessions and the occurence count are actions that have been implemented as parallel algorithms
+	\item Huge speedup possible, still very time and ram consuming on large datasets
+	\item The Results of the match count has to be sorted
+\end{itemize}
+
+\section{Replacment}
+\begin{itemize}
+	\item Replacment is so far strictly serial, but is parallelizable. For each user session a datastructure is kept, which replacements have been performed on it. 
+	\item This datastructure requires synchronized access of the threads
+\end{itemize}
+
