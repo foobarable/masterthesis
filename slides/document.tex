@@ -1,0 +1,155 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{textcomp}
+\usepackage{multirow}
+\usepackage{color}
+
+\usetheme{Dresden}
+\title{Improving automatic task tree generation with alignment algorithms}
+\author{Ralph Krimmel}
+
+\begin{document}
+
+\section{Introduction}
+\subsection*{}
+\begin{frame}
+	\maketitle
+\end{frame}
+
+\section{Task Trees}
+\subsection*{}
+
+
+\begin{frame}
+	\frametitle{Task Trees}
+
+	Something short about task trees here, what they are, what are they used for. 
+\end{frame}
+
+\begin{frame}
+	\frametitle{Task Trees 2}
+\end{frame}
+
+\section{Smith Waterman algorithm}
+\subsection*{}
+
+
+\begin{frame}
+
+
+	\[
+	H(i,j) = \max 
+	\begin{Bmatrix}
+		0  \\
+		H(i-1,j-1) + \ w(a_i,b_j) & \text{Match/Mismatch} \\
+		H(i-1,j) + \ w(a_i,-) & \text{Deletion} \\
+		H(i,j-1) + \ w(-,b_j) & \text{Insertion}
+	\end{Bmatrix}
+	\]
+\end{frame}
+
+\begin{frame}
+	\frametitle{Initialisierung}
+	\[
+\begin{pmatrix}
+          & - & A & C & A & C & A & C & T & A  \\
+	- & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+	A & 0 &   &   &   &   &   &   &   &    \\
+	G & 0 &   &   &   &   &   &   &   &    \\
+	C & 0 &   &   &   &   &   &   &   &    \\
+	A & 0 &   &   &   &   &   &   &   &    \\
+	C & 0 &   &   &   &   &   &   &   &    \\
+	A & 0 &   &   &   &   &   &   &   &    \\
+	C & 0 &   &   &   &   &   &   &   &    \\
+	A & 0 &   &   &   &   &   &   &   &    \\
+\end{pmatrix}
+\]
+\end{frame}
+
+\begin{frame}
+	\[
+\begin{pmatrix}
+	  & - &                & A & C & A & C & A & C & T \\
+	- & 0 &                & 0 & 0 & 0 & 0 & 0 & 0 & 0  \\
+	  &   &    \color{red} \searrow   & \downarrow  &   &   &   &   &   &    \\
+	A & 0 &     \rightarrow&\color{blue}2    &   &   &   &   &   &    \\
+	G & 0 &                &   &   &   &   &   &   &    \\
+	C & 0 &                &   &   &   &   &   &   &    \\
+	A & 0 &                &   &   &   &   &   &   &    \\
+	C & 0 &                &   &   &   &   &   &   &    \\
+	A & 0 &                &   &   &   &   &   &   &    \\
+	C & 0 &                &   &   &   &   &   &   &    \\    
+	A & 0 &                &   &   &   &   &   &   &    
+\end{pmatrix}
+\]
+\end{frame}
+
+\begin{frame}
+	\[
+\begin{pmatrix}
+	  & - &         &  A             & C & A & C & A & C & T      \\
+	- & 0 &         &  0             & 0 & 0 & 0 & 0 & 0 & 0      \\
+	A & 0 &         & \color{blue}2  &   &   &   &   &   &       \\
+	  &   & \searrow& \color{red}\downarrow     &   &   &   &   &   &       \\
+	G & 0 & \rightarrow&\color{blue}1&   &   &   &   &   &       \\
+	C & 0 &         &                &   &   &   &   &   &       \\
+	A & 0 &         &                &   &   &   &   &   &       \\
+	C & 0 &         &                &   &   &   &   &   &       \\
+	A & 0 &         &                &   &   &   &   &   &       \\
+	C & 0 &         &                &   &   &   &   &   &       \\    
+	A & 0 &         &                &   &   &   &   &   &       
+\end{pmatrix}
+\]
+\end{frame}
+
+
+\begin{frame}
+	\[
+\begin{pmatrix}
+	  & - & A & C & A & C & A & C & T & A \\
+	- & \color{blue}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+	A & 0 & \color{blue}2 & 1 & 2 & 1 & 2 & 1 & 0 & 2 \\
+	G & 0 & \color{blue}1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 \\
+	C & 0 & 0 & \color{blue}3 & 2 & 3 & 2 & 3 & 2 & 1 \\
+	A & 0 & 2 & 2 & \color{blue}5 & 4 & 5 & 4 & 3 & 4 \\
+	C & 0 & 1 & 4 & 4 & \color{blue}7 & 6 & 7 & 6 & 5 \\
+	A & 0 & 2 & 3 & 6 & 6 & \color{blue}9 & 8 & 7 & 8 \\
+	C & 0 & 1 & 4 & 5 & 8 & 8 & \color{blue}11 & \color{blue}10 & 9 \\
+	A & 0 & 2 & 3 & 6 & 7 & 10 & 10 & 10& \color{blue}12
+\end{pmatrix}
+\]
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{}
+	\[
+	\begin{pmatrix}
+		  & - & A & C & A & C & A & C & T & A \\
+		- & \color{blue}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		A & 0 & \color{blue}\nwarrow & \leftarrow & \nwarrow & \leftarrow & \nwarrow & \leftarrow & \leftarrow & \nwarrow \\
+		G & 0 & \color{blue}\uparrow & \nwarrow & \uparrow & \nwarrow & \uparrow & \nwarrow & \nwarrow & \uparrow \\
+		C & 0 & \uparrow & \color{blue}\nwarrow & \leftarrow & \nwarrow & \leftarrow & \nwarrow & \leftarrow & \leftarrow \\
+		A & 0 & \nwarrow & \uparrow & \color{blue}\nwarrow & \leftarrow & \nwarrow & \leftarrow & \leftarrow & \nwarrow \\
+		C & 0 & \uparrow & \nwarrow & \uparrow & \color{blue}\nwarrow & \leftarrow & \nwarrow & \leftarrow & \leftarrow \\
+		A & 0 & \nwarrow & \uparrow & \nwarrow & \uparrow & \color{blue}\nwarrow & \leftarrow & \leftarrow & \nwarrow \\
+		C & 0 & \uparrow & \nwarrow & \uparrow & \nwarrow & \uparrow & \color{blue}\nwarrow & \color{blue}\leftarrow & \leftarrow \\
+		A & 0 & \nwarrow & \uparrow & \nwarrow & \uparrow & \nwarrow & \uparrow & \nwarrow & \color{blue}\nwarrow
+	\end{pmatrix}
+	\]
+\end{frame}
+
+\section{Questions?}
+\subsection*{}
+
+\begin{frame}
+	\frametitle{Questions?}
+	\begin{center}
+		\large Questions?
+	\end{center}
+\end{frame}
+
+\end{document}
