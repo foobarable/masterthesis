@@ -121,8 +121,23 @@ What are alignments?
 		\item Explain each choice we can take here
 		\item Store every choice we took
 	\end{itemize}
+
 \subparagraph{Traceback}
 Go back from the addition cell in the first row to first cell to get alignment
+	\[
+	\begin{pmatrix}
+                   & - &   & A &   & C &   & A &   &  C & A & C & T & A \\
+	         - & \color{blue}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+	         A & 0 & \color{blue}2 & 1 & 2 & 1 & 2 & 1 & 0 & 2 \\
+	         G & 0 & \color{blue}1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 \\
+	         C & 0 & 0 & \color{blue}3 & 2 & 3 & 2 & 3 & 2 & 1 \\
+	         A & 0 & 2 & 2 & \color{blue}5 & 4 & 5 & 4 & 3 & 4 \\
+	         C & 0 & 1 & 4 & 4 & \color{blue}7 & 6 & 7 & 6 & 5 \\
+	         A & 0 & 2 & 3 & 6 & 6 & \color{blue}9 & 8 & 7 & 8 \\
+	         C & 0 & 1 & 4 & 5 & 8 & 8 & \color{blue}11 & \color{blue}10 & 9 \\
+	         A & 0 & 2 & 3 & 6 & 7 & 10 & 10 & 10& \color{blue}12
+	\end{pmatrix}
+	\]
 
 \subparagraph{Scoring}
 Describe how each match is scored
