@@ -3,19 +3,25 @@ The algorithm proposed by harms is well designed but is not capable of finding s
 When there is more than one possible interaction to achieve a goal, the method of Harms will create two different sequences for that interaction, 
 or worse, will not detect the interaction as a meaningful one at all. For this reason I propose an algorithm that is able to detect similar subsequences.
 The basic steps of the algorithm do not differ alot from Harms one. In fact some preprocessing steps and the sequence detection have been altered.
-Algorithm (TODO: reference) shows the main building blocks and will function as a list and order of contents of this chapter.
+Algorithm \ref{algtasktreeoverview} shows the main building blocks and will function as a list and order of contents of this chapter.
 \section{Task Tree Generation}
-	\begin{itemize}
-		\item Harmonization of user session
-		\item Creation of Substitution matrix
-		\item Main Loop:
-		\begin{itemize}
-			\item Iteration detection (no changes made)
-			\item Optional: Updating the substitution Matrix
-			\item Sequence detection
-		\end{itemize}
-		\item Repetition of Iteration Detection and Sequence Detection (Main Loop)
-	\end{itemize}
+
+\begin{algorithm}[h]
+\floatname{algorithm}{Algorithm}
+\begin{algorithmic}
+	\Procedure{GenerateTaskTree}{UserSessions}
+	\State Harmonize(UserSessions)
+	\State GenerateSubstitutionMatrix(UniqueTasks)
+	\While{Replaced Tasks} 
+	\State DetectIterations(UserSessions)
+	\State Optional: Substitution Matrix Update
+	\State DetectionSequences(UserSessions,SubstitutionMatrix)
+	\EndWhile
+	\EndProcedure
+\end{algorithmic}
+\caption{Overview over the task tree generation}
+\label{algtasktreeoverview}
+\end{algorithm}
 
 \section{Harmonization}
 Describe Event Task Instance Harmonization
