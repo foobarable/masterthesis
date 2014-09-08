@@ -3,7 +3,7 @@ The algorithm proposed by harms is well designed but is not capable of finding s
 When there is more than one possible interaction to achieve a goal, the method of Harms will create two different sequences for that interaction, 
 or worse, will not detect the interaction as a meaningful one at all. For this reason I propose an algorithm that is able to detect similar subsequences.
 The basic steps of the algorithm do not differ alot from Harms one. In fact some preprocessing steps and the sequence detection have been altered.
-Algorithm \ref{algtasktreeoverview} shows the main building blocks and will function as a list and order of contents of this chapter.
+Algorithm \ref{alg:tasktreeoverview} shows the main building blocks and will function as a list and order of contents of this chapter.
 \section{Task Tree Generation}
 
 \begin{algorithm}[h]
@@ -20,17 +20,61 @@ Algorithm \ref{algtasktreeoverview} shows the main building blocks and will func
 	\EndProcedure
 \end{algorithmic}
 \caption{Overview over the task tree generation}
-\label{algtasktreeoverview}
+\label{alg:tasktreeoverview}
 \end{algorithm}
 
 \section{Harmonization}
-Describe Event Task Instance Harmonization
-\begin{itemize}
-	\item For each Session, For each EventTaskInstance in Session:
-	\item Remember Tasks that occured already
-	\item Unify Task of a new EventTaskInstance if it has a task that already occured
-	\item Result is also a List of all unique Tasks (needed for substitution matrix generation)
-\end{itemize}
+The user sessions used for task tree generation at the start of this algorithm are available in a non-harmonized form, 
+meaning equal task instances may not have the same corresponding task assigned. The harmonization process sets the correct task to those task instances.
+Fixing the issue of non-harmonized input data before starting any further steps is crucial since it reduces the number of occuring tasks and makes task instances
+
+comparable by their tasks. Figure \ref{fig:nonharmonized} shows a non-harmonized user session, figure \ref{fig:harmonized} a session where the tasks of equal task instances have been set accordingly.
+
+Another point why this step is important is that it creates a set of unique tasks. This set is needed for the next step of the algorithm, the generation of the substitution matrix.
+
+\begin{figure}[h]
+\[
+\begin{array}{r|ccccc}
+	Task & 1 & 2 & 3 & 4 & 5\\
+	\hline
+	TaskInstance & A & B & C & A & B\\
+\end{array} 
+\]
+\caption{Non-harmonized user session}
+\label{fig:nonharmonized}
+\end{figure}
+
+\begin{figure}[h]
+\[
+\begin{array}{r|ccccc}
+	Task & 1 & 2 & 3 & 1 & 2\\
+	\hline
+	TaskInstance & A & B & C & A & B\\
+\end{array} 
+\]
+\caption{Harmonized user session}
+\label{fig:harmonized}
+\end{figure}
+
+\begin{algorithm}[h]
+\floatname{algorithm}{Algorithm}
+\begin{algorithmic}
+	\Procedure{HarmonizeSessions}{UserSessions}
+	 \ForAll{Sessions} 
+		 \ForAll{EventTaskInstances}
+		 	\State{Task $\gets$ GetTask(EvenTaskInstance)}
+		 	\If{Task $\in$ UniqueTasks} 
+				\State{SetTask(EventTaskInstance) $\gets$ Task} 
+			\Else 
+				\State{UniqueTasks $\gets$ UniqueTasks + Task} 
+			\EndIf
+		 \EndFor
+	 \EndFor
+	\EndProcedure
+\end{algorithmic}
+\caption{Harmonization of user sessions}
+\label{alg:harmonize}
+\end{algorithm}
 
 \section{Substitution Matrix}
 	\begin{itemize}

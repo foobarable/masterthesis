@@ -42,7 +42,7 @@
 \usepackage{multirow}
 \usepackage[table]{xcolor}
 \usepackage{longtable}
-\usepackage[font={small,sf},format=plain,labelfont={bf,up}]{caption} %im text \textbf könnte raus
+%\usepackage[font={small,sf},format=plain,labelfont={bf,up}]{caption} %im text \textbf könnte raus
 \usepackage{adjustbox}
 \usepackage{etoolbox}
 \usepackage[master,institut]{zfibmcover}        % load cover
@@ -62,8 +62,9 @@
 % ---------------------
 
 % caption font settings
-\setkomafont{captionlabel}{\usekomafont{section}\footnotesize}
-\setkomafont{caption}{\normalfont\itshape\footnotesize}
+
+\setkomafont{captionlabel}{\itshape\usekomafont{section}\footnotesize}
+\setkomafont{caption}{\normalfont\scriptsize}
 
 % Keine Serifenlose fuer description-Umgebungen
 %
