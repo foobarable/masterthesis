@@ -2,6 +2,7 @@
 
 
 vim -p \
+	document.tex \
 	chapters/introduction/introduction.tex \
 	chapters/foundations/foundations.tex \
 	chapters/approach/approach.tex \

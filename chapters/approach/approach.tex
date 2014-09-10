@@ -55,26 +55,6 @@ Another point why this step is important is that it creates a set of unique task
 \label{fig:harmonized}
 \end{figure}
 
-%TODO: Schoen! Braucht man es ueberhaupt?
-%\begin{algorithm}[h]
-%\floatname{algorithm}{Algorithm}
-%\begin{algorithmic}
-%	\Procedure{HarmonizeSessions}{UserSessions}
-%	 \ForAll{Sessions} 
-%		 \ForAll{EventTaskInstances}
-%		 	\If{EventTaskInstance $\in$ Unique} 
-%				\State{SetTask(EventTaskInstance) $\gets$ GetTask(Unique(EventTaskInstance))} 
-%			\Else 
-%				\State{Unique $\gets$ Unique + EventTaskInstance} 
-%			\EndIf
-%		 \EndFor
-%	 \EndFor
-%	\EndProcedure
-%\end{algorithmic}
-%\caption{Harmonization of user sessions }
-%\label{alg:harmonize}
-%\end{algorithm}
-
 \section{Task Distance Substitution Matrix}
 In section \ref{sec:foundationsubstitutionmatrix} I introduced substitution matrixes in general and what they are good for. 
 For this use case I needed to generate one substitution matrix that represents how similar tasks are. 
@@ -164,28 +144,23 @@ Now that I defined the distance for three cases it is possible to compute the sc
 
 The k constant should be chosen dependent on the underlying GUI model. A large k should be chosen for very deeply, nested GUI models, whereas for flat GUI models a smaller k seems better. 
 
-\section{Iteration Detection and Substitution Matrix update}
-\begin{itemize}
-	\item Iteration Detection does not differ from harms method
-	\item Optional: Substitution Matrix Update 
-	\begin{itemize}
-		\item Calculate distances from newly created tasks (either from iteration or sequence detection) to all the old unique tasks
-		\item Add newly created tasks to the unique Tasks
-		\item Reset newlycreated Tasks
-		\item This step is currently skipped due to perfomance issues, details about this in the case study section
-	\end{itemize}
-\end{itemize}
-
+\section{Iteration Detection and Substitution Matrix Update}
+The iteration detection from Harms is also suitable for my algorithm was not altered in any way. It reliably detects iterations and replaces them in the user sessions.
+Before the sequence detection can come to play the substitution matrix should be updated since there were new iteration tasks created during iteration detection. Those new tasks are stored in a set that contains all newly created tasks.
+The update process differs just a little from the generation process with the only difference beeing that just the distances between the newly created tasks to the current set of unique tasks is as well as the distances between the newly created tasks are computed.
+After the matrix has been updated, the newcly created tasks are merged with the set of unique tasks and then emptied.
+The whole step of updating the matrix is currently implemented but not used. Instead, each score between an event-task to a non-event-task and therefore all scores between non-event-tasks are defined as zero due to perfomance issues.
+More details on this issue can be found in section TODO: REF HERE.
 
 \section{Sequence Detection}
+As i figured out at the beginning of this chapter, the sequence detection is the part of the algorithm that varies the most from Harms approach.
+It is itself separated in three in steps:
 \begin{itemize}
-	\item Sequence Detection is separated in 3 steps
-	\begin{itemize}
-		\item Search for significant regions
-		\item Model generation
-		\item Replacement
-	\end{itemize}
+	\item The search for significant regions
+	\item The model generation
+	\item The sequence replacement
 \end{itemize}
+
 \subsection{Search for significant regions}		
 \begin{itemize}
 	\item For sequence detection a method called alignments is used
@@ -209,9 +184,9 @@ The k constant should be chosen dependent on the underlying GUI model. A large k
 	\item Score of a matched region: sum of all scores for each position minus the score threshold 
 	\item first row has a different meaning than in basic Smith waterman (score of the last matched subsequence)
 	\item Definitions:
-	\item F is the dynamica programming matrix
-	\item s is the substition matrix
-	\item d is the gap penalty
+	\item F is the dynamic programming matrix
+	\item S is the score of the substitution matrix
+	\item g is the gap penalty
 \end{itemize}
 
 \subparagraph{Intialization}:
@@ -224,7 +199,7 @@ The k constant should be chosen dependent on the underlying GUI model. A large k
 	\begin{itemize}
 		\item Build dynamic programmic matrix
 		\item  \[F(i,0) = max \left\{ \begin{array}{lr}F(i-1,0)&\\F(i-1,j)-T& j=1,\dots,m\end{array}\right. \]
-		\item  \[F(i,j) = max \left\{ \begin{array}{lr}F(i,0),\\F(i-1,j-1)+S(x_i,y_i),\\F(i-1,j)-d,\\F(i,j-1)-d\end{array}\right.\]
+		\item  \[F(i,j) = max \left\{ \begin{array}{lr}F(i,0),\\F(i-1,j-1)+S(x_i,y_i),\\F(i-1,j)-g,\\F(i,j-1)-g\end{array}\right.\]
 		\item Explain each choice we can take here
 		\item Store every choice we took
 	\end{itemize}
