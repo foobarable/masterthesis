@@ -17,6 +17,7 @@
 \subsection{Updating}
 \begin{itemize}
 	\item The procedure of updating the substitution matrix is implemented but has just been tested on a very small data set. 
+%	\item This step is implemented, but not used due to problem size. Thus, all non-EventTask-Tasks have a score of 0 to any other Task/EventTask
 	\item Since the Matrix grows with O(n*(n+1)/2), for large data sets the calculation of non EventTasks is switched off, because each generated tasks increases n.
 	\item Also, the computation of non-EventTasks is complex itself. First, for each Task all EventTasks have to be searched (done via visitor pattern). 
 	\item Then for each found EventTasks, distances have to be calculated (or read from Substitution Matrix)

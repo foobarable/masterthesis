@@ -1,4 +1,3 @@
-\section{Improving Task Tree Generation}
 The algorithm proposed by harms is well designed but is not capable of finding similar user sequences. 
 When there is more than one possible interaction to achieve a goal, the method of Harms will create two different sequences for that interaction, 
 or worse, will not detect the interaction as a meaningful one at all. For this reason I propose an algorithm that is able to detect similar subsequences.
@@ -10,12 +9,12 @@ Algorithm \ref{alg:tasktreeoverview} shows the main building blocks and will fun
 \floatname{algorithm}{Algorithm}
 \begin{algorithmic}
 	\Procedure{GenerateTaskTree}{UserSessions}
-	\State Harmonize(UserSessions)
-	\State GenerateSubstitutionMatrix(UniqueTasks)
+	\State Harmonize (UserSessions)
+	\State Generate Substitution Matrix (UniqueTasks)
 	\While{Replaced Tasks} 
-	\State DetectIterations(UserSessions)
+	\State Detect Iterations (UserSessions)
 	\State Optional: Substitution Matrix Update
-	\State DetectionSequences(UserSessions,SubstitutionMatrix)
+	\State Detect Sequences (UserSessions,SubstitutionMatrix)
 	\EndWhile
 	\EndProcedure
 \end{algorithmic}
@@ -56,45 +55,114 @@ Another point why this step is important is that it creates a set of unique task
 \label{fig:harmonized}
 \end{figure}
 
-\begin{algorithm}[h]
-\floatname{algorithm}{Algorithm}
-\begin{algorithmic}
-	\Procedure{HarmonizeSessions}{UserSessions}
-	 \ForAll{Sessions} 
-		 \ForAll{EventTaskInstances}
-		 	\State{Task $\gets$ GetTask(EvenTaskInstance)}
-		 	\If{Task $\in$ UniqueTasks} 
-				\State{SetTask(EventTaskInstance) $\gets$ Task} 
-			\Else 
-				\State{UniqueTasks $\gets$ UniqueTasks + Task} 
-			\EndIf
-		 \EndFor
-	 \EndFor
-	\EndProcedure
-\end{algorithmic}
-\caption{Harmonization of user sessions}
-\label{alg:harmonize}
-\end{algorithm}
+%TODO: Schoen! Braucht man es ueberhaupt?
+%\begin{algorithm}[h]
+%\floatname{algorithm}{Algorithm}
+%\begin{algorithmic}
+%	\Procedure{HarmonizeSessions}{UserSessions}
+%	 \ForAll{Sessions} 
+%		 \ForAll{EventTaskInstances}
+%		 	\If{EventTaskInstance $\in$ Unique} 
+%				\State{SetTask(EventTaskInstance) $\gets$ GetTask(Unique(EventTaskInstance))} 
+%			\Else 
+%				\State{Unique $\gets$ Unique + EventTaskInstance} 
+%			\EndIf
+%		 \EndFor
+%	 \EndFor
+%	\EndProcedure
+%\end{algorithmic}
+%\caption{Harmonization of user sessions }
+%\label{alg:harmonize}
+%\end{algorithm}
 
-\section{Substitution Matrix}
-	\begin{itemize}
-		\item Representation of how similar two elements in a sequence are. 
-		\item Alignment algorithms use this information to arrange the two sequences 
-		\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b  
-	\end{itemize}
-	\paragraph{Biological background}
-	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
-	\paragraph{Objectdistance Substitution Matrix}
-	\begin{itemize}
-		\item The substitution used here is based on the distance of elements in the GUI model of events
-		\item What is a GUI Model? Small example and description here
-		\item Algorithm of creation: For Every unique EventTask: substition score of (a,b) = -1*distanceInGuiModel(a,b)+k, with k the maximum value the score can take.
-		\item The k Parameter is dependent on the underlying gui model. A large k should be chosen vor very deeply, nested gui-models, whereas for flat gui models a smaller k seems better. 
-		\item Another Problem: Size of substitution matrix can grow large for a huge number of EventTasks. Memory Usage: O(n*(n+1)/2) 
-		\item For non EventTasks (which don't have a GUI model) the following procedure of distance calculation is proposed:
-		\item distance = The mean distance between all children of each Task, that are EventTasks
-		\item This step is implemented, but not used due to problem size. Thus, all non-EventTask-Tasks have a score of 0 to any other Task/EventTask
-	\end{itemize}
+\section{Task Distance Substitution Matrix}
+In section \ref{sec:foundationsubstitutionmatrix} I introduced substitution matrixes in general and what they are good for. 
+For this use case I needed to generate one substitution matrix that represents how similar tasks are. 
+The score of two tasks in the \textit{task distance substitution matrix} is defined as follows:
+\begin{definition}
+	\item Let a and b be two tasks
+	\item Let S(a,b) be the score for substituting task a with task b. The higher the value of S is, the more similar are the tasks a and b and vice versa.
+\end{definition}
+
+To calculate the score, three cases have to be considered:
+\begin{itemize}
+	\item Similarity of two event-tasks
+	\item Similarity of an event-task and a non-event-task
+	\item Similarity of two non-event-tasks
+\end{itemize}
+
+\subsection{Event-Task Event-Task Similarity}
+The first idea was to calculate the score of the matrix based on the distance between the absolute coordinates of the events-tasks. 
+There are a few problems with this approach: First, not all event-tasks may have absolute coordinates. 
+The second problem with this method is that in graphical user interfaces events may still be very similar, even if they have a large absolute distance.
+An example for such a case would be a web formular with many fields to fill out. 
+TODO: Maybe Screenshot here?
+Those fields take space which would result in large distances between them although the event-tasks all belong to a single formular.
+The solution to this problems is to make use of a grouping of elements the designer of the GUI already did: The GUI-Model (see section \ref{sec:foundationguiandguimodel}).
+Elements of a GUI that belong to one semantic task can usually be found in some kind of container that groups those elements together. Therefore the basis for my 
+distance calculation is the distance in the GUI-Model, as defined in \ref{def:guimodeldistanceee}. 
+
+\begin{definition}
+	\item Let a and b be events-tasks
+\begin{equation*}d(a,b) = d(b,a) = \text{the distance in the GUI model of the targets of event-tasks a and b.}
+\end{equation*}
+\label{def:guimodeldistanceee}
+\end{definition}
+
+Since the GUI model is a tree, the distance of two targets in a GUI can easily be calculated by finding the common ancestor of the targets and summing up the number of nodes from both the events to this ancestor, including the ancestor.
+TODO: Add figure here
+\begin{figure}[h]
+	\label{fig:guimodeldistance}
+\end{figure}
+Figure \ref{fig:guimodeldistance} shows a GUI model with two elements and their common ancestor. 
+
+
+\subsection{Event-Task Non-Event-Task Similarity}
+It takes a bit more effort to calculate the substitution score if one task is a non-event-task. 
+The reason is that the non-event tasks do not represent a simple event anymore. Therefore they do not possess a target in the GUI.
+A possible solution is to recursively visit every child of the non-event-task, gather all event tasks and then calculate the mean distance from each of those tasks to the event-task the distance shall be calculated to.
+Formally, definition \ref{def:guimodeldistanceee} has to be modified so that it covers non-events as well:
+
+\begin{definition}
+%	\item Let a and b be events-tasks, then:
+%\begin{equation*}d(a,b) = d(b,a) = \text{be the distance in the GUI model of the targets of event-tasks a and b.}
+%\end{equation*}
+	\item Let c be a non-event-task
+	\item Let E be the set containing all event-tasks that can be recursively found in c.
+	\item with definition \ref{def:guimodeldistanceee} it is possible to define d as
+\begin{equation*}
+	d(a,c) = d(c,a) = \frac{\sum_{\forall x \in E} d(a,x)}{|E|}
+\end{equation*}
+\label{def:guimodeldistanceene}
+\end{definition}
+
+\subsection{Non-Event Non-Event Similarity}
+With Definition \ref{def:guimodeldistanceene} it is simple to compute the distance for two tasks since all that is to do now is to repeat the procedure of finding all event-task children of one task, calculate the distances to the other task and use the mean distances as the total distance.
+The definition of d can be extended so it accepts two non-event-tasks:
+
+\begin{definition}
+	\item Let c and d be non-event-tasks 
+	\item Let E be the set containing all event-tasks that can be recursively found in c.
+	%\item Let F be the set containing all event-tasks that can be recursively found in d.
+	\item with definition \ref{def:guimodeldistanceene} it is possible to define d as
+	\begin{equation*}
+		d(c,d) = d(d,c) = \frac{\sum_{\forall x \in E} d(x,d)}{|E|}
+	\end{equation*}
+\label{def:guimodeldistancenene}
+\end{definition}
+\subsection{Score}
+Now that I defined the distance for three cases it is possible to compute the score $S$ of two tasks.
+\begin{definition}
+	\item Let U be the set of unique tasks occurring in the user sessions
+	\item Let k be a constant that defines the maximal score 
+	\item For each tupel $i,j \in U$ 
+\begin{equation*}
+		 S(i,j) = -1*d(i,j)+k
+	\label{eq:subscore}
+\end{equation*}
+\end{definition}
+
+The k constant should be chosen dependent on the underlying GUI model. A large k should be chosen for very deeply, nested GUI models, whereas for flat GUI models a smaller k seems better. 
 
 \section{Iteration Detection and Substitution Matrix update}
 \begin{itemize}
@@ -125,19 +193,6 @@ Another point why this step is important is that it creates a set of unique task
 	\item This is useful for this problem, because we also want to detect similar interactions of different users, not just equal interactions
 	\item align each user session with any other user session (section alighments)  (if not mentioned, mention complexity of $O(n^2)$
 \end{itemize}
-\subsubsection{Alignments}
-What are alignments? 
-\begin{itemize}
-	\item String algorithm often used in bioinformatics 
-	\item arranging sequences of DNA, RNA, Peptids to identify meaningful regions.
-	\item Meaningful regions are conserved, little mutations in sequences
-	\item Representation: Sequences in rows, aligned 
-	\item Minimal example of two aligned sequences here (with gaps though)
-	\item 2 Main categories: global and local alignments 
-	\item global: find best alignment end to end: better for very similar sequences
-	\item local: find best alignment of subsequence: better for finding conserved regions of not so similar sequences
-	\item Basic Algorithms: NeedleMan Wunsch(global), Smith Waterman(local) 
-\end{itemize} 
 
 \paragraph{Smith Waterman Algorithm For Repeated Matches}
 \begin{itemize}
@@ -169,7 +224,7 @@ What are alignments?
 	\begin{itemize}
 		\item Build dynamic programmic matrix
 		\item  \[F(i,0) = max \left\{ \begin{array}{lr}F(i-1,0)&\\F(i-1,j)-T& j=1,\dots,m\end{array}\right. \]
-		\item  \[F(i,j) = max \left\{ \begin{array}{lr}F(i,0),\\F(i-1,j-1)+s(x_i,y_i),\\F(i-1,j)-d,\\F(i,j-1)-d\end{array}\right.\]
+		\item  \[F(i,j) = max \left\{ \begin{array}{lr}F(i,0),\\F(i-1,j-1)+S(x_i,y_i),\\F(i-1,j)-d,\\F(i,j-1)-d\end{array}\right.\]
 		\item Explain each choice we can take here
 		\item Store every choice we took
 	\end{itemize}

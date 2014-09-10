@@ -1,0 +1,97 @@
+Introductory words what to find in this chapter
+
+\section{GUI and GUI-Model}
+\label{sec:foundationguiandguimodel}
+\begin{itemize}
+	\item What is a gui?
+	\item What is a gui model?
+\end{itemize}
+
+\section{Task Tree Terminology}
+\label{sec:foundationtasktreeterminology}
+	The basic building blocks of a task tree are ..
+\begin{itemize} 
+	
+	\item Components of a task tree: (with picture)
+	\begin{itemize}
+		\item root node: represents the overall task which contains all subtasks, the user wants to "reach" this node by his actions/his input
+		\begin{itemize}
+    			\item Order something in a webshop
+		\end{itemize}
+		\item intermediate nodes: subtasks which are steps towards the overall task
+		\begin{itemize}
+			\item e.g.: create a new account/log in, put something into the basket
+		\end{itemize}
+		\item leaf nodes: actions (e.g. click, scroll, textinput) which cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput)
+		\begin{itemize}
+			\item e.g.: enter a product name in a text field and click on the "search"-button
+		\end{itemize}
+	\end{itemize}
+	\item Where should i write about the difference between tasks and taskinstances? 	
+	\item temporal relationship: the order of the executed actions is important, so it is saved in the task tree
+	\item different ways of temporal relationship used by harms: 
+	\begin{itemize}
+		\item sequences: children executed in specific order
+		\item iteration: only one child, executed zero or more times
+		\item selection: only one of the children is executed
+		\item optional:  only one child, executed once or not
+	\end{itemize}	
+	\item Trace: recorded sequence of events: monitoring module records events caused by user actions, stored 
+	\item add example of a trace (maybe this goes to case study)
+\end{itemize}
+
+\section{Substition Matrixes}
+\label{sec:foundationsubstitutionmatrix}
+	\begin{itemize}
+		\item Representation of how similar two elements in a sequence are. 
+		\item Alignment algorithms use this information to arrange the two sequences 
+		\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b  
+	\end{itemize}
+	\paragraph{Biological background}
+	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
+
+\section{Alignments}
+What are alignments? 
+\begin{itemize}
+	\item String algorithm often used in bioinformatics 
+	\item arranging sequences of DNA, RNA, Peptids to identify meaningful regions.
+	\item Meaningful regions are conserved, little mutations in sequences
+	\item Representation: Sequences in rows, aligned 
+	\item Minimal example of two aligned sequences here (with gaps though)
+	\item 2 Main categories: global and local alignments 
+	\item global: find best alignment end to end: better for very similar sequences
+	\item local: find best alignment of subsequence: better for finding conserved regions of not so similar sequences
+	\item Basic Algorithms: NeedleMan Wunsch(global), Smith Waterman(local) 
+\end{itemize} 
+
+\section{State of the Art of Trace Based Task Tree Generation}
+\begin{itemize}
+	\item Procedure: start with leaf nodes to creat a task tree
+ 	\item for every event in a trace: create an event task instance
+  	\item event tasks instances stored in recorded order
+
+	\item Iteration detection:
+	\begin{itemize} 
+		\item identical tasks, which often repeat directly (e.g.: click on the same button a few times): Iteration
+		\item generate a new task model of type iteration: iterated event task as single child
+		\item replace every occured iteration of the event task with the iteration task node 
+	\end{itemize}
+
+	\item Sequence detection:
+	\begin{itemize}
+		\item task list scanned for identical subsequences
+    		\item most occured and longest subsequence: propably a logical and useful subtask
+		\item new task node type sequence generated
+		\item every identical subsequence replaced with the new task node 
+		\item if same length and count of subsequence: first subsequence will be replaced (always only one subsequence replaced!
+    		\item minimal length of a subsequence: 2 actions/ event tasks
+	\end{itemize}
+	\item Repetition of Detections:
+	\begin{itemize}
+		\item iteration and sequence detection repeatet until there are no matches anymore
+  		\item replaced sequences may already contain iterations/sequences 
+		\item in the end: list with task trees and event tasks that does not fit in as an iteration or sequence
+		\item Problem: some event tasks are used only once (e.g. login) or very seldom by one user
+		\item solution: compare data of more users 
+	\end{itemize}
+\end{itemize}
