@@ -39,19 +39,52 @@ TODO: GUI Model
 		\item selection: only one of the children is executed
 		\item optional:  only one child, executed once or not
 	\end{itemize}	
+	
+	\begin{figure}
+		%\tikzstyle{every node}=[draw=black,thick,anchor=west]   
+		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
+		        text centered, anchor=west, text=black, fill=blue!25]
+		%\tikzstyle{selected}=[draw=red,fill=red!30]
+		%\tikzstyle{optional}=[dashed,fill=gray!50]
+		
+		\begin{tikzpicture}[%
+		  grow via three points={one child at (0.5,-0.7) and
+		  two children at (0.5,-0.7) and (0.5,-1.4)},
+		  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+		  \node {Sequence}
+		    child { node {Iteration}       
+		      child { node {Selection}
+		        child { node {Sequence}
+		          child { node {Click        on   Textfield}}
+		          child { node {Enter user name    into Textfield}}
+		      child [missing] {}
+		          child [missing] {}
+		    }
+		        child [missing] {}
+		    child [missing] {}
+		        child { node {Sequence}
+		          child { node {click        on   Textfield "password"}}
+		          child { node {Enter password  into Textfield "password"}}
+		        }
+		      }
+		    }
+		    child [missing] {}
+		    child [missing] {}
+		    child [missing] {}
+		    child [missing] {}
+		    child [missing] {}
+		    child [missing] {}
+		    child [missing] {}
+		    child { node {Click        on   Button "login"}};
+		%    child [missing] {}               
+		%    child [missing] {}               
+		%    child [missing] {}
+		\end{tikzpicture}
+	\end{figure}
+
 	\item Trace: recorded sequence of events: monitoring module records events caused by user actions, stored 
 	\item add example of a trace (maybe this goes to case study)
 \end{itemize}
-
-\section{Substition Matrixes}
-\label{sec:foundationsubstitutionmatrix}
-	\begin{itemize}
-		\item Representation of how similar two elements in a sequence are. 
-		\item Alignment algorithms use this information to arrange the two sequences 
-		\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b  
-	\end{itemize}
-	\paragraph{Biological background}
-	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
 
 \section{Alignments}
 What are alignments? 
@@ -66,6 +99,18 @@ What are alignments?
 	\item local: find best alignment of subsequence: better for finding conserved regions of not so similar sequences
 	\item Basic Algorithms: NeedleMan Wunsch(global), Smith Waterman(local) 
 \end{itemize} 
+
+
+\section{Substitution Matrixes}
+\label{sec:foundationsubstitutionmatrix}
+	\begin{itemize}
+		\item Representation of how similar two elements in a sequence are. 
+		\item Alignment algorithms use this information to arrange the two sequences 
+		\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b  
+	\end{itemize}
+	\paragraph{Biological background}
+	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
+
 
 \section{State of the Art of Trace Based Task Tree Generation}
 \begin{itemize}
