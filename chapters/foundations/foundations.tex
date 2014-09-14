@@ -19,7 +19,7 @@ To understand tasks and task trees we have to look at how users interact with so
 Users perfoming actions like clicking or typing trigger so called events. Those events consist of a type and a target. 
 The type describes the type of the action that triggered that event (e.g. onclick), the target describes the element in the GUI the event occurred on.
 The events a user creates can be traced which is the basic step to gather data that is needed to generate task trees. 
-A trace is a list of events in the order they occurred. Figure \ref{fig:trace} shows an example of such a trace. 
+A trace is a list of events in the order they occurred. Table \ref{tab:trace} shows an example of such a trace. 
 All events in this list and their corresponding actions represent the users intention to achieve a goal while using the software e.g. buying a book 
 in an online shop. From now on this goal is named task. This task can consist of several subtasks such as logging in or putting a book into the basket.
 Each subtask itself can again contain futher subtasks. From figure \ref{fig:booktree} one can see that this results in a tree structure, a so called trask tree.
@@ -123,7 +123,7 @@ A task tree consists of three different kinds of nodes:
 	\item Intermediate nodes: Are subtasks which are steps towards the overall task. In figure \ref{fig:booktree} the intermediate nodes are login, search and order.
 	\item Leaf nodes: Actions (e.g. click, scroll, textinput) which cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called event tasks. Event tasks have no further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
 \end{itemize}
-Another relevant point is that the order of the executed actions is important. Therefore this information has to be represented in the task tree as well. For this Harms et al. defined the so called temporal relationships for all non-event-tasks. There are four types of temporal relationships, each with different properties. The \textit{sequence} temporal relationship dictates that children have to be executed in specific order in order (TODO: sounds awful) to fulfil the task. An \textit{iteration} can just have one child which is executed once or more times. Just on child of a \textit{selection} is allowed to be executed whereas the one child of an \textit{optional} may or may not be executed. Figure \ref{fig:exampletasktree} shows a tasktree that represents a login procedure and contains all possible temporal relationships. At last Harms et al. differentiate between a task and an executed task, a task instance.  
+Another relevant point is that the order of the executed actions is important. Therefore this information has to be represented in the task tree as well. For this Harms et al. defined the so called temporal relationships for all non-event-tasks. There are four types of temporal relationships, each with different properties. The \textit{sequence} temporal relationship dictates that children have to be executed in specific order in order (TODO: sounds awful) to fulfil the task. An \textit{iteration} can just have one child which is executed once or more times. Just on child of a \textit{selection} is allowed to be executed whereas the one child of an \textit{optional} may or may not be executed. Figure \ref{fig:exampletasktree} shows a tasktree that represents a login procedure and contains all possible temporal relationships. At last Harms et al. differentiate between a task and an executed task, a task instance. Figure \ref{fig:exampletaskinstancetree} shows the main differences between a task and its instance: \textit{Selection} instances can have only one child with the task instance that was executed. \textit{Optional} instances have one child if the task was executed and none if not. Instances of \textit{iterations} have as many children as often the task was executed.
 	\begin{figure}
 		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
 		        text centered, anchor=west, text=black, fill=blue!30]
@@ -154,6 +154,12 @@ Another relevant point is that the order of the executed actions is important. T
 		    child [missing] {}
 		    child [missing] {}
 		    child [missing] {}
+		    child [missing] {}
+		    child { node {Optional 1}
+			    child { node {Iteration 2}
+				child{ node{Scroll on Page}}
+			}
+		    }
 		    child [missing] {}
 		    child [missing] {}
 		    child { node {Click        on   Button "login"}};
@@ -196,9 +202,10 @@ Another relevant point is that the order of the executed actions is important. T
 		    child [missing] {}
 		    child [missing] {}
 		    child [missing] {}
+		    child { node { Instance of Optional 1}} 
 		    child { node {Click        on   Button "login"}};
 		    \end{tikzpicture}
-		\label{fig:exampletasktree}
+		\label{fig:exampletaskinstancetree}
 		\caption{An example for one task tree instance of the task tree in figure \ref{fig:exampletasktree}.\cite{harms2013}}
 	\end{figure}
 \section{Alignments}
