@@ -1,7 +1,7 @@
 In this chapter I will provide and explain the concepts and terms that are used throughout this thesis. 
 I will cover the definitions of a GUI and GUI-Model as well as the basic terminology of a task tree, followed by 
  information on alignment algorithms and substitution matrixes.
-The last section describes the method for tasktree generation by Harms et al. \cite{harms2013}
+The last section describes the method for task tree generation by Harms et al.\cite{harms2013}
 
 
 \section{GUI and GUI-Model}
@@ -12,33 +12,35 @@ TODO: GUI Model
 
 \section{Task Tree Terminology}
 \label{sec:foundationtasktreeterminology}
-Harms et al.\cite{harms2013} has created a set of definitions and the respective vocabulary that help dealing with tasktrees.
+Harms et al.\cite{harms2013} has created a set of definitions and the respective vocabulary that help dealing with task trees.
 I will adopt his definitions and summarize them in this section.
-To understand tasks and tasktrees we have to look at how users interact with software. 
-Perfoming actions like clicking or typing, they trigger so called events. 
-	Those events have a type and a target.
+To understand tasks and task trees we have to look at how users interact with software. 
 
-	The basic building blocks of a task tree are ..
+Users perfoming actions like clicking or typing trigger so called events. Those events consist of a type and a target. 
+The type describes the type of the action that triggered that event (e.g. onclick), the target describes the element in the GUI the event occurred on.
+The events a user creates can be traced which is the basic step to gather data that is needed to generate task trees. 
+A trace is a list of events in the order they occurred. Figure \ref{fig:trace} shows an example of such a trace. 
+All events in this list and their corresponding actions represent the users intention to achieve a goal while using the software e.g. buying a book 
+in an online shop. From now on this goal is named task. This task can consist of several subtasks such as logging in or putting a book into the basket.
+Each subtask itself can again contain futher subtasks. From figure \ref{fig:booktree} one can see that this results in a tree structure, a so called trask tree.
+
+\begin{figure}
+	\label{fig:booktree}
+	\caption{Simplified and not complete visit of an online book shop as a task tree}
+\end{figure}
+
+A task tree consists of three different kinds of nodes:
 \begin{itemize} 
-	
-	\item Components of a task tree: (with picture)
-	\begin{itemize}
-		\item root node: represents the overall task which contains all subtasks, the user wants to "reach" this node by his actions/his input
-		\begin{itemize}
-    			\item Order something in a webshop
-		\end{itemize}
-		\item intermediate nodes: subtasks which are steps towards the overall task
-		\begin{itemize}
-			\item e.g.: create a new account/log in, put something into the basket
-		\end{itemize}
-		\item leaf nodes: actions (e.g. click, scroll, textinput) which cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput)
-		\begin{itemize}
-			\item e.g.: enter a product name in a text field and click on the "search"-button
-		\end{itemize}
-	\end{itemize}
-	\item Where should i write about the difference between tasks and taskinstances? 	
-	\item temporal relationship: the order of the executed actions is important, so it is saved in the task tree
-	\item different ways of temporal relationship used by harms: 
+	\item Root node: Represents the overall task which contains all subtasks, the user wants to "reach" this node by his actions/his input. 
+		In figure \ref{fig:booktree} the overall task is to buy books at an online shop.
+	\item Intermediate nodes: Are subtasks which are steps towards the overall task. In figure \ref{fig:booktree} the intermediate nodes are login, search and order.
+	\item Leaf nodes: Actions (e.g. click, scroll, textinput) which cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called event tasks.
+		The event tasks of \ref{fig:booktree} are 
+\end{itemize}
+
+	%\item Where should i write about the difference between tasks and taskinstances? 	
+	%\item temporal relationship: the order of the executed actions is important, so it is saved in the task tree
+	%\item different ways of temporal relationship used by harms: 
 	\begin{itemize}
 		\item sequences: children executed in specific order
 		\item iteration: only one child, executed zero or more times
@@ -69,7 +71,7 @@ Perfoming actions like clicking or typing, they trigger so called events.
 		        child [missing] {}
 		    child [missing] {}
 		        child { node {Sequence}
-		          child { node {click        on   Textfield "password"}}
+		          child { node {Click        on   Textfield "password"}}
 		          child { node {Enter password  into Textfield "password"}}
 		        }
 		      }
@@ -86,12 +88,9 @@ Perfoming actions like clicking or typing, they trigger so called events.
 		%    child [missing] {}               
 		%    child [missing] {}
 		\end{tikzpicture}
+		\label{fig:exampletasktree}
+		\caption{An example for a task tree with temporal relations\cite{harms2013}.}
 	\end{figure}
-
-	\item Trace: recorded sequence of events: monitoring module records events caused by user actions, stored 
-	\item add example of a trace (maybe this goes to case study)
-\end{itemize}
-
 \section{Alignments}
 What are alignments? 
 \begin{itemize}
