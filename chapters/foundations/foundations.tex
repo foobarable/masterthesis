@@ -6,7 +6,6 @@ The last section describes the method for task tree generation by Harms et al.\c
 
 \section{GUI and GUI-Model}
 \label{sec:foundationguiandguimodel}
-GUI is short for graphical user interface which is an interface that is used to issue commands to a computer by means of a device such as a mouse that manipulates and activates onscreen images.\cite{Dictionary.com2014}
 
 TODO: GUI Model
 
@@ -206,22 +205,47 @@ Another relevant point is that the order of the executed actions is important. T
 		    child { node {Click        on   Button "login"}};
 		    \end{tikzpicture}
 		\label{fig:exampletaskinstancetree}
-		\caption{An example for one task tree instance of the task tree in figure \ref{fig:exampletasktree}.\cite{harms2013}}
+		\caption{An example for one task tree instance of the task tree in figure \ref{fig:exampletasktree}\cite{harms2013}.}
 	\end{figure}
 \section{Alignments}
-What are alignments? 
-\begin{itemize}
-	\item String algorithm often used in bioinformatics 
-	\item arranging sequences of DNA, RNA, Peptids to identify meaningful regions.
-	\item Meaningful regions are conserved, little mutations in sequences
-	\item Representation: Sequences in rows, aligned 
-	\item Minimal example of two aligned sequences here (with gaps though)
-	\item 2 Main categories: global and local alignments 
-	\item global: find best alignment end to end: better for very similar sequences
-	\item local: find best alignment of subsequence: better for finding conserved regions of not so similar sequences
-	\item Basic Algorithms: NeedleMan Wunsch(global), Smith Waterman(local) 
-\end{itemize} 
+Alignments are a method in bioinformatics to compare strings or sequences of DNA/RNA/Amino acids and score their similariy. 
+It is a very basic task to find out if two sequences are related. 
+This is done by arranging those sequences in a way that similar elements of each sequence are aligned together. The biological background of this approach is that
+both sequences have diverged from a common ancestor by a process of mutation and selection\cite{durbin1998}, hence have still common regions. The differences between those
+sequences can be explained by three processes: \textit{Substitution}, which replaces one element with an other,  \textit{deletion} which removes an element and \textit{insertion} that adds a new element to a sequence.
+Both insertion and deletion produce a so called gap in the alignment since the change just appeared in one of the two aligned sequences. Figure \ref{fig:alignmentbasic} illustrates all possible modifications.
+Each modification can be scored individually but it is common practise to score substitutions with substitution matrixes and have a general gap penalty. The sum of all single scores is the score of the total alignmment.
+Alignment algorithms try to maximize this score.
 
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+	\begin{tabular}{c|cccc}
+		1: &A&B&C&D\\
+		2: &A&B&C&A\\
+	\end{tabular}
+	\caption{Subsitution of D} 
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\begin{tabular}{c|cccc}
+		1:&A&B&C&D\\
+		2:&A&B&-&D\\
+	\end{tabular}
+	\caption{Deletion of C} 
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+	\begin{tabular}{c|cccc}
+		1:&A&B&C&-\\
+		2:&A&B&C&D\\
+	\end{tabular}
+	\caption{Insertion of D}
+	\end{subfigure}
+	\label{fig:alignmentbasic}
+	\caption{Three possible modifications that can occurr to sequence 2}
+\end{figure}
+
+Alignments can be categorized into global and local alignments. Global alignment algorithms try match one sequence to the other from start to end whereas local alignment algorithm try to find the best alignment of subsequences. 
+A popular global alignment algorithm is the Needleman-Wunsch algorithm\cite{needleman1970}. For basic local alignments the common algorithm is from Smith and Waterman\cite{waterman1981}.
 
 \section{Substitution Matrixes}
 \label{sec:foundationsubstitutionmatrix}
