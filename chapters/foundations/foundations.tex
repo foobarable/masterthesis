@@ -249,14 +249,23 @@ A popular global alignment algorithm is the Needleman-Wunsch algorithm\cite{need
 
 \section{Substitution Matrixes}
 \label{sec:foundationsubstitutionmatrix}
-	\begin{itemize}
-		\item Representation of how similar two elements in a sequence are. 
-		\item Alignment algorithms use this information to arrange the two sequences 
-		\item Usually symmetric matrices where each cell represents how good or bad it is to substitute element a with element b  
-	\end{itemize}
-	\paragraph{Biological background}
-	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
+In the last section I stated that alignment algorithms maximize the total alignment score. Therefore the underlying scoring model has to be adjusted very carefully since it practically determines the outcome of the algorithm.
+There are usually two parameters which have to be set: the substitution score and the gap penalty. 
 
+The gap penalty in its most basic version is a constant that has to be manually adjusted so that it fits the problem well. 
+A large gap penalty leads to less insertion and deletion occurrence and more substitutions.
+This gap scoring is called linear affine gap penalty. (TODO: Cite)
+The total gap penalty is n*g with n being the number of gaps and g the gap penalty constant. 
+There are different gap penalty models like a different g for opening a new gap and extending an already open gap. 
+In this thesis I will just use the linear affine gap penalty. 
+
+The substitution score is a representation of how similar two elements are. The more similar they are, the higher the score will be.
+The score is usually stored in symmetric matrices where each cell represents how good or bad it is to substitute element a with element b. 
+%In biology 
+%	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
+\begin{figure}
+	\label{fig:submatexample}
+\end{figure}
 
 \section{State of the Art of Trace Based Task Tree Generation}
 \begin{itemize}
