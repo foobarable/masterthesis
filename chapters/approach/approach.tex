@@ -223,63 +223,81 @@ The most na\"ive approach is to try out all possible combinations both sequences
 possible global alignments of two sequences\cite{durbin1998}. 
 Another way would be to use some kind of heuristic but we are interested in an exact, deterministic method.
 A common technique to solve this issue is dynamic programming\cite{bellman1957}. 
-The idea is not to calculate every possible variant but to reuse the best solution of smaller subproblems. 
+The main idea of dynamic programming is not to calculate every possible variant but to reuse the best solutions of smaller subproblems.  This method is central to computational sequence analysis\cite{durbin1998}.
 
+\subparagraph{Basic Smith-Waterman}
+The basic version of the Smith-Waterman algorithm makes use of dynamic programming by defining the dynamic programming matrix $F$ where each cell of the matrix stores the best score for aligning the elements up to the position the cell represents.
+For example the cell $(2|2)$ stores the score for the best alignment of first two elements of each sequence. 
+Each cell is computed by getting the best score out of four choices. Prior to enlisting those, we need the following definitions: 
 
+\begin{definition}
+	\item Let x,y be two sequences
+	\item Let F be a matrix with F(i,j) being the best score of aligning $x_1\dots x_i$ with $y_1\dots y_j$
+\end{definition}
+
+Then we can compute F by repeatedly applying the following equation:
+\begin{equation}
+F(i,j) = max \left\{ \begin{array}{lr}0,&\\F(i-1,j-1)+S(x_i,y_j),&Substitution\\F(i-1,j)-g,&Gap\\F(i,j-1)-g.&Gap\\\end{array} \right. 
+\end{equation}
+Figure \ref{fig:basicalignmentoperations} illustrates this formula. The diagonal choice means we align one element from each sequence with each other. Therefore we have to look up the similarity of both elements in the substitution matrix. 
+When the score from the upper cell minus the gap penalty is bigger than the diagonal choice a gap will appear at this position in sequence y. 
+This is the same for when the option from the left cell is taken, just that the gap will be inserted in sequence x. 
+The option 0 in the equation is to prevent alignment scores to become negative. 
+If a match cannot be extended with its score being a positive value it is better to start a new one later. 
+As we can see it is possible to fill the whole matrix by once the trivial scores, the first row and the first column, have been initialized.
+
+\begin{figure}
+	\centering
+	\includegraphics{img/basic_cell_fill.pdf}
+	\caption{Illustration of the three operations deletion, insertion and substitution in a dynamic programming matrix}
+	\label{fig:basicalignmentoperations}
+\end{figure}
+
+\subparagraph{Repeated matches}
+In the improved version of the algorithm a cell in F has a slight different meaning and its computation is a bit more complex. 
+The first difference is that this algorithm is asymetric in the sense of aligning sequence x to sequence y produces a different outcome than aligning sequence y to sequence x. Hence, we define y as the pattern we want to search and x as the sequence in which we search all subsequences of y repeatedly. This results in a final alignment where x has matched and unmatched regions.  
+The algorithm itself is partitioned into three parts: 
 
 \begin{itemize}
-	\item Two sequences: 
-	\item y: pattern
-	\item x: sequence in which we search all subsequences of y repeatedly
-	\item Final aligment: x has matched and unmatched regions
-	\item Uses matrix (dynamica programming matrix) where each cell stores the best score for aligning the elements at the position the cell represents
-	\item Advantage: Possible alignments with less score do not need to be calculated recursively
-	\item Score of a matched region: sum of all scores for each position minus the score threshold 
-	\item first row has a different meaning than in basic Smith waterman (score of the last matched subsequence)
-	\item Definitions:
-	\item F is the dynamic programming matrix
-	\item S is the score of the substitution matrix
-	\item g is the gap penalty
+	\item Initialization
+	\item Recursion
+	\item Traceback
 \end{itemize}
 
-\subparagraph{Intialization}:
-	\begin{itemize}
-		\item \[F(0,0) = 0\]
-%		\item Fill first col with 0, 
-	\end{itemize}
+\subparagraph{Intialization:}
+	The initialization step is simple: \\
+	Let m be the length of y
+	
+	\begin{equation*}
+		F(0,j) = 0 \text{ for } j=0\dotsc m
+	\end{equation*}
+	This differs from the Smith-Waterman algorithm described by Durbin et al.\cite{durbin1998} who just initialize F(0,0) and do not fill the first column. There is no need to initialize the first row because a subalignment will never start with a gap. For the sake of an easy implementation it was better to initialize the first row though.
 
 \subparagraph{Recursion}
-	\begin{itemize}
-		\item Build dynamic programmic matrix
-		\item  \[F(i,0) = max \left\{ \begin{array}{lr}F(i-1,0)&\\F(i-1,j)-T& j=1,\dots,m\end{array}\right. \]
-		\item  \[F(i,j) = max \left\{ \begin{array}{lr}F(i,0),\\F(i-1,j-1)+S(x_i,y_i),\\F(i-1,j)-g,\\F(i,j-1)-g\end{array}\right.\]
-		\item Explain each choice we can take here
-		\item Store every choice we took
-	\end{itemize}
+	The recursion formula for filling the matrix
+
+\begin{equation}
+F(i,0) = max \left\{ \begin{array}{lr}F(i-1,0),&\\F(i-1,j)-T,& j=1,\dots,m\end{array}\right. 
+\end{equation}
+\begin{equation}
+F(i,j) = max \left\{ \begin{array}{lr}F(i,0),\\F(i-1,j-1)+S(x_i,y_i),\\F(i-1,j)-g,\\F(i,j-1)-g.\end{array}\right.
+\end{equation}
+		
+		Store every choice we took
 
 \subparagraph{Traceback}
 Go back from the addition cell in the first row to first cell to get alignment
 \includegraphics[width=\textwidth]{chapters/approach/smithwatermanrepeated.png}
-%	\[
-%	\begin{pmatrix}
-%                   & - &   & A &   & C &   & A &   &  C & A & C & T & A \\
-%	         - & \color{blue}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-%	         A & 0 & \color{blue}2 & 1 & 2 & 1 & 2 & 1 & 0 & 2 \\
-%	         G & 0 & \color{blue}1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 \\
-%	         C & 0 & 0 & \color{blue}3 & 2 & 3 & 2 & 3 & 2 & 1 \\
-%	         A & 0 & 2 & 2 & \color{blue}5 & 4 & 5 & 4 & 3 & 4 \\
-%	         C & 0 & 1 & 4 & 4 & \color{blue}7 & 6 & 7 & 6 & 5 \\
-%	         A & 0 & 2 & 3 & 6 & 6 & \color{blue}9 & 8 & 7 & 8 \\
-%	         C & 0 & 1 & 4 & 5 & 8 & 8 & \color{blue}11 & \color{blue}10 & 9 \\
-%	         A & 0 & 2 & 3 & 6 & 7 & 10 & 10 & 10& \color{blue}12
-%	\end{pmatrix}
-%	\]
-
 \subparagraph{Scoring}
 Describe how each match is scored
+\begin{itemize}
+	\item Score of a matched region: sum of all scores for each position minus the score threshold 
+	\item first row has a different meaning than in basic Smith waterman (score of the last matched subsequence)
+\end{itemize}
 
 \subparagraph{Match retrival}
 	\begin{itemize}
+		
 		\item retrieve matches that reach a defined threshold from each alignment pair
 		\item Due the nature of this algoritm, all matches that can be found have this minimal score
 		\item A match consists of 2 sequences of numbers. 

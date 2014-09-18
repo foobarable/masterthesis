@@ -1,5 +1,7 @@
 DIRS= `find -maxdepth 1  -type d ! -wholename \*.svn\* | grep /`
 PDF = $(addsuffix .pdf, $(basename $(wildcard *.eps)))
+INKSCAPE = $(addsuffix .pdf, $(basename $(wildcard *.svg)))
+
 
 show: all
 
@@ -22,8 +24,14 @@ evince:
 prepare:
 	mkdir tmp
 
-pictures/%.pdf: pictures%.eps
+img/%.pdf: pictures%.eps
 	epstopdf $(basename $@).eps
+
+img/%.pdf: %.svg
+	inkscape $(basename $@).svg --export-eps=$(basename $@).eps
+	epstopdf $(basename $@).eps
+
+
 
 clean:
 	-rm -f ./tmp/*~ ./tmp/*.bak ./tmp/*.aux ./tmp/*.log ./tmp/*.toc ./tmp/*.out ./tmp/*.nav ./tmp/*.snm ./tmp/*.bbl ./tmp/*.blg
