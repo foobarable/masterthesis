@@ -15,13 +15,14 @@ Harms et al.\cite{harms2013} have created a set of definitions and the respectiv
 We will adopt his definitions and summarize them in this section.
 
 To understand tasks and task trees we have to look at how users interact with software. 
-Users perfoming actions like clicking or typing trigger so called events. Those events consist of a type and a target. 
+Users perfoming actions like clicking or typing trigger so called events. 
+Those events consist of a type and a target. 
 The type describes the type of the action that triggered that event (e.g. onclick), the target describes the element in the GUI the event occurred on.
 The events a user creates can be traced which is the basic step to gather data that is needed to generate task trees. 
 A trace is a list of events in the order they occurred. Table \ref{tab:trace} shows an example of such a trace. 
 All events in this list and their corresponding actions represent the users intention to achieve a goal while using the software e.g. buying a book 
 in an online shop. From now on this goal is named task. This task can consist of several subtasks such as logging in or putting a book into the basket.
-Each subtask itself can again contain further subtasks. From figure \ref{fig:booktree} one can see this results in a tree structure, a so called trask tree.
+Each subtask itself can again contain further subtasks. From figure \ref{fig:booktree} one can see this results in a tree structure, a so called \textit{trask tree}.
 
 \begin{table}
 \begin{center}
@@ -38,8 +39,8 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 	   7. &Left mouse button click &  Button with name "login" \\
 	  \end{tabular}
   \end{center}
-  \label{tab:trace}
   \caption{Example for a trace of the login process of a user.\cite{harms2013}}
+  \label{tab:trace}
   \end{table}
 
 \begin{figure}
@@ -111,18 +112,27 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 ;
 \end{tikzpicture}
 
-	\label{fig:booktree}
 	\caption{Simplified and not complete visit of an online book shop as a task tree}
+	\label{fig:booktree}
 \end{figure}
 
 A task tree consists of three different kinds of nodes:
 \begin{itemize} 
 	\item Root node: Represents the overall task which contains all subtasks, the user wants to achieve this goal by his actions/his input. 
 		In figure \ref{fig:booktree} the overall task is to buy books at an online shop.
-	\item Intermediate nodes: Are subtasks which are steps towards the overall task. In figure \ref{fig:booktree} the intermediate nodes are login, search, basket and order.
-	\item Leaf nodes: Actions (e.g. clicking, scrolling, textinput) which cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called event tasks. Event tasks have no further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
+	\item Leaf nodes: Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called \textit{event tasks}. Event tasks do not have any further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
+	\item Intermediate nodes: Are subtasks which are steps towards the overall task. All tasks above the leave nodes are called non-event-tasks. In figure \ref{fig:booktree} the intermediate nodes are login, search, basket and order.
 \end{itemize}
-Another relevant point is that the order of the executed actions is important. Therefore this information has to be represented in the task tree as well. For this Harms et al. defined the so called temporal relationships for all non-event-tasks. There are four types of temporal relationships, each with different properties. The \textit{sequence} temporal relationship dictates that children have to be executed in specific order to fulfil the task. An \textit{iteration} can just have one child which is executed once or more times. Just one child of a \textit{selection} is allowed to be executed whereas the one child of an \textit{optional} may or may not be executed. Figure \ref{fig:exampletasktree} shows a tasktree that represents a login procedure and contains all possible temporal relationships. At last Harms et al. differentiate between a task and an executed task, a task instance. Figure \ref{fig:exampletaskinstancetree} shows the main differences between a task and its instance: \textit{Selection} instances can have only one child with the task instance that was executed. \textit{Optional} instances have one child if the task was executed and none if not. Instances of \textit{iterations} have as many children as often the task was executed.
+Another relevant point is that the order of the executed actions is important. 
+Therefore this information has to be represented in the task tree as well. 
+For this Harms et al. defined the so called \textit{temporal relationships} for all non-event-tasks. 
+There are four types of temporal relationships, each with different properties. 
+The \textit{sequence} temporal relationship dictates that children have to be executed in specific order to fulfil the task. 
+An \textit{iteration} can just have one child which is executed once or more times. 
+Just one child of a \textit{selection} is allowed to be executed whereas the one child of an \textit{optional} may or may not be executed. 
+Figure \ref{fig:exampletasktree} shows a tasktree that represents a login procedure and contains all possible temporal relationships. 
+At last Harms et al. differentiate between a task and an executed task, a task instance. 
+Figure \ref{fig:exampletaskinstancetree} shows the main differences between a task and its instance: \textit{Selection} instances can have only one child with the task instance that was executed. \textit{Optional} instances have one child if the task was executed and none if not. Instances of \textit{iterations} have as many children as often the task was executed.
 	\begin{figure}
 		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
 		        text centered, anchor=west, text=black, fill=blue!30]
@@ -163,8 +173,8 @@ Another relevant point is that the order of the executed actions is important. T
 		    child [missing] {}
 		    child { node {Click        on   Button "login"}};
 		    \end{tikzpicture}
-		\label{fig:exampletasktree}
 		\caption{An example for a task tree with temporal relations\cite{harms2013}.TODO: More explanations here}
+		\label{fig:exampletasktree}
 	\end{figure}
 	\begin{figure}
 		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
@@ -204,18 +214,74 @@ Another relevant point is that the order of the executed actions is important. T
 		    child { node { Instance of Optional 1}} 
 		    child { node {Click        on   Button "login"}};
 		    \end{tikzpicture}
-		\label{fig:exampletaskinstancetree}
 		\caption{An example for one task tree instance of the task tree in figure \ref{fig:exampletasktree}\cite{harms2013}.}
+		\label{fig:exampletaskinstancetree}
 	\end{figure}
+
+\section{State of the Art of Trace Based Task Tree Generation}
+The current procedure to generate tasktrees\cite{harms2013} starts with iterating through the events in the traces and creates an event task instance for each. 
+Those event task instances are stored in the order they were triggered.  This structure is a so called \textit{user session}.
+
+The user sessions used for task tree generation are available in a non-harmonized form,
+meaning equal task instances may not have the same corresponding task assigned. TODO: Maybe write about the different levels of equality here?
+The harmonization process that follows now sets the correct task to those task instances.
+Fixing the issue of non-harmonized input data before starting any further steps is crucial since it reduces the number of occuring tasks and makes task instances
+comparable by their tasks. Figure \ref{fig:nonharmonized} shows a non-harmonized user session, figure \ref{fig:harmonized} a session where the tasks of equal task instances have been set accordingly.
+
+After the harmonization step follows the iteration detection, which detects any identical task instances that are direcly adjacent task instances in the user sessions. They occur if a user repeatedly does the same action (e.g. multiple clicks on the same button). 
+Once those subsequent instances have been detected, a new task of type iteration is generated. 
+We recall from the previous section that a task with a temporal relationshit \textit{iteration} can just have one child. We add the task of the detected iterated instance to this newly created iteration task.
+After this this task is replaced in every other place it occurs as well. In contradiction to the task, the iteration instance has, after the replacement, as much children of the instance as often the iterated instance occured.
+
+The next part of the task tree generation algorithm is the sequence detection.
+For this, the user sessions are scanned for identical subsequences. This is done with the help of a trie data structure.
+The longest subsequence that occured most often is then added to a newly created \textit{sequence} task and again replaced in
+all other user sessions as well. After that the next most occuring subsequence is replaced. The minimal length of a subsequence is two.
+If there is more than one subsequence with equal occurrence count, just the longest subsequence is replaced.
+If both occurence count and length match, Harms et al. just replace the subsequence occuring first in the ordered list.
+Both steps, iteration detection and sequence detection are repeated until no more iterations or sequences are found.
+Figure \ref{fig:exampletasktreeharms} shows an example of the first iteration of the task tree generation.
+
+\begin{figure}
+	\caption{Example for one iteration of the iteration and sequence detection for task tree generation}
+	\label{fig:exampletasktreeharms}
+\end{figure}
+
+\begin{figure}
+\[
+\begin{array}{r|ccccc}
+	Task & 1 & 2 & 3 & 4 & 5\\
+	\hline
+	TaskInstance & A & B & C & A & B\\
+\end{array} 
+\]
+\caption{Non-harmonized user session}
+\label{fig:nonharmonized}
+\end{figure}
+
+\begin{figure}
+\[
+\begin{array}{r|ccccc}
+	Task & 1 & 2 & 3 & 1 & 2\\
+	\hline
+	TaskInstance & A & B & C & A & B\\
+\end{array} 
+\]
+\caption{Harmonized user session}
+\label{fig:harmonized}
+\end{figure}
+
 \section{Alignments}
+\label{sec:alignments}
 Alignments are a method in bioinformatics to compare strings or sequences of DNA/RNA/Amino acids and score their similarity. 
 It is a very basic task to find out if two sequences are related. 
 This is done by arranging those sequences in a way that similar elements of each sequence are aligned together. The biological background of this approach is that
-both sequences have diverged from a common ancestor by a process of mutation and selection\cite{durbin1998}, hence have still common regions. The differences between those
-sequences can be explained by three processes: \textit{Substitution} which replaces one element with an other,  \textit{deletion} which removes an element and \textit{insertion} that adds a new element to a sequence.
+both sequences have diverged from a common ancestor by a process of mutation and selection\cite{durbin1998}, hence have still common regions. Those regions are called conserved regions, meaning they were resistant to mutation. 
+
+In contrast to the persistent regions, differences between sequences can be explained by three processes: \textit{Substitution} which replaces one element with an other,  \textit{deletion} which removes an element and \textit{insertion} that adds a new element to a sequence.
 Both insertion and deletion produce a so called gap in the alignment since the change just appeared in one of the two aligned sequences. Figure \ref{fig:alignmentbasic} illustrates all possible modifications.
 Each modification can be scored individually but it is common practise to score substitutions with substitution matrixes and have a general gap penalty. The sum of all single scores is the score of the total alignmment.
-Alignment algorithms try to maximize this score.
+Alignment algorithms try to maximize this score. 
 
 \begin{figure}[h]
 	\centering
@@ -240,8 +306,8 @@ Alignment algorithms try to maximize this score.
 	\end{tabular}
 	\caption{Insertion of D}
 	\end{subfigure}
-	\label{fig:alignmentbasic}
 	\caption{Three possible modifications that can occurr to sequence 2}
+	\label{fig:alignmentbasic}
 \end{figure}
 
 Alignments can be categorized into global and local alignments. Global alignment algorithms try match one sequence to the other from start to end whereas local alignment algorithm try to find the best alignment of subsequences. 
@@ -266,35 +332,3 @@ The score is usually stored in symmetric matrices where each cell represents how
 \begin{figure}
 	\label{fig:submatexample}
 \end{figure}
-
-\section{State of the Art of Trace Based Task Tree Generation}
-\begin{itemize}
-	\item Procedure: start with leaf nodes to creat a task tree
- 	\item for every event in a trace: create an event task instance
-  	\item event tasks instances stored in recorded order
-
-	\item Iteration detection:
-	\begin{itemize} 
-		\item identical tasks, which often repeat directly (e.g.: click on the same button a few times): Iteration
-		\item generate a new task model of type iteration: iterated event task as single child
-		\item replace every occured iteration of the event task with the iteration task node 
-	\end{itemize}
-
-	\item Sequence detection:
-	\begin{itemize}
-		\item task list scanned for identical subsequences
-    		\item most occured and longest subsequence: propably a logical and useful subtask
-		\item new task node type sequence generated
-		\item every identical subsequence replaced with the new task node 
-		\item if same length and count of subsequence: first subsequence will be replaced (always only one subsequence replaced!
-    		\item minimal length of a subsequence: 2 actions/ event tasks
-	\end{itemize}
-	\item Repetition of Detections:
-	\begin{itemize}
-		\item iteration and sequence detection repeatet until there are no matches anymore
-  		\item replaced sequences may already contain iterations/sequences 
-		\item in the end: list with task trees and event tasks that does not fit in as an iteration or sequence
-		\item Problem: some event tasks are used only once (e.g. login) or very seldom by one user
-		\item solution: compare data of more users 
-	\end{itemize}
-\end{itemize}

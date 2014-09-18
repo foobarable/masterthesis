@@ -9,7 +9,6 @@ Algorithm \ref{alg:tasktreeoverview} shows the main building blocks and will fun
 \floatname{algorithm}{Algorithm}
 \begin{algorithmic}
 	\Procedure{GenerateTaskTree}{UserSessions}
-	\State Harmonize (UserSessions)
 	\State Generate Substitution Matrix (UniqueTasks)
 	\While{Replaced Tasks} 
 	\State Detect Iterations (UserSessions)
@@ -22,42 +21,13 @@ Algorithm \ref{alg:tasktreeoverview} shows the main building blocks and will fun
 \label{alg:tasktreeoverview}
 \end{algorithm}
 
-\section{Harmonization}
-The user sessions used for task tree generation at the start of this algorithm are available in a non-harmonized form, 
-meaning equal task instances may not have the same corresponding task assigned. The harmonization process sets the correct task to those task instances.
-Fixing the issue of non-harmonized input data before starting any further steps is crucial since it reduces the number of occuring tasks and makes task instances
-
-comparable by their tasks. Figure \ref{fig:nonharmonized} shows a non-harmonized user session, figure \ref{fig:harmonized} a session where the tasks of equal task instances have been set accordingly.
-
-Another point why this step is important is that it creates a set of unique tasks. This set is needed for the next step of the algorithm, the generation of the substitution matrix.
-
-\begin{figure}[h]
-\[
-\begin{array}{r|ccccc}
-	Task & 1 & 2 & 3 & 4 & 5\\
-	\hline
-	TaskInstance & A & B & C & A & B\\
-\end{array} 
-\]
-\caption{Non-harmonized user session}
-\label{fig:nonharmonized}
-\end{figure}
-
-\begin{figure}[h]
-\[
-\begin{array}{r|ccccc}
-	Task & 1 & 2 & 3 & 1 & 2\\
-	\hline
-	TaskInstance & A & B & C & A & B\\
-\end{array} 
-\]
-\caption{Harmonized user session}
-\label{fig:harmonized}
-\end{figure}
-
 \section{Task Distance Substitution Matrix}
-In section \ref{sec:foundationsubstitutionmatrix} I introduced substitution matrixes in general and what they are good for. 
-For this use case I needed to generate one substitution matrix that represents how similar tasks are. 
+The harmonization process performed by Harms et al. is also applied to the user sessios in this approach. 
+A useful side product of the harmonization is the set of unique tasks.
+This set is needed for this step of the algorithm, the generation of the substitution matrix.
+
+In section \ref{sec:foundationsubstitutionmatrix} we introduced substitution matrixes in general and what they are good for. 
+For this use case we needed to generate one substitution matrix that represents how similar tasks are. 
 The score of two tasks in the \textit{task distance substitution matrix} is defined as follows:
 \begin{definition}
 	\item Let a and b be two tasks
@@ -188,39 +158,76 @@ Now that I defined the distance for three cases it is possible to compute the sc
 \end{equation*}
 \end{definition}
 
-The k constant should be chosen dependent on the underlying GUI model. A large k should be chosen for very deeply, nested GUI models, whereas for flat GUI models a smaller k seems better. 
+The k constant should be chosen dependent on the underlying GUI model. A large k should be chosen for very deeply, nested GUI models whereas for flat GUI models a smaller k seems better. 
+
+The maximal score is reached if the distance between two elements is zero. This happens if we compare two equal elements.
+A problem can occur when the score of a non-event-task to an event task is equal to maximal score. 
+This happens if a non-event-task has just one event-task as child and the distance of this child to the same event-task is calculated. 
+Since it is preferred that the score of two equal event-tasks is always larger than the score of this event-task with a non-event-task we add the penalty term $L$ to the score equation.
+
+\begin{definition}
+	\item Let E be the set of all event-tasks
+	\item let N be the set of all non-event-tasks
+\begin{eqnarray*}
+	L(i,j) &=& 
+	\begin{cases}
+		0 & \text{if } i,j \in E \\
+		\text{constant} & \text{if } i \in N \lor  j \in N\\
+	\end{cases} \\
+	S(i,j) &=& -1*d(i,j)+k-L
+\end{eqnarray*}
+	\label{eq:subscore_adjusted}
+\end{definition}
+
 
 \section{Iteration Detection and Substitution Matrix Update}
 The iteration detection from Harms is also suitable for my algorithm was not altered in any way. It reliably detects iterations and replaces them in the user sessions.
 Before the sequence detection can come to play the substitution matrix should be updated since there were new iteration tasks created during iteration detection. Those new tasks are stored in a set that contains all newly created tasks.
 The update process differs just a little from the generation process with the only difference beeing that just the distances between the newly created tasks to the current set of unique tasks is as well as the distances between the newly created tasks are computed.
-After the matrix has been updated, the newcly created tasks are merged with the set of unique tasks and then emptied.
-The whole step of updating the matrix is currently implemented but not used. Instead, each score between an event-task to a non-event-task and therefore all scores between non-event-tasks are defined as zero due to perfomance issues.
+After the matrix has been updated, the newly created tasks are merged with the set of unique tasks and then emptied.
+TODO: NOT UP TO DATE The whole step of updating the matrix is currently implemented but not used. 
+Instead, each score between an event-task to a non-event-task and therefore all scores between non-event-tasks are defined as zero due to perfomance issues.
 More details on this issue can be found in section TODO: REF HERE.
 
 \section{Sequence Detection}
-As i figured out at the beginning of this chapter, the sequence detection is the part of the algorithm that varies the most from Harms approach.
-It is itself separated in three in steps:
+As we figured out at the beginning of this chapter the sequence detection is the part of the algorithm that varies the most from Harms approach.
+It is itself separated in three steps:
 \begin{itemize}
-	\item The search for significant regions
+	\item The search for significant patterns
 	\item The model generation
 	\item The sequence replacement
 \end{itemize}
 
-\subsection{Search for significant regions}		
-\begin{itemize}
-	\item For sequence detection a method called alignments is used
-	\item It can be used for approximate string matching. 
-	\item This is useful for this problem, because we also want to detect similar interactions of different users, not just equal interactions
-	\item align each user session with any other user session (section alighments)  (if not mentioned, mention complexity of $O(n^2)$
-\end{itemize}
+\subsection{Search for significant patterns}		
+The search for significant patterns is done with an alignment method we introduced in section \ref{sec:alignments}. 
+The bioinformatical problem of comparing and aligning DNA/RNA/Amino acid sequences is closely related to finding important subsequences in the user sessions. 
+The conserved regions of biological sequences comply with those interactions that most of the users performed similarly. 
+We can conclude that those interactions are meaningful in the sense of fulfilling one desired task.
+The goal of the alignment algorithm is now to detect the conserved regions and extract a model of the average user behaviour. 
+Since alignment algorithms also find approximate and not only exact similarities, this step of the sequence detection is the main difference to Harms method.
+
+The first step of the search for significant patterns is to align every user session with any other user session with an algorithm called Smith-Waterman algorithm for repeated matches.
+We now describe this algorithm in detail.
 
 \paragraph{Smith Waterman Algorithm For Repeated Matches}
+The Smith-Waterman algorithm for repeated matches\cite{durbin1998} is a modified version of the original Smith-Waterman algorithm\cite{waterman1981}.
+The original Smith-Waterman finds the best local similarity between two sequences.
+Since we need all relevant similarities and not just the one with the best score, we define a threshold score $T$.
+Once a local subalignment reaches T it is considered as relevant.
+
+We recall from the alignments introduction that alignment algorithms try to find the best possible score between two sequences using the underlying scoring model of substitution and gap scores.
+The most na\"ive approach is to try out all possible combinations both sequences could be aligned. As usual, this approach is not very feasible because there are 
+\begin{equation*}
+	\binom{2n}{n} = \frac{(2n)!}{(n!)^2} \simeq \frac{2^{2n}}{\sqrt{\pi n}}
+\end{equation*}
+possible global alignments of two sequences\cite{durbin1998}. 
+Another way would be to use some kind of heuristic but we are interested in an exact, deterministic method.
+A common technique to solve this issue is dynamic programming\cite{bellman1957}. 
+The idea is not to calculate every possible variant but to reuse the best solution of smaller subproblems. 
+
+
+
 \begin{itemize}
-	\item Modified Version of the smith waterman algorithm
-	\item Finds all local alignments of two sequences that reach a threshold score, not just the best
-	\item Uses dynamic programming
-	\item Exact method, not heuristic
 	\item Two sequences: 
 	\item y: pattern
 	\item x: sequence in which we search all subsequences of y repeatedly
