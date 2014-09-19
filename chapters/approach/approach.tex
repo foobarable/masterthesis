@@ -207,7 +207,8 @@ The goal of the alignment algorithm is now to detect the conserved regions and e
 Since alignment algorithms also find approximate and not only exact similarities, this step of the sequence detection is the main difference to Harms method.
 
 The first step of the search for significant patterns is to align every user session with any other user session with an algorithm called Smith-Waterman algorithm for repeated matches.
-We now describe this algorithm in detail.
+For the rest of this section the user session will be represented by a sequence of numbers. Each number in a sequence corresponds with the unique id the task at this position in the user sessions has.
+We now describe the algignment algorithm in detail.
 
 \paragraph{Smith Waterman Algorithm For Repeated Matches}
 The Smith-Waterman algorithm for repeated matches\cite{durbin1998} is a modified version of the original Smith-Waterman algorithm\cite{waterman1981}.
@@ -223,7 +224,8 @@ The most na\"ive approach is to try out all possible combinations both sequences
 possible global alignments of two sequences\cite{durbin1998}. 
 Another way would be to use some kind of heuristic but we are interested in an exact, deterministic method.
 A common technique to solve this issue is dynamic programming\cite{bellman1957}. 
-The main idea of dynamic programming is not to calculate every possible variant but to reuse the best solutions of smaller subproblems.  This method is central to computational sequence analysis\cite{durbin1998}.
+The main idea of dynamic programming is not to calculate every possible variant but to reuse the best solutions of smaller subproblems.  
+This method is central to computational sequence analysis\cite{durbin1998}.
 
 \subparagraph{Basic Smith-Waterman}
 The basic version of the Smith-Waterman algorithm makes use of dynamic programming by defining the dynamic programming matrix $F$ where each cell of the matrix stores the best score for aligning the elements up to the position the cell represents.
@@ -255,7 +257,9 @@ As we can see it is possible to fill the whole matrix by once the trivial scores
 
 \subparagraph{Repeated matches}
 In the improved version of the algorithm a cell in F has a slight different meaning and its computation is a bit more complex. 
-The first difference is that this algorithm is asymetric in the sense of aligning sequence x to sequence y produces a different outcome than aligning sequence y to sequence x. Hence, we define y as the pattern we want to search and x as the sequence in which we search all subsequences of y repeatedly. This results in a final alignment where x has matched and unmatched regions.  
+The first difference is that this algorithm is asymetric in the sense of aligning sequence x to sequence y produces a different outcome than aligning sequence y to sequence x. Hence, we define y as the pattern we want to search and x as the sequence in which we search all subsequences of y repeatedly.
+This results in a final alignment where x has matched and unmatched regions.  
+
 The algorithm itself is partitioned into three parts: 
 
 \begin{itemize}
@@ -274,34 +278,59 @@ The algorithm itself is partitioned into three parts:
 	This differs from the Smith-Waterman algorithm described by Durbin et al.\cite{durbin1998} who just initialize F(0,0) and do not fill the first column. There is no need to initialize the first row because a subalignment will never start with a gap. For the sake of an easy implementation it was better to initialize the first row though.
 
 \subparagraph{Recursion}
-	The recursion formula for filling the matrix
+The recursion formula for filling the matrix also has the three options for insertion/deletion and substitution as illustrated in figure \ref{fig:basicalignmentoperations}.
+But as we see there are some more options. 
+For the first row (equation \ref{eq:firstrow}), which does not represent a real alignment of sequences but denotes the sum of completed match scores, we have two options. 
+The first one is to take the the the value from the last column so we always keep track of the total score. 
+This leads to the fact that the value in this line will always stay the same or increase, but never decrease.
+The second choice is taken when a match reaches its maximum and has a minimum score of T. 
+This is the consequence of an ending match meaning this choice is just taken when we calculate the cell for an unmatched region.
+To summarize the equation for the first row we can say the algorithm choses the maximum value of the last column minus T or adopts the value of the preceding cell in the first row, depending which one was larger. 
+
+Equation \ref{eq:otherrows} for the fields aside of the first row is amended by the posibility to begin its alignment score with the value standing in the first row of its own column. 
+Durbin et al. does not mention the fact that this makes it easier for subalignments of long sequences to reach the threshold score once a few matches have been found before.
+This issue has not been investigated in this work. 
+The total score of the whole alignment is stored in F(i+1,0). This cell lies an unmatched region of x and contains the sum of all completed match scores.
+
 
 \begin{equation}
 F(i,0) = max \left\{ \begin{array}{lr}F(i-1,0),&\\F(i-1,j)-T,& j=1,\dots,m\end{array}\right. 
+\label{eq:firstrow}
 \end{equation}
 \begin{equation}
 F(i,j) = max \left\{ \begin{array}{lr}F(i,0),\\F(i-1,j-1)+S(x_i,y_i),\\F(i-1,j)-g,\\F(i,j-1)-g.\end{array}\right.
+\label{eq:otherrows}
 \end{equation}
 		
-		Store every choice we took
-
 \subparagraph{Traceback}
-Go back from the addition cell in the first row to first cell to get alignment
-\includegraphics[width=\textwidth]{chapters/approach/smithwatermanrepeated.png}
-\subparagraph{Scoring}
-Describe how each match is scored
-\begin{itemize}
-	\item Score of a matched region: sum of all scores for each position minus the score threshold 
-	\item first row has a different meaning than in basic Smith waterman (score of the last matched subsequence)
-\end{itemize}
+A very important point in dynamic programming algorithms is that we not just calculate and store the maximum score for each subalignment but additionally have to store which choice of the formula produced the highest value.
+This makes it possible to go back from the total best score to the start and find the actual alignment of the whole sequences. This process is called traceback. 
+Figure \ref{fig:durbindpmatrixtraceback} shows a completly filled dynamic programmic matrix and the traceback path.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{chapters/approach/smithwatermanrepeated.png}
+\caption{Figure from Durbin et al.\cite{durbin1998}. The repeat dynamic programming matrix for two example sequences, for T = 20. Below the optimal alignment, with total score $9 = 29-20$. There are two separate match regions, with scores 1 and 8. Dots are used to indoicate unmatched regions of x. The arrows show the traceback process, going back from the total score to the start.}
+\label{fig:durbindpmatrixtraceback}
+\end{figure}
 
 \subparagraph{Match retrival}
+To find similar user behaviour we are just interested in the matches that reached the threshold score. After aligning every user session with each other we extract all matches from those alignments.
+We consider every subset of the alignment that is not a unmatched region a match.
+Therefore a match consists of two sequences of numbers and can contain gaps. We will encode a gap in the number -1. 
+Fig \ref{fig:matchexample} shows an example of a match, containing one gap in the first sequence, two exact tasks and one substitution.
+
+
+\begin{figure}[h]
+	\centering
+	\begin{tabular}{cccc}
+		9 & 16 & -1 & 6 \\
+		9 & 15 & 17 & 6  
+	\end{tabular}
+	\caption{Example for a retrieved match}
+	\label{fig:matchexample}
+\end{figure}
 	\begin{itemize}
-		
-		\item retrieve matches that reach a defined threshold from each alignment pair
-		\item Due the nature of this algoritm, all matches that can be found have this minimal score
-		\item A match consists of 2 sequences of numbers. 
-		\item for each found match:
 		\item Search match in all user sessions
 		\item From the most to the least found match:
 	\end{itemize}
