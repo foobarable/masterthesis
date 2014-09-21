@@ -214,6 +214,9 @@ We now describe the algignment algorithm in detail.
 The Smith-Waterman algorithm for repeated matches\cite{durbin1998} is a modified version of the original Smith-Waterman algorithm\cite{waterman1981}.
 The original Smith-Waterman finds the best local similarity between two sequences.
 Since we need all relevant similarities and not just the one with the best score, we define a threshold score $T$.
+\begin{definition}
+	Let T be the threshold score for subalignments.
+\end{definition}
 Once a local subalignment reaches T it is considered as relevant.
 
 We recall from the alignments introduction that alignment algorithms try to find the best possible score between two sequences using the underlying scoring model of substitution and gap scores.
@@ -315,7 +318,7 @@ Figure \ref{fig:durbindpmatrixtraceback} shows a completely filled dynamic progr
 \end{figure}
 
 \subsubsection{Match retrival}
-To find similar user behaviour we are just interested in the matches that reached the threshold score. After aligning every user session with each other we extract all matches from those alignments.
+To find similar user behaviour we are only interested in the matches that reached the threshold score. After aligning every user session with each other we extract all matches from those alignments.
 We consider every subset of the alignment that is not an unmatched region as a match.
 Therefore a match consists of two sequences of numbers and can contain gaps. We encode a gap with the value -1. 
 Fig \ref{fig:matchexample} shows an example of a match, containing one gap in the first sequence, two exact tasks and one substitution.
@@ -329,12 +332,12 @@ Fig \ref{fig:matchexample} shows an example of a match, containing one gap in th
 	\caption{Example for a retrieved match}
 	\label{fig:matchexample}
 \end{figure}
-Each of those matches are searched in all user sessions. For this each position in the user sessions is checked if the match in question fits at this position.
+Each of those matches is searched in all user sessions. For this each position in the user sessions is checked if the match in question fits at this position.
 Before we can do this, we have to explain what it means that a match is found since we have to respect how a match will be transformed into a task later.
-There are some rules that have to be fulfilled to consider a match as found. 
+There are some rules that have to be fulfilled to consider a match as found:
 
 	\begin{rules}
-		\item If both elements of a position in a match are equal, this element has to be found at this position. 
+		\item If both elements of a position in a match are equal, this element has to be found at this position of the subsequence in which we search.
 	\end{rules}
 	\begin{figure}[h]
 		\centering
@@ -361,11 +364,12 @@ There are some rules that have to be fulfilled to consider a match as found.
 	\end{figure}
 	
 	\begin{rules}
-	\item If both elements are not equal and the next position contains two equal elements (a) or a gap (b), either of the elements can occur at this position. 
+	\item If both elements are not equal and the next position contains two equal elements (a) or a gap (b), either of the unequal elements can occur at this position. 
 	\end{rules}
 	\begin{figure}[h]
 		\centering
 		\begin{subfigure}[b]{0.49\textwidth}
+		\centering
 			\begin{tabular}{cc}
 				 14 & 4\\
 				 16 & 4\\  
@@ -374,20 +378,22 @@ There are some rules that have to be fulfilled to consider a match as found.
 			\label{fig:rule3}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.49\textwidth}
+		\centering
 			\begin{tabular}{ccc}
+		\centering
 				14 & -1 & 6\\
 				16 & 4  & 6 \\
 			\end{tabular}
-			\caption{Example for rule 3 (b). Will match 16 4 6, 14 4 6, 14 6 and 16 6 }
+			\caption{Example for rule 3 (b). Will match 16 4 6, 14 4 6, 14 6 and 16 6. }
 		\end{subfigure}
 		\caption{Examples for rule 3 (a) and (b)}
 		\label{fig:rule3}
 	\end{figure}
 	\begin{rules}
-	\item If both elements are not equal and the elements of the next position are not equal as well:
+	\item If both elements are not equal and the elements of the next positions are not equal as well:
 		\begin{enumerate}
-			\item Group all elements of one sequence together as long as the next position still has unequal elements.
-			\item A match is found if the user session matches one of those sequences. 
+			\item Group all elements of one sequence together as long as the next positions still have unequal elements.
+			\item A match is found if the user session matches completely one of those grouped sequences. 
 		\end{enumerate}
 	\end{rules}
 	\begin{figure}[h]
@@ -401,13 +407,13 @@ There are some rules that have to be fulfilled to consider a match as found.
 	\end{figure}
 
 \paragraph{Match Sorting}
-Once all matches have been retrieved they are sorted to have an order they will be replaced in the sequences. The sorting criteria are the following: 
-First sort by the number of occurence in all sequences.
-The reason for this is that we want to prefer the most occuring over all other match properties because it is likely that a task with a high occurence to represent
-the average user behaviour. If two matches have the same occurrence count, the length of the matches is considered. Longer matches will replaced first.
-The next two sort properties are just for a deterministic behaviour of the algorithm. 
-Therefore we need an explicit order of all matches. 
-If two matches have the same  occurrence count and the length, the sum of the user session ids is considered and after that the sum of the task ids.
+Once all matches have been retrieved they have to be sorted to have an order they will be replaced in the sequences. The sorting criteria are the following: 
+First we sort by the number of occurence in all sequences.
+The reason for this is that we want to prefer the most occurring over all other match properties because it is likely that a task with a high occurence represents
+the average user behaviour. If two matches have the same occurrence count, the length of the matches is considered. Longer matches will be replaced first.
+The next two sort properties are introduced for a deterministic behaviour of the algorithm. 
+%The reason why is that we need an explicit order of all matches.   
+If two matches have the same occurrence count and the length, the sum of the user session ids is considered and after that the sum of the task ids.
 
 
 \subsubsection{Model generation}
