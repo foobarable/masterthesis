@@ -1,29 +1,38 @@
-\begin{itemize}
-	\item Approach was implemented in Autoquest (cite)
-	\item What is autoquest? Proof of concept implementation of pharms
-	\item Can Process Platform indepentent, abstract events
-	\item Basically just branched the autoquest-core-tasktree package
-	\item Input data: User Sessions with EventTaskInstances and corresponding event Tasks
-	\item Output: Generated Task Model
-\end{itemize}
+
+S. Herbold and P. Harms implemented their approach in the proof of concept implementation AutoQUEST.
+AutoQUEST \textit{"provides diverse methods for assessing the quality
+of software. AutoQUESTs internal algorithms operate on
+abstract events, which makes AutoQUEST independent of
+the platform of an assessed software"} \cite{herbold2013}. 
+Another feature of AutoQUEST is that it is modular and extensible via plugins.
+AutoQUEST is written in Java 1.7 and is published and licensed under the Apache License Version 2.0.
+In this chapter we will document how we extended AutoQUEST by our task tree generation method.
+
+%The most time spent developing for AutoQUEST was to get eclipse running.
+The alignment sequence detection was implemented in one subversion branch of the autoquest-core-tasktree package. 
+In AutoQUEST this module is responsible for the task tree generation. 
+The most issues we had to solve existed due to the complexity of the problem, which is $O(n^2)$ for most of the utilized algorithms.
+
 \section{Substitution Matrix}
 \subsection{Generation}
-\begin{itemize}
-	\item No problems for limited number of tasks
-	\item For large numbers of Tasks, efficient implementation needed
-	\item Implemented as Triangle Matrix of float values, stored in a single float[] (to save overhead of n*sizeof(float[])
-	\item Calculation of distances between Tasks is well parallelizable, storing it to the matrix is not (yet).
-\end{itemize}
+The generation of the substitution matrix is a step we just need to do once at the beginning of the sequence detection.
+For a reasonable number of unique tasks no problems were to expect but for a large number an efficient storage had to be implemented.
+Since the substitution matrix is symmetrical it is common practise to just store $\frac{n(n+1)}{2}$ entries and not the whole matrix. 
+Another improvement is that just a single array of primitive floats has been used which saves space again, namely n times the size of a float array.
+The generation of the substitution matrix is so far not parallelized but it is possible to do so. 
+The calculation of one cell in the matrix is nearly completly indepedent from another cell. 
+This would save further time, given enough processors.
+
+
 \subsection{Updating}
-\begin{itemize}
-	\item The procedure of updating the substitution matrix is implemented but has just been tested on a very small data set. 
+	The procedure of updating the substitution matrix is implemented but has just been tested on a very small data set. 
 %	\item This step is implemented, but not used due to problem size. Thus, all non-EventTask-Tasks have a score of 0 to any other Task/EventTask
-	\item Since the Matrix grows with O(n*(n+1)/2), for large data sets the calculation of non EventTasks is switched off, because each generated tasks increases n.
-	\item Also, the computation of non-EventTasks is complex itself. First, for each Task all EventTasks have to be searched (done via visitor pattern). 
-	\item Then for each found EventTasks, distances have to be calculated (or read from Substitution Matrix)
-	\item THis process could as well be parallelized, still, storing in the matrix has to be synchronous. Also, when the matrix is updated, it's size has to be enlarged. The problem with this is, that then a data structure with a dynamic size has to be used, which itself is not very memory efficient. 
-	\item A solution is to allocate a very large matrix from start and for increasing allocate an even larger matrix and copy the old matrix to the new. This procedure has a high peak memory usage but will reduce mean memory usage of the object distribution matrix (Numbers of the sizes of Float, ArrayList<Float> and float[] here)
-\end{itemize}
+	Since the Matrix grows with O(n*(n+1)/2) for large data sets the calculation of non EventTasks is switched off because each generated task increases n.
+	Also, the computation of non-EventTasks is complex itself. First, for each Task all EventTasks have to be searched. This is done via visitor pattern. 
+	Then for each found EventTask distances have to be calculated or read from substitution matrix.
+	This process could as well be parallelized but still, storing in the matrix has to be synchronous. 
+	Another point is when the matrix is updated, it's size has to be enlarged. If the substitution matrix update is switched on, the matrix preallocates 10 times the initial unique tasks and doubles each time the size limit is reached.
+	This increase of the size is very expensive since the whole matrix has to be copied to the newly created, larger sized matrix.
 
 \section{Alignments, Match Count, and Sorting}
 \begin{itemize}
@@ -37,4 +46,5 @@
 	\item Replacement also parallelized, needed careful synchronization of access to shared resources
 	\item Achievable speedup should not be too large
 \end{itemize}
+
 

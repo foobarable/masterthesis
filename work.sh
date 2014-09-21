@@ -8,7 +8,7 @@ vim -p \
 	chapters/approach/approach.tex \
 	chapters/implementation/implementation.tex \
 	chapters/casestudy/casestudy.tex \
-	chapters/conclusion/conclusion/conclusion.tex \
+	chapters/conclusion/conclusion.tex \
 
 
 

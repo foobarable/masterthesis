@@ -193,10 +193,11 @@ More details on this issue can be found in section TODO: REF HERE.
 
 \section{Sequence Detection}
 As we figured out at the beginning of this chapter the sequence detection is the part of the algorithm that varies the most from Harms approach.
-It is itself separated in three steps:
+It is itself separated in four steps:
 \begin{itemize}
 	\item The search for significant patterns
-	\item The model generation
+	\item The match retrival
+	\item The task generation
 	\item The sequence replacement
 \end{itemize}
 
@@ -320,7 +321,7 @@ Figure \ref{fig:durbindpmatrixtraceback} shows a completely filled dynamic progr
 \label{fig:durbindpmatrixtraceback}
 \end{figure}
 
-\subsubsection{Match retrival}
+\subsection{Match retrival}
 To find similar user behaviour we are only interested in the matches that reached the threshold score. After aligning every user session with each other we extract all matches from those alignments.
 We consider every subset of the alignment that is not an unmatched region as a match.
 Therefore a match consists of two sequences of numbers and can contain gaps. We encode a gap with the value -1. 
@@ -335,8 +336,10 @@ Fig \ref{fig:matchexample} shows an example of a match, containing one gap in th
 	\caption{Example for a retrieved match}
 	\label{fig:matchexample}
 \end{figure}
+
 Each of those matches is searched in all user sessions. For this each position in the user sessions is checked if the match in question fits at this position.
 Before we can do this, we have to explain what it means that a match is found since we have to respect how a match will be transformed into a task later.
+When a match is found we store the id of the user session it occured as well as its position in the user session.
 There are some rules that have to be fulfilled to consider a match as found:
 
 	\begin{rules}
@@ -419,35 +422,98 @@ The next two sort properties are introduced for a deterministic behaviour of the
 If two matches have the same occurrence count and the length, the sum of the user session ids is considered and after that the sum of the task ids.
 
 
-\subsubsection{Model generation}
-After sorting the matches, the actual task is created from each match that has a minimum occurence of f.
+\subsection{Task generation}
+After sorting the matches, the actual task is created from each match that has a minimum occurence of f. 
+This parameter is introduced to exclude those matches that just have been performed by a small number of users and therefore are not representative for a general interaction with the software.
 \begin{definition}
 	\item Let f be the number of occurrences a task must have in all user sessions in order to be replaced.
 		\label{def:minoccurrencecount}
 \end{definition}
-We will now see why we had to search the matches according to the rules enlisted in the previous section. The model generation rules correspond to the search rules.
 
-	\begin{itemize}
-		\item Generate Model From Match is done the following way:
-		\item For each position of the Match: 
-		\begin{itemize}
-			\item If Both numbers are equal: The model at this position is the Task refered by this number
-			\item If one sequence has a gap at this position: The other EventTask is inserted as an optional
-			\item If both numbers differ a selection is inserted. Which kind of selection depends on what the following task is. We don't want to have 2 selections next to each other, instead, create one selection and add each sequence as a sequence
-			\begin{itemize}
-				\item If the next position also would be a selection, the selection has 2 sequences as a child. those sequences consists of the tasks of each sequence of the match until there is no more selection found 
-				\item If the next position is something else we just have a single selection, just add the tasks of the match at this position as childs to the selection
-				\item (This description here is really bad, will need some examples)
-			\end{itemize}
-		\end{itemize}
-	\end{itemize}
+We will now see why we had to search the matches according to the rules enlisted in the previous section. The task generation rules correspond to the search rules.
+We start with an empty task of temporal relationship type \textit{sequence}.
+This is the root node of the task we will convert the match to. For this the procedure is to evaluate each position of the match and apply some rules again.
+If both elements in the match are equal, the task with this id is added to the sequence. This is the equivalent to search rule 1. 
+Search rule 2 transfered to task generation leads to the creation of tasks with temporal relationship type \textit{optional}. 
+The created optional task has the task that is "aligned" with the gap as its child.
+If the algorithm observes a position where search rule 3 is applied, a single selection with two children is created. 
+Both of the two unequal tasks of this position have this selection as their parent.
+The adopted application of search rule 4 creates three new tasks, a selection and two sequences. 
+The selection is added to the root sequence, both of the sequences are children of the selection.
+The sequences themselves contain the subsequent unequal tasks of one row of the match. 
+Figure \ref{fig:matchexampletaskgeneration} shows a match that is converted into a task. In this match all rules have been applied.
 
-\subsubsection{Replacement}
-	\begin{itemize}
-		\item Replace each model in the user sessions
-	\end{itemize}
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[c]{0.44\textwidth}
+		\centering
+	\begin{tabular}{cccccc}
+		9 & 16 & -1 & 6 & 4& 5\\
+		9 & 15 & 17 & 5 & 3& 5\\
+	\end{tabular}
+	\end{subfigure}
+	\begin{subfigure}[c]{0.1\textwidth}
+		\centering
+
+		\Large{$\Rightarrow$}
+	\end{subfigure}
+	\begin{subfigure}[c]{0.44\textwidth}
+		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
+		        text centered, anchor=west, text=black, fill=blue!30]
+		
+		\begin{tikzpicture}[%
+		  grow via three points={one child at (0.5,-0.7) and
+		  two children at (0.5,-0.7) and (0.5,-1.4)},
+		  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+		  \node {Sequence} 
+		  	child { node {9} }       
+		  	child { node {Selection}
+		        	child { node {16}}
+		        	child { node {15}}
+		        }
+		 	child [missing] {}
+		 	child [missing] {}
+		        child { node {Optional}
+		        	child { node {17}}
+		        }
+		 	child [missing] {}
+		        child { node {Selection}
+		        	child { node {Sequence}
+		        		child{node {6}}
+		        		child{node {4}}
+		        	}
+		 		child [missing] {}
+		 		child [missing] {}
+		        	child{ node {Sequence}
+		        		child{node {5}}
+		        		child{node {3}}
+		        	}
+		        }
+		 	child [missing] {}
+		 	child [missing] {}
+		       child { node {5}};
+		 
+		    \end{tikzpicture}
+	\end{subfigure}
+	\caption{Example for task generation. The match on the left is converted into the task on the right.}
+	\label{fig:matchexampletaskgeneration}
+\end{figure}
+
+\subsection{Replacement}
+One last step is needed to finish the sequence detection: the replacement of all generated tasks in all the user sessions.
+For this we create an instance of the generated sequence and replace each subsequence in the user sessions that fits the model of the instance. 
+We do not need to search the positions where we can insert the instance since we stored all the occurrences in our first search. 
+What we have to do is to update the information about the position in all other stored match occurrence data. 
+For example if we extract six task instances, match occurrences with a position after this replacement need to substract six from their start and end indices.
+If a first replacement overlaps another one, the second one is ignored. Here we can see again that the order of replacement is very important  because it determines which 
+matches are replaced and which may be ignored.
 
 \subsection{Repetition}
-
+Same as in Harms et al.s approach the steps iteration detection and sequence detection are repeated until a specific condition is reached. 
+Harms et al. repeat until no further replacements can be made. 
+We propose to stop the repetition before. 
+Possible conditions could be that the algorithms stops once it finds less matches than a specific percentage of the number of matches that have been found in the first iteration of the algorithm.
+Another possibility would be to have a fixed number of iterations.
+We will evaluate those proposals in the case study section.
 
 
