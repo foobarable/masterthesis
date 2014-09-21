@@ -156,6 +156,7 @@ Now that I defined the distance for three cases it is possible to compute the sc
 		 S(i,j) = -1*d(i,j)+k
 	\label{eq:subscore}
 \end{equation*}
+\label{def:scorewithmaximalscore}
 \end{definition}
 
 The k constant should be chosen dependent on the underlying GUI model. A large k should be chosen for very deeply, nested GUI models whereas for flat GUI models a smaller k seems better. 
@@ -175,8 +176,9 @@ Since it is preferred that the score of two equal event-tasks is always larger t
 		\text{constant} & \text{if } i \in N \lor  j \in N\\
 	\end{cases} \\
 	S(i,j) &=& -1*d(i,j)+k-L
-\end{eqnarray*}
 	\label{eq:subscore_adjusted}
+\end{eqnarray*}
+\label{def:scoreadjusted}
 \end{definition}
 
 
@@ -216,6 +218,7 @@ The original Smith-Waterman finds the best local similarity between two sequence
 Since we need all relevant similarities and not just the one with the best score, we define a threshold score $T$.
 \begin{definition}
 	Let T be the threshold score for subalignments.
+	\label{def:treshold}
 \end{definition}
 Once a local subalignment reaches T it is considered as relevant.
 
@@ -420,6 +423,7 @@ If two matches have the same occurrence count and the length, the sum of the use
 After sorting the matches, the actual task is created from each match that has a minimum occurence of f.
 \begin{definition}
 	\item Let f be the number of occurrences a task must have in all user sessions in order to be replaced.
+		\label{def:minoccurrencecount}
 \end{definition}
 We will now see why we had to search the matches according to the rules enlisted in the previous section. The model generation rules correspond to the search rules.
 

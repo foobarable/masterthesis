@@ -318,6 +318,11 @@ A popular global alignment algorithm is the Needleman-Wunsch algorithm\cite{need
 In the last section I stated that alignment algorithms maximize the total alignment score. Therefore the underlying scoring model has to be adjusted very carefully since it practically determines the outcome of the algorithm.
 There are usually two parameters which have to be set: the substitution score and the gap penalty. 
 
+\begin{definition}
+	\item Let g be the gap penalty with $g>0$.
+	\label{def:gappenalty}
+\end{definition}
+
 The gap penalty in its most basic version is a constant that has to be manually adjusted so that it fits the problem well. 
 A large gap penalty leads to less insertion and deletion occurrence and more substitutions.
 This gap scoring is called linear affine gap penalty. (TODO: Cite)
@@ -327,6 +332,7 @@ In this thesis I will just use the linear affine gap penalty.
 
 The substitution score is a representation of how similar two elements are. The more similar they are, the higher the score will be.
 The score is usually stored in symmetric matrices where each cell represents how good or bad it is to substitute element a with element b. 
+The formal definition of the the substitution matrix will follow in chapter approach.
 %In biology 
 %	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
 \begin{figure}
