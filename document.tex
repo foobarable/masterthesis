@@ -117,6 +117,7 @@
 %\renewcommand*\thesubsection{(\alph{subsection})}
 
 \newshadetheorem{definitions}{Definition}[chapter]
+\newshadetheorem{rles}{Rule}
 
 \newenvironment{definition}[1][]{%
   \definecolor{shadethmcolor}{rgb}{.9,.9,.95}%
@@ -124,6 +125,13 @@
   \setlength{\shadeboxrule}{1.5pt}%
   \begin{definitions}\hspace*{1mm}%
 }{\end{definitions}}
+
+\newenvironment{rules}[1][]{%
+  \definecolor{shadethmcolor}{rgb}{.9,.9,.95}%
+  \definecolor{shaderulecolor}{rgb}{0.0,0.0,0.4}%
+  \setlength{\shadeboxrule}{1.5pt}%
+  \begin{rles}\hspace*{1mm}%
+}{\end{rles}}
 
 \begin{document}
 
