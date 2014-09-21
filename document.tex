@@ -31,6 +31,14 @@
 \usepackage{multirow}
 \usepackage{color}
 \usepackage{babelbib}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{shadethm}
+
+\usepackage{listings}
+
+%\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{setspace}
 \usepackage{booktabs}
 \usepackage{gensymb}
@@ -38,12 +46,13 @@
 \usepackage{multirow}
 \usepackage[table]{xcolor}
 \usepackage{longtable}
-\usepackage[font={small,sf},format=plain,labelfont={bf,up}]{caption} %im text \textbf könnte raus
+%\usepackage[font={small,sf},format=plain,labelfont={bf,up}]{caption} %im text \textbf könnte raus
 \usepackage{adjustbox}
 \usepackage{etoolbox}
 \usepackage[master,institut]{zfibmcover}        % load cover
-\usepackage[sort]{natbib} % base bib style
-
+\usepackage[sort,numbers]{natbib} % base bib style
+\usepackage{tikz}
+\usetikzlibrary{trees}
 
 % The following package makes code look a little nicer, but it may not be present on all systems.
 \IfFileExists{cmtt.sty}{\usepackage[override]{cmtt}}{}% better typewriter font
@@ -58,8 +67,9 @@
 % ---------------------
 
 % caption font settings
-\setkomafont{captionlabel}{\usekomafont{section}\footnotesize}
-\setkomafont{caption}{\normalfont\itshape\footnotesize}
+
+\setkomafont{captionlabel}{\itshape\usekomafont{section}\footnotesize}
+\setkomafont{caption}{\normalfont\footnotesize}
 
 % Keine Serifenlose fuer description-Umgebungen
 %
@@ -70,12 +80,10 @@
 
 \raggedbottom % Tanzender Fuss, tanzende fussnoten
 
-
-
 \renewcommand{\cite}{\citep*}% change citation default command
 \newcommand{\cites}{\citet*}% use for citation in sentence
 
-\bibpunct{(}{)}{;}{a}{}{,~} % configure citation style
+%\bibpunct{(}{)}{;}{a}{}{,~} % configure citation style
 
 \bibfont{\small} % smaller font for bibliography
 
@@ -108,6 +116,23 @@
 %use (a) for numbering subsections
 %\renewcommand*\thesubsection{(\alph{subsection})}
 
+\newshadetheorem{definitions}{Definition}[chapter]
+\newshadetheorem{rles}{Rule}
+
+\newenvironment{definition}[1][]{%
+  \definecolor{shadethmcolor}{rgb}{.9,.9,.95}%
+  \definecolor{shaderulecolor}{rgb}{0.0,0.0,0.4}%
+  \setlength{\shadeboxrule}{1.5pt}%
+  \begin{definitions}\hspace*{1mm}%
+}{\end{definitions}}
+
+\newenvironment{rules}[1][]{%
+  \definecolor{shadethmcolor}{rgb}{.9,.9,.95}%
+  \definecolor{shaderulecolor}{rgb}{0.0,0.0,0.4}%
+  \setlength{\shadeboxrule}{1.5pt}%
+  \begin{rles}\hspace*{1mm}%
+}{\end{rles}}
+
 \begin{document}
 
 \Number{2014-01} % enter here the actual year and number of your thesis. 
@@ -137,24 +162,31 @@
 
 \clearpage
 \chapter{Introduction}
+\label{chap:introduction}
 \input{./chapters/introduction/introduction}
 
+\clearpage
+\chapter{Foundations}
+\label{chap:foundations}
+\input{./chapters/foundations/foundations}
+
 \chapter{Approach}
+\label{chap:approach}
 \input{./chapters/approach/approach}
 
 \clearpage
 \chapter{Implementation}
+\label{chap:implementation}
 \input{./chapters/implementation/implementation}
 
 \clearpage
 \chapter{Case Study}
+\label{chap:casestudy}
 \input{./chapters/casestudy/casestudy}
 
-\clearpage
-\chapter{Discussion}
-\input{./chapters/discussion/discussion}
 
 \chapter{Conclusion}
+\label{chap:conclusion}
 \input{./chapters/conclusion/conclusion}
 
 %\section{Perspective}
@@ -164,8 +196,7 @@
 %\input{./}
 
 \clearpage
-\chapter{Literature}
-\addcontentsline{toc}{section}{Literature}
+%\addcontentsline{toc}{section}{Literature}
 \bibliographystyle{apalike}
 \bibliography{literature}
 

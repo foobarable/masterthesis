@@ -1,2 +1,52 @@
-Alot of results here. Show nice task trees.
+\begin{itemize}
+	\item Two sets of sessions from one case study: Application portal case study. 
+	\item 1. Full case study
+	\item 2. subset of full case study(1244 sessions)
+	\item Also do such a nice table pharms uses here
+	\item Full Case study: Over 500 users, more than 350000 events. (screenshot of application portal here?)
+	\item Format is XML. (show nice xml input here)
+	\item When running the full case study alot of perfomance problems came up.
+	\item Memory consumption and computation time grew alot due to the nature of the algorithm
+	\item Computation moved from a Intel(R) Core(TM) i5-2520M CPU @ 2.50GHz with 8GB Ram to a AMD Opteron(TM) Processor 6276 (64 core) with 250GB Ram.
+	\item The java virtual machine was given 64GB
+	\item Still computation time extremly large (see performance evaluation)
+	\item It took 52 iterations till no more matches found
+	\item Graph With matches found per iteration her
+	\item Maybe change stop criterium: 10% of the matches found in the first run
+	\item Other solution: Update substution matrix, so non-Event tasks can have a negative score (less likely to find matches then)
+	\item 
+\end{itemize} 
+
+\section{Data Preprocessing}
+After loading the xml file the following preprocessing steps have been performed (shortly explain every step with 1 or 2 sentences)
+\begin{itemize}
+	\item condenseHTMLGUIModel sequences
+	\item condenseMouseClicks sequences
+	\item correctKeyInteractionTargets sequences
+	\item correctTabKeyNavigationOrder sequences
+\end{itemize}
+
+\section{Generated Task Trees}
+\begin{itemize}
+	\item Show some meaningful generated task trees
+	\item Show also tasktrees that are not useful
+\end{itemize}
+\section{Performance Evaluation}
+
+\begin{itemize}
+	\item Alot of tables (which step of the algorithm takes how long, for each dataset
+
+	\item Small DataSet Time: real    35m25.965s, user    608m25.525s, sys     26m54.396s
+	\item Small DataSet Memory: Arround 20GB
+	\item Full Dataset: Time real    real    134m13.617s user    2883m52.227s sys     98m57.555s
+	\item Full Dataset Memory: Arround 47GB
+
+		\begin{itemize}
+			\item Harmonization: 40 Minutes
+			\item Substitution Matrix: 3h
+			\item Analysis of log file here
+		\end{itemize}
+
+
+\end{itemize}
 
