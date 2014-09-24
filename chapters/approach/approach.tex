@@ -26,12 +26,12 @@ The harmonization process performed by Harms et al. is also applied to the user 
 A useful side product of the harmonization is the set of unique tasks.
 This set is needed for this step of the algorithm, the generation of the substitution matrix.
 
-In section \ref{sec:foundationsubstitutionmatrix} we introduced substitution matrixes in general and what they are good for. 
-For this use case we needed to generate one substitution matrix that represents how similar tasks are. 
+In section \ref{sec:foundationsubstitutionmatrix} we introduced substitution matrixes in general and what they are used for. 
+For the use case of detecting tasks we need to generate one substitution matrix that represents how similar tasks are. 
 The score of two tasks in the \textit{task distance substitution matrix} is defined as follows:
 \begin{definition}
 	\item Let a and b be two tasks
-	\item Let S(a,b) be the score for substituting task a with task b. The higher the value of S is, the more similar are the tasks a and b and vice versa.
+	\item Let S(a,b) = S(b,a) be the score for substituting task a with task b. The higher the value of S is, the more similar are the tasks a and b and vice versa.
 \end{definition}
 
 To calculate the score, three cases have to be considered:
@@ -106,8 +106,8 @@ Since the GUI model is a tree, the distance of two targets in a GUI can easily b
  
 \end{tikzpicture}
 \end{center}	
-\label{fig:guimodeldistance}
 \caption{A HTML GUI model with two nodes (green) the distance will be calculated for.  The number of red nodes is the distance between the green nodes. The common anchestor is the \texttt{<body>} element.}
+\label{fig:guimodeldistance}
 
 \end{figure}
 Figure \ref{fig:guimodeldistance} shows a GUI model with two elements and their common ancestor. 
@@ -147,7 +147,9 @@ The definition of d can be extended so it accepts two non-event-tasks:
 \label{def:guimodeldistancenene}
 \end{definition}
 \subsection{Score}
-Now that I defined the distance for three cases it is possible to compute the score $S$ of two tasks.
+Now that I defined the distance for three cases it is possible to compute the score $S$ of two tasks. 
+To transform a distance into a score we multiply all distance values with $-1$ and add a constant so that some scores are positive and some have a negative value.
+
 \begin{definition}
 	\item Let U be the set of unique tasks occurring in the user sessions
 	\item Let k be a constant that defines the maximal score 
@@ -183,8 +185,8 @@ Since it is preferred that the score of two equal event-tasks is always larger t
 
 
 \section{Iteration Detection and Substitution Matrix Update}
-The iteration detection from Harms is also suitable for my algorithm was not altered in any way. It reliably detects iterations and replaces them in the user sessions.
-Before the sequence detection can come to play the substitution matrix should be updated since there were new iteration tasks created during iteration detection. Those new tasks are stored in a set that contains all newly created tasks.
+The iteration detection from Harms is also suitable for our algorithm and was not altered in any way. It reliably detects iterations and replaces them in the user sessions.
+Before the sequence detection can come into play the substitution matrix should be updated since there were new iteration tasks created during iteration detection. Those new tasks are stored in a set that contains all newly created tasks.
 The update process differs just a little from the generation process with the only difference beeing that just the distances between the newly created tasks to the current set of unique tasks is as well as the distances between the newly created tasks are computed.
 After the matrix has been updated, the newly created tasks are merged with the set of unique tasks and then emptied.
 TODO: NOT UP TO DATE The whole step of updating the matrix is currently implemented but not used. 
@@ -194,23 +196,23 @@ More details on this issue can be found in section TODO: REF HERE.
 \section{Sequence Detection}
 As we figured out at the beginning of this chapter the sequence detection is the part of the algorithm that varies the most from Harms approach.
 It is itself separated in four steps:
-\begin{itemize}
+\begin{enumerate}
 	\item The search for significant patterns
 	\item The match retrival
 	\item The task generation
 	\item The sequence replacement
-\end{itemize}
+\end{enumerate}
 
 \subsection{Search for significant patterns}		
 The search for significant patterns is done with an alignment method we introduced in section \ref{sec:alignments}. 
-The bioinformatical problem of comparing and aligning DNA/RNA/Amino acid sequences is closely related to finding important subsequences in the user sessions. 
+The bioinformatical problem of comparing and aligning DNA/RNA/Amino acid sequences is closely related to finding more or less equal subsequences in the user sessions. 
 The conserved regions of biological sequences comply with those interactions that most of the users performed similarly. 
 We can conclude that those interactions are meaningful in the sense of fulfilling one desired task.
 The goal of the alignment algorithm is now to detect the conserved regions and extract a model of the average user behaviour. 
 Since alignment algorithms also find approximate and not only exact similarities, this step of the sequence detection is the main difference to Harms method.
 
-The first step of the search for significant patterns is to align every user session with any other user session with an algorithm called Smith-Waterman algorithm for repeated matches.
-For the rest of this section the user session will be represented by a sequence of numbers. Each number in a sequence corresponds with the unique id the task at this position in the user sessions has.
+The first step of the search for significant patterns is to align every user session with any other user session with the Smith-Waterman algorithm for repeated matches.
+For the rest of this section the user session will be represented by a sequence of numbers. Each number in a sequence corresponds with the unique id of the task at this position in the user sessions.
 We now describe the algignment algorithm in detail.
 
 \subsubsection{Smith Waterman Algorithm For Repeated Matches}
@@ -223,8 +225,8 @@ Since we need all relevant similarities and not just the one with the best score
 \end{definition}
 Once a local subalignment reaches T it is considered as relevant.
 
-We recall from the alignments introduction that alignment algorithms try to find the best possible score between two sequences using the underlying scoring model of substitution and gap scores.
-The most na\"ive approach is to try out all possible combinations both sequences could be aligned. As usual, this approach is not very feasible because there are 
+We recall from the section \ref{sec:alignments} that alignment algorithms try to find the best possible score between two sequences using the underlying scoring model of substitution and gap scores.
+The most na\"ive approach is to test possible combinations both sequences could be aligned. As usual, this approach is not very feasible because there are 
 \begin{equation*}
 	\binom{2n}{n} = \frac{(2n)!}{(n!)^2} \simeq \frac{2^{2n}}{\sqrt{\pi n}}
 \end{equation*}
@@ -243,7 +245,6 @@ Each cell is computed by getting the best score out of four choices. Prior to en
 	\item Let x,y be two sequences
 	\item Let F be a matrix with F(i,j) being the best score of aligning $x_1\dots x_i$ with $y_1\dots y_j$
 \end{definition}
-
 Then we can compute F by repeatedly applying the following equation:
 \begin{equation}
 F(i,j) = max \left\{ \begin{array}{lr}0,&\\F(i-1,j-1)+S(x_i,y_j),&Substitution\\F(i-1,j)-g,&Gap\\F(i,j-1)-g.&Gap\\\end{array} \right. 
@@ -285,7 +286,7 @@ The algorithm itself is partitioned into three parts:
 	This differs from the Smith-Waterman algorithm described by Durbin et al.\cite{durbin1998} who just initialize F(0,0) and do not fill the first column. There is no need to initialize the first row because a subalignment will never start with a gap. For the sake of an easy implementation it was better to initialize the first row though.
 
 \subparagraph{Recursion}
-The recursion formula for filling the matrix also has the three options for insertion/deletion and substitution as illustrated in figure \ref{fig:basicalignmentoperations}.
+The recursion formula for filling the matrix also has the three options for insertion,deletion and substitution as illustrated in figure \ref{fig:basicalignmentoperations}.
 But as we see there are some more options. 
 For the first row (equation \ref{eq:firstrow}), which does not represent a real alignment of sequences but denotes the sum of completed match scores, we have two options. 
 The first one is to take the the the value from the last column so we always keep track of the total score. 
@@ -311,21 +312,24 @@ F(i,j) = max \left\{ \begin{array}{lr}F(i,0),\\F(i-1,j-1)+S(x_i,y_i),\\F(i-1,j)-
 		
 \subparagraph{Traceback}
 A very important point in dynamic programming algorithms is that we not just calculate and store the maximum score for each subproblem but additionally have to store which choice of the formula produced the highest value.
-This makes it possible to go back from the total best score to the start and find the actual alignment of the whole sequences. This process is called traceback. 
+This makes it possible to go back from the total best score to the start and find the actual alignment of the whole sequences. 
+This process is called traceback. 
+The procedure is to go back the path that led to the final score (here in F(i+1,0)). 
+After going back, again take the path that led to the previous cell. Repeat this procedure until F(0,0) is reached.
 Figure \ref{fig:durbindpmatrixtraceback} shows a completely filled dynamic programmic matrix and the traceback path.
 
 \begin{figure}
 \centering
 \includegraphics[scale=0.4]{chapters/approach/smithwatermanrepeated.png}
-\caption{Figure from Durbin et al.\cite{durbin1998}. The repeat dynamic programming matrix for two example sequences, for T = 20. Below the optimal alignment, with total score $9 = 29-20$. There are two separate match regions, with scores 1 and 8. Dots are used to indoicate unmatched regions of x. The arrows show the traceback process, going back from the total score to the start.}
+\caption{Figure from Durbin et al.\cite{durbin1998}. The repeat dynamic programming matrix for two example sequences, for T = 20. Below the optimal alignment, with total score $9 = 29-20$. There are two separate match regions, with scores 1 and 8. Dots are used to indicate unmatched regions of x. The arrows show the traceback process, going back from the total score to the start.}
 \label{fig:durbindpmatrixtraceback}
 \end{figure}
 
 \subsection{Match retrival}
 To find similar user behaviour we are only interested in the matches that reached the threshold score. After aligning every user session with each other we extract all matches from those alignments.
 We consider every subset of the alignment that is not an unmatched region as a match.
-Therefore a match consists of two sequences of numbers and can contain gaps. We encode a gap with the value -1. 
-Fig \ref{fig:matchexample} shows an example of a match, containing one gap in the first sequence, two exact tasks and one substitution.
+Therefore a match consists of two sequences of numbers and can contain gaps. We encode a gap with the value -1.  
+Figure \ref{fig:matchexample} shows an example of a match, containing one gap in the first sequence, two exact tasks and one substitution.
 
 \begin{figure}[h]
 	\centering
@@ -333,13 +337,13 @@ Fig \ref{fig:matchexample} shows an example of a match, containing one gap in th
 		9 & 16 & -1 & 6 \\
 		9 & 15 & 17 & 6  
 	\end{tabular}
-	\caption{Example for a retrieved match}
+	\caption{Example for a retrieved match. Each of the two subsequences of the sequences the match was generated from is printed in a row.}
 	\label{fig:matchexample}
 \end{figure}
 
 Each of those matches is searched in all user sessions. For this each position in the user sessions is checked if the match in question fits at this position.
-Before we can do this, we have to explain what it means that a match is found since we have to respect how a match will be transformed into a task later.
-When a match is found we store the id of the user session it occured as well as its position in the user session.
+Before we can do this, we have to explain what it means that a match is found since we have to take into account how a match will be transformed into a task later.
+When a match is found we store the id of the user session it occured in as well as its position in the user session.
 There are some rules that have to be fulfilled to consider a match as found:
 
 	\begin{rules}
@@ -357,7 +361,7 @@ There are some rules that have to be fulfilled to consider a match as found:
 	
 
 	\begin{rules}
-		\item If one element in a match is a gap (-1), the other element of this position is optional at this position. (The equivalent regular expression would be the question mark quantor.)
+		\item If one element in a match is a gap (-1), the other element of this position is optional at this position.)
 	\end{rules}
 	\begin{figure}[h]
 		\centering
@@ -415,7 +419,7 @@ There are some rules that have to be fulfilled to consider a match as found:
 \paragraph{Match Sorting}
 Once all matches have been retrieved they have to be sorted to have an order they will be replaced in the sequences. The sorting criteria are the following: 
 First we sort by the number of occurence in all sequences.
-The reason for this is that we want to prefer the most occurring over all other match properties because it is likely that a task with a high occurence represents
+The reason for this is that we want to prefer the most occurring match over all other match properties because it is likely that a task with a high occurence represents
 the average user behaviour. If two matches have the same occurrence count, the length of the matches is considered. Longer matches will be replaced first.
 The next two sort properties are introduced for a deterministic behaviour of the algorithm. 
 %The reason why is that we need an explicit order of all matches.   
@@ -429,7 +433,6 @@ This parameter is introduced to exclude those matches that just have been perfor
 	\item Let f be the number of occurrences a task must have in all user sessions in order to be replaced.
 		\label{def:minoccurrencecount}
 \end{definition}
-
 We will now see why we had to search the matches according to the rules enlisted in the previous section. The task generation rules correspond to the search rules.
 We start with an empty task of temporal relationship type \textit{sequence}.
 This is the root node of the task we will convert the match to. For this the procedure is to evaluate each position of the match and apply some rules again.
@@ -500,7 +503,7 @@ Figure \ref{fig:matchexampletaskgeneration} shows a match that is converted into
 \end{figure}
 
 \subsection{Replacement}
-One last step is needed to finish the sequence detection: the replacement of all generated tasks in all the user sessions.
+One last step is required to finish the sequence detection: the replacement of all generated tasks in all the user sessions.
 For this we create an instance of the generated sequence and replace each subsequence in the user sessions that fits the model of the instance. 
 We do not need to search the positions where we can insert the instance since we stored all the occurrences in our first search. 
 What we have to do is to update the information about the position in all other stored match occurrence data. 
