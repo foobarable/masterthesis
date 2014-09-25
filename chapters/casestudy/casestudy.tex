@@ -9,14 +9,13 @@ In this case study 555 user created arround 3635 feasible user sessions. Further
 	\centering
 	 \begin{tabular}{|r|c|}
 		   \hline
-		      & \textbf{Case Study 2} \\
-		      & Application Portal \\
+		   & \textbf{Application Portal }\\
 		     \hline
 		       Start of Recording & 25 October 2013 \\
 		       End of Recordning & 7 March 2014 \\
 		       Recorded Users & 555 \\
 		       Recorded User Sessions & 4,129 \\
-		       Considered User Sessions & 3,635 \\
+		       Considered User Sessions & 3,602 \\
 		       \hline
 		         \textbf{Recorded Events} & 350,368 \\
 		         Relevant Events & 306,568 \\
@@ -84,6 +83,60 @@ After loading the input data from all XML files the following preprocessing step
 	\item correctTabKeyNavigationOrder: Iterates the provided sequences and corrects the order of events in case of tab key navigation. This is required, as from time to time the event of pressing the tab key for navigation in formulars comes before the text input event in a text input field out of which the tab key navigates.
 \end{itemize}
 
+\section{Calculation of distances between non-event-tasks}
+The calculation of distances between non-event-tasks is unproblematic on very small subsets(ca.40 user sessions) of the case study.
+But once we included more sequences the index for the array we use for storing the scores in the substitution matrix hit the limit of Integer.MAX\_VALUE.
+A possible solution for this issue is not to calculate the distances between the non-event-tasks and thus saving computation time and ram usage.
+In this section we investigate if the calculation between non-event-tasks is neccessary by comparing the two generated task trees, one with the additional calculations and one where 
+we set every score involving a non-event-task to zero. Table \ref{tab:resultsnoneventtasks} shows the results of this experiment.
+The number of found tasks is significantly higher when the distances between non-event-tasks are calculated. The time to generate the task tree increases drastically as well.
+The quality of the generated task trees also differs. Without the calculated distances the generated task trees have a flatter structure and are shorter. 
+With the calculation of the distances long interactions e.g. login or account creation procedures can be found. 
+Those long tasks do not always represent correct user interactions. 
+Figure \ref{fig:noneventaccountcreation} shows a task tree for the first part of the account creation process. 
+We can see several subtasks of the task where the subtask does not model user behaviour correctly.
+\texttt{Selection 2691} followed by by \texttt{optionality 2692} makes no sense since the text input of the optionality should just happen after the text input field has been clicked on. 
+This happens in \texttt{iteration 1288}, the first child of \texttt{selection 2691}. So the optionality with the text input should actually be in a sequence with \texttt{iteration 1288} as its preceeding element.
+Another thing that is no real user behaviour in this example task is \texttt{sequence 1656}. 
+The first selection in it gives the posibility to either click or double click on an input field. 
+While double clicking a text field is not an effective behaviour of a user, it is still a valid action to achieve his goal to enter his email address.
+The meaningless part is the text input on the email input field, followed by the same event again. This should either be just one event at all or be found in an iteration.
+There are several more examples where the non-event-task distance calculation did not improve the task tree quality.
+In summary, the amount of tasks created  but not their quality can be increased by enabling the distance computing.
+
+With the large increase of computational time in mind we will set the score to or from non-event-tasks to zero in all further experiments.
+The reason for this is that we have an increase in time by over 3800\% even in this very small example and we cannot asume a linear scaling of this increase because nearly all algorithms we use scale have a complexity of $O(n^2)$.
+
+\begin{figure}[h]
+	\centering
+	%\includegraphics[scale=0.7]{chapters/casestudy/noneventcreateaccount.png}
+	\includegraphics[width=\textwidth]{chapters/casestudy/noneventcreateaccount.png}
+	\caption{An example for a task found by alignment task tree generation with distance calculation between non-event-tasks.}
+	\label{fig:noneventaccountcreation}
+\end{figure}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		& \textbf{with non-event-task distances}& \textbf{without non-event-task distances} \\
+		\hline
+		Sequences & 352 & 50 \\
+		
+		Iterations& 38  & 38 \\
+		Selections& 328 & 21 \\
+		Optionals & 6   & 8  \\
+		\hline
+		Time      &  72.2s & 1.9s \\
+		Number of iterations & 35 & 7\\
+		\hline
+	\end{tabular}
+	\caption{Results of the version with and without calculation of the distances between non-event-tasks}
+	\label{tab:resultsnoneventtasks}
+\end{table}
+
+
+
 \section{Evaluation of termination conditions}
 \begin{itemize}
 	\item Run CTA with full case study
@@ -93,7 +146,7 @@ After loading the input data from all XML files the following preprocessing step
 		\centering
 	\begin{tabular}{|c|r|c|c|}
 		  \hline
-		  Iteration & Matches & Absolute time& Relative time \\
+		  Iteration No. & Matches & Absolute time& Relative time \\
 		  \hline
      		    0  & 1,112,794 & 26.17 & 26.17\\
 	            1  & 381,190   & 39.16 & 12.99\\
@@ -119,7 +172,6 @@ After loading the input data from all XML files the following preprocessing step
 	\end{figure}
 \end{itemize}
 
-\section{Calculation of distances between non-Event-Tasks}
 
 \section{Performance Evaluation}
 \begin{itemize}
@@ -137,6 +189,7 @@ After loading the input data from all XML files the following preprocessing step
 
 \section{Generated Task Trees}
 \begin{table}
+	\centering
  \begin{tabular}{|r|c|c|}
 	   \hline
 	      & \textbf{Harms et al.} & \textbf{Alignment approach} \\
