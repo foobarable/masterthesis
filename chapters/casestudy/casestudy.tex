@@ -1,7 +1,28 @@
 To validate our method we will run the alignment approach of task tree generation against the same case study as Harms et al. did.
-The data was collected on an application portal of the university. Figure \ref{fig:screenshotmasterportal} shows a screenshot of the first page of the portal.
-After login, users can fill out multiple forms regarding their personal data as well as upload their CVs. The data entered was fully anonymized. 
-In this case study 555 user created arround 3635 feasible user sessions. Further details are enlisted in table \ref{tab:casestudy2}.
+The data was collected on an application portal of the university. 
+Figure \ref{fig:screenshotmasterportal} shows a screenshot of the first page of the portal.
+After login, users can fill out multiple forms regarding their personal data as well as upload their CVs. 
+In this case study 555 user created arround 3602 appropriate user sessions. 
+Further details about the data are enlisted in table \ref{tab:casestudy2}.
+The data of the traces is XML structured. Figure \ref{fig:xml} shows the format of one \textit{onclick} event.
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{chapters/casestudy/masterportalscreenshot.png}
+	\caption{Screenshot of the website the data was collected with.}
+	\label{fig:screenshotmasterportal}
+\end{figure}
+\begin{figure}
+\begin{verbatim}
+<event type="onclick">
+      <param name="timestamp" value="1389109340615"/>
+      <param name="target" value="DSuS8oahm5 ... NfhupVDJCn=="/>
+      <param name="Y" value="64"/>
+      <param name="X" value="662"/>
+</event>
+\end{verbatim}
+\caption{Example of one event in XML structure} 
+\label{fig:xml}
+\end{figure}
 
 
 
@@ -30,16 +51,29 @@ In this case study 555 user created arround 3635 feasible user sessions. Further
 	\label{tab:casestudy2}
 \end{table}
 
+We are interested in several aspects of the task tree creation with the alignment approach. 
+First of all we want to examine the necessity of the calculation of the distance between non-event-tasks. 
+The calculations of those distances are very expensive operations so we want to know if this step could be left out and we still find approximately the same amount of tasks in the same quality.
+After that we study the algorithms termination conditions with the goal to find out if we can terminate the algorithm earlier than proposed in chapter \ref{chap:approach}.
 
+Afterwards, we evaluate the performance of the alignment approach and compare it to the performance of the n-gram approach.
+At last we discuss the created task tree by means of representative task examples after running the alignment approach on the full case study.
+All experiments were executed on a AMD Opteron(TM) Processor 6276 (64 core) with 250GB of ram after we figured out, that a Intel(R) Core(TM) i5-2520M CPU @ 2.50GHz with 8GB of ram is not sufficient to run the alignment approach on large numbers of user sessions.
+The Java virtual machine was started with the following parameters:
+\begin{itemize}
+	\item -XX:+UseConcMarkSweepGC
+	\item -Xmx84000m
+\end{itemize}
 
-Another aspect of our approach we want to examine is the necessity of the calculation of the distance between non-event-tasks. 
-The calculations of those distances are very expensive operations so we are interested if this step could be left out and we still find approximatly the same amount of tasks, in the same quality.
-
+\section{Parameters}
+The alignment approach has several parameters that have to be set before running the algorithm. Some values of the parameters may also depend on the underlying data.
+All parameters are described in the approach chapter. Table \ref{tab:parameters} gives a short summary of all available parameters that can be set and also the values
+we used in this case study. Those parameters were manually chosen by trial and error and do not guarantee the best possible results. 
 
 \begin{table}
 	\begin{tabularx}{\textwidth}{|c|X|c|c|}
 	   \hline
-		   Parameter & Function & Definition & Used values\\
+	   \textbf{Parameter} & \textbf{Function} & \textbf{Definition} & \textbf{Value in case study}\\
 	     \hline
 	       k & The value of the maximum score in the substitution matrix& \ref{def:scorewithmaximalscore}& 6 \\
 	       L & Penalty for the score between non-event-tasks & \ref{def:scoreadjusted} & 3\\
@@ -48,32 +82,11 @@ The calculations of those distances are very expensive operations so we are inte
 	       f & Number of occurrences a task must at least have in all user sessions to be replaced & \ref{def:minoccurrencecount} &3\\
 	       \hline
  \end{tabularx}
- \caption{Table of all parameters of the sequence detection.}
+ \caption{Table of all parameters of the alignment alignment approach for the tasktree generation.}
  \label{tab:parameters}
  \end{table}
 
-
-\begin{itemize}
-	
-	\item Two case studies: 
-		\begin{itemize}
-			\item Application portal case study. 
-			\item Website of research group
-		\end{itemize}
-	\item Table of Case studies
-	\item Screenshot of Application Master Portal
-	\item Screenshot of Website of research group
-	\item Show XML recorded traces
-	\item When running the full case study alot of perfomance problems came up.
-	\item Memory consumption and computation time grew alot due to the nature of the algorithm
-	\item Computation moved from a Intel(R) Core(TM) i5-2520M CPU @ 2.50GHz with 8GB Ram to a AMD Opteron(TM) Processor 6276 (64 core) with 250GB Ram.
-	\item The java virtual machine was given 64GB
-	\item Still computation time extremly large (see performance evaluation)
-	
-	\item Maybe change stop criterium: 10% of the matches found in the first run
-	\item Other solution: Update substution matrix, so non-Event tasks can have a negative score (less likely to find matches then)
-\end{itemize} 
-
+ 
 \section{Data Preprocessing}
 After loading the input data from all XML files the following preprocessing steps have been performed. The information about each command is copied from its man page in AutoQUEST.
 \begin{itemize}
@@ -84,13 +97,16 @@ After loading the input data from all XML files the following preprocessing step
 \end{itemize}
 
 \section{Calculation of distances between non-event-tasks}
+\label{sec:noneventtasks}
 The calculation of distances between non-event-tasks is unproblematic on very small subsets(ca.40 user sessions) of the case study.
 But once we included more sequences the index for the array we use for storing the scores in the substitution matrix hit the limit of Integer.MAX\_VALUE.
 A possible solution for this issue is not to calculate the distances between the non-event-tasks and thus saving computation time and ram usage.
 In this section we investigate if the calculation between non-event-tasks is neccessary by comparing the two generated task trees, one with the additional calculations and one where 
 we set every score involving a non-event-task to zero. Table \ref{tab:resultsnoneventtasks} shows the results of this experiment.
-The number of found tasks is significantly higher when the distances between non-event-tasks are calculated. The time to generate the task tree increases drastically as well.
-The quality of the generated task trees also differs. Without the calculated distances the generated task trees have a flatter structure and are shorter. 
+The number of found tasks is significantly higher when the distances between non-event-tasks are calculated. 
+The time to generate the task tree increases drastically as well.
+The quality of the generated task trees also differs. 
+Without the calculated distances the generated task trees have a flatter structure and are shorter. 
 With the calculation of the distances long interactions e.g. login or account creation procedures can be found. 
 Those long tasks do not always represent correct user interactions. 
 Figure \ref{fig:noneventaccountcreation} shows a task tree for the first part of the account creation process. 
@@ -104,8 +120,9 @@ The meaningless part is the text input on the email input field, followed by the
 There are several more examples where the non-event-task distance calculation did not improve the task tree quality.
 In summary, the amount of tasks created  but not their quality can be increased by enabling the distance computing.
 
-With the large increase of computational time in mind we will set the score to or from non-event-tasks to zero in all further experiments.
-The reason for this is that we have an increase in time by over 3800\% even in this very small example and we cannot asume a linear scaling of this increase because nearly all algorithms we use scale have a complexity of $O(n^2)$.
+With the large increase of computational time and the integer limitation of the Java array indexes in mind we will set the score to or from non-event-tasks to zero in all further experiments.
+The reason for this is that we have an increase in time by over 3800\% even in this very small example and we cannot asume a linear scaling of this increase because nearly all algorithms we use have a complexity of $O(n^2)$.
+A parallel computation of the distances and a clever storage of all already calculated values could as well fix this issue but this could not be addressed in this thesis due to time issues.
 
 \begin{figure}[h]
 	\centering
@@ -119,7 +136,7 @@ The reason for this is that we have an increase in time by over 3800\% even in t
 	\centering
 	\begin{tabular}{|c|c|c|}
 		\hline
-		& \textbf{with non-event-task distances}& \textbf{without non-event-task distances} \\
+		& \textbf{with distances}& \textbf{without distances} \\
 		\hline
 		Sequences & 352 & 50 \\
 		
@@ -128,25 +145,31 @@ The reason for this is that we have an increase in time by over 3800\% even in t
 		Optionals & 6   & 8  \\
 		\hline
 		Time      &  72.2s & 1.9s \\
-		Number of iterations & 35 & 7\\
+		Number of repetitions & 35 & 7\\
 		\hline
 	\end{tabular}
 	\caption{Results of the version with and without calculation of the distances between non-event-tasks}
 	\label{tab:resultsnoneventtasks}
 \end{table}
 
-
-
 \section{Evaluation of termination conditions}
-\begin{itemize}
-	\item Run CTA with full case study
-	\item show matches found per iteration and time per iteration
+In this section we will investigate if the algorithm for the task tree generation can be terminated with other conditions than the condition mentioned in chapter \ref{chap:approach}.
+The described behaviour is that the algorithm stops if no further replacements could be performed. 
+It has been observed that the most matches are found in the first few repetitions of the sequence detection phase.
+Table \ref{tab:timesandmatchesperiteration} and the corresponding figure \ref{fig:hasehase} supports this claim. We can see that the number of matches found in each repetition decreases rapidly. 
+After the 6th repetition we detect 0.01\% of the matches found in the first sequence detection. We could stop the algorithm here. But since the algorithm finishes shortly after (after the 10th repetiton), 
+we keep the termination condition for this case study as it is defined in the approach. 
+If on other case studies the algorithm repeats more often, it can be considered to change the termination condition to a fixed number of iteration.
+Another propable condition is to stop when the number of found matches falls below a fraction from the matches found in the first repetition.
 
-	\begin{table}
+We saw in section \ref{sec:noneventtasks} that the number of iterations drastically increases if the distances between non-event-tasks are calculated. 
+If a good solution for the large computation time of the distances is found, this would be a possible use case of a different termination condition.
+
+\begin{table}[h!] 
 		\centering
 	\begin{tabular}{|c|r|c|c|}
 		  \hline
-		  Iteration No. & Matches & Absolute time& Relative time \\
+		  \textbf{Iteration No.} & \textbf{Matches} & \textbf{Absolute time}& \textbf{Relative time} \\
 		  \hline
      		    0  & 1,112,794 & 26.17 & 26.17\\
 	            1  & 381,190   & 39.16 & 12.99\\
@@ -165,34 +188,40 @@ The reason for this is that we have an increase in time by over 3800\% even in t
 		   \label{tab:timesandmatchesperiteration}
 	\end{table}
 
-	\begin{figure}
+	\begin{figure}[h!]
 		\includegraphics[width=\textwidth]{chapters/casestudy/hasehase.png}
 		\caption{}
 		\label{fig:hasehase}
 	\end{figure}
-\end{itemize}
 
 
 \section{Performance Evaluation}
-\begin{itemize}
-	\item Compare Core-TaskTrees(CT) with Core-TaskTrees-Algignment (CTA)
-	\begin{itemize}
-		\item Run CT with 10, 100, 1000, all user sessions on CS1
-		\item Run CTA with 10, 100, 1000, all user sessions on CS1
-		\item Show percentage of each step of CTA of all user sessions
-		\item Run CT with 10, 100, 1000, all user sessions on CS2
-		\item Run CTA with 10, 100, 1000, all user sessions on CS2
-		\item Show percentage of each step of CTA of all user sessions
-	\end{itemize}
-	\item Alot of tables (which step of the algorithm takes how long, for each dataset
-\end{itemize}
 
+\begin{table}[h]
+	\centering
+\begin{tabular}{|r|r|r|}
+	\hline
+	\textbf{Count of user sessions} & \textbf{n-gram Approach} & \textbf{alignment approach} \\
+	\hline
+	  10 & 3.141 & 2.655 \\
+	  100 & 12.019 & 5.681 \\
+	  1000 & 419.063 & 60.775 \\
+	  3602 & 5780.05 & 1,417.37 \\
+	\hline
+	 \end{tabular}
+	 \caption{Comparison between execution times (seconds) of n-gram approach and alignment supported task tree generation}
+	 \label{tab:comparisontasktreegenerations}
+ \end{table}
+
+ \begin{figure}[h]
+	\includegraphics{chapters/casestudy/performance.pdf}
+\end{figure}
 \section{Generated Task Trees}
 \begin{table}
 	\centering
  \begin{tabular}{|r|c|c|}
 	   \hline
-	      & \textbf{Harms et al.} & \textbf{Alignment approach} \\
+	      & \textbf{n-gram approach} & \textbf{alignment approach} \\
 	     \hline
 	       \textbf{Generated Tasks} & 10,634 & 6,532 \\
 	       Sequences & 9,530 & 2,759 \\
@@ -201,6 +230,7 @@ The reason for this is that we have an increase in time by over 3800\% even in t
 	       Optionals & -& 101 \\
 	       \hline
 \end{tabular}
+
 \end{table}
 
 

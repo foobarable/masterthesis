@@ -4,10 +4,16 @@ We will cover the definitions of a GUI and GUI-Model as well as the basic termin
 The last section describes the method for task tree generation by Harms et al.\cite{harms2013}
 
 
-\section{GUI and GUI-Model}
+\section{GUI-Model}
 \label{sec:foundationguiandguimodel}
+A gui model is the structure of a graphical user interface. It consists of different elements those itself can have elements as children.
+A gui model can be displayed as a tree. Figure \ref{fig:guimodel} shows a part of the GUI-model of the case study we will use in chapter \ref{chap:casestudy}.
+\begin{figure}
+	\includegraphics[width=\textwidth]{chapters/foundations/guimodel.png}
+	\caption{Excerpt from a GUI Model of the website \texttt{www.app.informatik.uni-goettingen.de}}
+	\label{fig:guimodel}
+\end{figure}
 
-TODO: GUI Model
 
 \section{Task Tree Terminology}
 \label{sec:foundationtasktreeterminology}
@@ -130,7 +136,7 @@ The \textit{sequence} temporal relationship dictates that children have to be ex
 An \textit{iteration} can just have one child which is executed once or more times. 
 Just one child of a \textit{selection} is allowed to be executed whereas the one child of an \textit{optional} may or may not be executed. 
 Figure \ref{fig:exampletasktree} shows a tasktree that represents a login procedure and contains all possible temporal relationships. 
-At last Harms et al. differentiate between a task and an executed task, a task instance. TODO: Maybe write more about difference between task and Task instances here
+At last Harms et al. differentiate between a task and an executed task, a task instance.
 Figure \ref{fig:exampletaskinstancetree} shows the main differences between a task and its instance: \textit{Selection} instances can have only one child with the task instance that was executed. \textit{Optional} instances have one child if the task was executed and none if not. Instances of \textit{iterations} have as many children as often the task was executed.
 	\begin{figure}
 		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
@@ -240,12 +246,12 @@ all other user sessions as well. After that the next most is added occuring subs
 If there is more than one subsequence with equal occurrence count, just the longest subsequence is replaced.
 If both occurence count and length match, Harms et al. just replace the subsequence occuring first in the ordered list.
 Both steps, iteration detection and sequence detection are repeated until no more iterations or sequences are found.
-Figure \ref{fig:exampletasktreeharms} shows an example of the first iteration of the task tree generation.
+Figure \ref{fig:exampletasktreeharms} shows an example of the first repetition of the task tree generation.
 
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.85]{chapters/foundations/TaskDetection.pdf}
-	\caption{Example for one iteration of the iteration and sequence detection for task tree generation}
+	\caption{Example for one repetition of the iteration and sequence detection for task tree generation. Figure from Harms et al.}
 	\label{fig:exampletasktreeharms}
 \end{figure}
 
@@ -308,7 +314,7 @@ Alignment algorithms try to maximize this score.
 	\end{tabular}
 	\caption{Insertion of D}
 	\end{subfigure}
-	\caption{Three possible modifications that can occurr to sequence 2}
+	\caption{Three possible modifications of sequence 2}
 	\label{fig:alignmentbasic}
 \end{figure}
 
@@ -327,7 +333,7 @@ There are usually two parameters which have to be set: the substitution score an
 
 The gap penalty in its most basic version is a constant that has to be manually adjusted so that it fits the problem well. 
 A large gap penalty leads to less insertion and deletion occurrences and more substitutions.
-This type of gap scoring is called linear affine gap penalty. (TODO: Cite)
+This type of gap scoring is called linear affine gap penalty. 
 The total gap penalty is $n*g$ with n being the number of gaps and g the gap penalty constant. 
 There are different gap penalty models like a different g for opening a new gap and extending an already open gap. 
 In this thesis I will just use the linear affine gap penalty. 
@@ -338,5 +344,33 @@ The formal definition of the the substitution matrix will follow in chapter appr
 %In biology 
 %	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
 \begin{figure}
+\centering
+%\footnotesize
+\scriptsize
+\begin{verbatim}
+      A    R    N    D    C    Q    E    G    H    I    L    K    M    F    P    S    T    W    Y    V
+A    13    6    9    9    5    8    9   12    6    8    6    7    7    4   11   11   11    2    4    9
+R     3   17    4    3    2    5    3    2    6    3    2    9    4    1    4    4    3    7    2    2
+N     4    4    6    7    2    5    6    4    6    3    2    5    3    2    4    5    4    2    3    3
+D     5    4    8   11    1    7   10    5    6    3    2    5    3    1    4    5    5    1    2    3
+C     2    1    1    1   52    1    1    2    2    2    1    1    1    1    2    3    2    1    4    2
+Q     3    5    5    6    1   10    7    3    7    2    3    5    3    1    4    3    3    1    2    3
+E     5    4    7   11    1    9   12    5    6    3    2    5    3    1    4    5    5    1    2    3
+G    12    5   10   10    4    7    9   27    5    5    4    6    5    3    8   11    9    2    3    7
+H     2    5    5    4    2    7    4    2   15    2    2    3    2    2    3    3    2    2    3    2
+I     3    2    2    2    2    2    2    2    2   10    6    2    6    5    2    3    4    1    3    9
+L     6    4    4    3    2    6    4    3    5   15   34    4   20   13    5    4    6    6    7   13
+K     6   18   10    8    2   10    8    5    8    5    4   24    9    2    6    8    8    4    3    5
+M     1    1    1    1    0    1    1    1    1    2    3    2    6    2    1    1    1    1    1    2
+F     2    1    2    1    1    1    1    1    3    5    6    1    4   32    1    2    2    4   20    3
+P     7    5    5    4    3    5    4    5    5    3    3    4    3    2   20    6    5    1    2    4
+S     9    6    8    7    7    6    7    9    6    5    4    7    5    3    9   10    9    4    4    6
+T     8    5    6    6    4    5    5    6    4    6    4    6    5    3    6    8   11    2    3    6
+W     0    2    0    0    0    0    0    0    1    0    1    0    0    1    0    1    0   55    1    0
+Y     1    1    2    1    3    1    1    1    3    2    2    1    2   15    1    2    2    3   31    2
+V     7    4    4    4    4    4    4    4    5    4   15   10    4   10    5    5    5   72    4   17
+	\end{verbatim}
+\normalsize
+	\caption{An example for substitution matrixes: The PAM250 substitution matrix for amino acids\cite{dayhoff1978}. Note that biological substitution matrixes may not be symmetric. }
 	\label{fig:submatexample}
 \end{figure}
