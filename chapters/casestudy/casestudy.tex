@@ -109,8 +109,6 @@ The quality of the generated task trees also differs.
 One criterion of the quality of task trees is the deepness. Each level in a task tree increases the depth by one.
 Without the calculated distances the generated task trees have a flatter structure (maximum depth is 6 with calculated distances, 4 without).
 
-
-
 With the calculation of the distances long interactions like login or account creation procedures can be found.
 Those long tasks do not always represent correct user interactions.
 Figure \ref{fig:noneventaccountcreation} shows a task tree for the first part of the account creation process.
@@ -196,32 +194,6 @@ If a good solution for the large computation time of the distances is found, thi
 		   \caption{Matches found per repetition and the time for each repetition. All times in minutes.}
 		   \label{tab:timesandmatchesperiteration} %TODO labelanpassen -> repetition
 	\end{table}
-%
-% backing up old table
-
-% \begin{table}[h!]
-% 		\centering
-% 	\begin{tabular}{|c|r|c|c|}
-% 		\hline
-% 		\textbf{Iteration No.} & \textbf{Matches} & \textbf{Absolute time}& \textbf{Relative time} \\
-% 		\hline
-% 					0  & 1,112,794 & 26.17 & 26.17\\
-% 					1  & 381,190   & 39.16 & 12.99\\
-% 			2  & 167,677   & 45.52 & 6.36\\
-% 			3  & 63,964    & 51.00 & 5.48\\
-% 			4  & 26,171    & 55.83 & 4.83\\
-% 			5  & 12,627    & 60.72 & 4.89\\
-% 			6  & 8,660     & 65.48 & 4.76\\
-% 			7  & 7,517     & 70.34 & 4.86\\
-% 			8  & 7,232     & 75.02 & 4.68\\
-% 			9  & 7,214     & 79.74 & 4.72\\
-% 			10 & 7,214     & 84.49 & 4.75\\
-% 		\hline
-% 			\end{tabular}
-% 			\caption{Matches found per iteration and the time for each iteration. All times in minutes.}
-% 			\label{tab:timesandmatchesperiteration}
-% 	\end{table}
-
 	\begin{figure}[h!]
 		\includegraphics[width=\textwidth]{chapters/casestudy/hasehase.png}
 		\caption{}
@@ -230,7 +202,8 @@ If a good solution for the large computation time of the distances is found, thi
 
 
 \section{Performance Evaluation}
-To evaluate the performance of the alignment approach we run
+To evaluate the performance of both the alignment approach and the n-gram approach we run each task tree generation algorithms against different sized subsets of the case study.
+We chose user session sets with the size of 10, 100, 1000 and the full case study. Figure 
 
 \begin{table}[h]
 	\centering
@@ -238,7 +211,7 @@ To evaluate the performance of the alignment approach we run
 		\toprule
 		\textbf{Number of user sessions} & \textbf{n-gram approach} & \textbf{alignment approach} \\
 		\midrule
-		10 	& 3.141 		& 2.655 \\
+		10 	& 3.141 	& 2.655 \\
 		100 	& 12.019 	& 5.681 \\
 		1000 	& 419.063 	& 60.775 \\
 		\midrule
@@ -249,26 +222,11 @@ To evaluate the performance of the alignment approach we run
 	\label{tab:comparisontasktreegenerations}
 \end{table}
 
-% Backup table
-%
-%\begin{table}[h]
-%	\centering
-%\begin{tabular}{|r|r|r|}
-%	\hline
-%	\textbf{Count of user sessions} & \textbf{n-gram Approach} & \textbf{alignment approach} \\
-%	\hline
-%	  10 & 3.141 & 2.655 \\
-%	  100 & 12.019 & 5.681 \\
-%	  1000 & 419.063 & 60.775 \\
-%	  3602 & 5780.05 & 1,417.37 \\
-%	\hline
-%	 \end{tabular}
-%	 \caption{Comparison between execution times (seconds) of n-gram approach and alignment supported task tree generation}
-%	 \label{tab:comparisontasktreegenerations}
- %\end{table}
 
  \begin{figure}[h]
 	\includegraphics{chapters/casestudy/performance.pdf}
+	\caption{Scaling behaviour of both approaches.}
+	\label{fig:performance}
 \end{figure}
 \section{Generated Task Trees}
 \begin{table}
