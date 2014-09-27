@@ -82,7 +82,7 @@ we used in this case study. Those parameters were manually chosen by trial and e
 	       f & Number of occurrences a task must at least have in all user sessions to be replaced & \ref{def:minoccurrencecount} &3\\
 	       \hline
  \end{tabularx}
- \caption{Table of all parameters of the alignment alignment approach for the tasktree generation.}
+ \caption{Table of all parameters of the alignment alignment approach for the task tree generation.}
  \label{tab:parameters}
  \end{table}
 
@@ -106,7 +106,7 @@ we set every score involving a non-event-task to zero. Table \ref{tab:resultsnon
 The number of found tasks is significantly higher when the distances between non-event-tasks are calculated.
 The time to generate the task tree increases drastically as well.
 The quality of the generated task trees also differs.
-One criterion of tasktrees is the deepness. Each level in a tree increases the depth by one.
+One criterion of the quality of task trees is the deepness. Each level in a task tree increases the depth by one.
 Without the calculated distances the generated task trees have a flatter structure (maximum depth is 6 with calculated distances, 4 without).
 
 
@@ -290,7 +290,7 @@ To evaluate the performance of the alignment approach we run
 
 \begin{itemize}
 	\item Show some meaningful generated task trees
-	\item Show also tasktrees that are not useful
+	\item Show also task trees that are not useful
 \begin{figure}
 	\centering
 	\includegraphics[]{chapters/casestudy/mixedtasktree.png}
