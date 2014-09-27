@@ -5,7 +5,6 @@ After logging in, users can fill out multiple forms regarding their personal dat
 In this case study 555 user created arround 3602 appropriate user sessions.
 Further details about the data are enlisted in table \ref{tab:casestudy2}.
 The data of the traces is XML structured. Figure \ref{fig:xml} shows the format of one \textit{onclick} event.
-
 \begin{figure}[h]
 	\includegraphics[width=\textwidth]{chapters/casestudy/masterportalscreenshot.png}
 	\caption{Screenshot of the website the data was collected with.}
@@ -179,8 +178,8 @@ If a good solution for the large computation time of the distances is found, thi
 			\cmidrule{3-4}
 		  \textbf{Repetition No.} & \textbf{Matches} & \textbf{Absolute}& \textbf{Relative} \\
 		  \midrule
-     		 0  & 1,112,794 & 26.17 & 26.17\\
-	       1  & 381,190   & 39.16 & 12.99\\
+     		    0  & 1,112,794 & 26.17 & 26.17\\
+	            1  & 381,190   & 39.16 & 12.99\\
 		    2  & 167,677   & 45.52 & 6.36\\
 		    3  & 63,964    & 51.00 & 5.48\\
 		    4  & 26,171    & 55.83 & 4.83\\
@@ -197,7 +196,7 @@ If a good solution for the large computation time of the distances is found, thi
 	\end{table}
 	\begin{figure}[h!]
 		\includegraphics[width=\textwidth]{chapters/casestudy/hasehase.png}
-		\caption{}
+		\caption{Graph with matches found per repetition and the time per repetition.}
 		\label{fig:hasehase}
 	\end{figure}
 
@@ -243,7 +242,9 @@ In summary the alignment approach is definitely more resource intensive than the
 In this section we analyse the tasks we generated with the alignment approach. 
 We were able to create tasks that describe effective user behaviour but also could find examples for wrong tasks.
 With wrong tasks we mean tasks that allow actions that are either not possible on the underlying GUI model or make no sense.
-The quantity of created tasks can be found in table \ref{tab:taskquantity}. We find around 4000 
+The quantity of created tasks can be found in table \ref{tab:taskquantity}. 
+We find around 6000 less than Harms et al. but are able to create tasks of of temporal relationship type selection and optional.
+
 \begin{table}
 	\centering
 	\begin{tabular}{ r r r }
@@ -269,39 +270,33 @@ The quantity of created tasks can be found in table \ref{tab:taskquantity}. We f
 \begin{figure}
 	\centering
 	\includegraphics[]{chapters/casestudy/mixedtasktree.png}
-	\caption{}
-	\label{}
+	\caption{Example for a task tree consisting of two different interactions made by the user. }
+	\label{fig:mixedtasktree}
 \end{figure}
 \begin{figure}
 	\centering
 	\includegraphics[]{chapters/casestudy/newpassword.png}
-	\caption{}
-	\label{}
-\end{figure}
-\begin{figure}
-	\centering
-	\includegraphics[]{chapters/casestudy/preprocessing_needed.png}
-	\caption{}
+	\caption{Example for a task for setting a new password (Version 1).}
 	\label{}
 \end{figure}
 \begin{figure}
 	\centering
 	\includegraphics[]{chapters/casestudy/newpassword-1.png}
-	\caption{}
+	\caption{Example for a task for setting a new password (Version 2).}
+	\label{}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[]{chapters/casestudy/preprocessing_needed.png}
+	\caption{Example for a created task that shows that further data preprocessing is required.}
 	\label{}
 \end{figure}
 \begin{figure}
 	\centering
 	\includegraphics[]{chapters/casestudy/login_process_repeated.png}
-	\caption{}
+	\caption{Example for a task in the middle of a login process.}
 	\label{}
 \end{figure}
-%\begin{figure}
-%	\centering
-%	\includegraphics[]{}
-%	\caption{}
-%	\label{}
-%\end{figure}
 
 \section{Discussion}
 \begin{itemize}
