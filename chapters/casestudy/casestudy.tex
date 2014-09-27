@@ -1,12 +1,12 @@
-To validate our method we will run the alignment approach of task tree generation against the same case study as Harms et al. did.
-The data was collected on an application portal of the university.
+To validate our method we run the alignment approach of task tree generation against the same case study as Harms et al. did.
+The user traces were collected on an application portal of the university.
 Figure \ref{fig:screenshotmasterportal} shows a screenshot of the first page of the portal.
-After login, users can fill out multiple forms regarding their personal data as well as upload their CVs.
+After logging in, users can fill out multiple forms regarding their personal data as well as upload their CVs.
 In this case study 555 user created arround 3602 appropriate user sessions.
 Further details about the data are enlisted in table \ref{tab:casestudy2}.
 The data of the traces is XML structured. Figure \ref{fig:xml} shows the format of one \textit{onclick} event.
 
-\begin{figure}
+\begin{figure}[h]
 	\includegraphics[width=\textwidth]{chapters/casestudy/masterportalscreenshot.png}
 	\caption{Screenshot of the website the data was collected with.}
 	\label{fig:screenshotmasterportal}
@@ -89,31 +89,35 @@ we used in this case study. Those parameters were manually chosen by trial and e
 
 \section{Data Preprocessing}
 After loading the input data from all XML files the following preprocessing steps have been performed. The information about each command is copied from its man page in AutoQUEST.
-\begin{itemize}
-	\item condenseHTMLGUIModel: Merges all equal nodes in the GUI-Model.
-	\item condenseMouseClicks: Reduces a sequence of mouse button down, mouse button up and mouse click with the same button on the same event target to a single mouse click with that button on that target. The mouse button down and mouse button up events are discarded.
-	\item correctKeyInteractionTargets: Iterates the provided sequences and sets the target of all key interaction events to the GUI element having the current keyboard focus. The current keyboard focus is determined either by keyboard focus events or by using the target of the first key interaction in a sequence. Events changing the keyboard focus are discarded herewith.
-	\item correctTabKeyNavigationOrder: Iterates the provided sequences and corrects the order of events in case of tab key navigation. This is required, as from time to time the event of pressing the tab key for navigation in formulars comes before the text input event in a text input field out of which the tab key navigates.
-\end{itemize}
+\begin{description}
+	\item[condenseHTMLGUIModel]\hfill\\ Merges all equal nodes in the GUI-Model.
+	\item[condenseMouseClicks]\hfill\\ Reduces a sequence of mouse button down, mouse button up and mouse click with the same button on the same event target to a single mouse click with that button on that target. The mouse button down and mouse button up events are discarded.
+	\item[correctKeyInteractionTargets]\hfill\\ Iterates the provided sequences and sets the target of all key interaction events to the GUI element having the current keyboard focus. The current keyboard focus is determined either by keyboard focus events or by using the target of the first key interaction in a sequence. Events changing the keyboard focus are discarded herewith.
+	\item[correctTabKeyNavigationOrder]\hfill\\ Iterates the provided sequences and corrects the order of events in case of tab key navigation. This is required, as from time to time the event of pressing the tab key for navigation in formulars comes before the text input event in a text input field out of which the tab key navigates.
+\end{description}
 
 \section{Calculation of distances between non-event-tasks}
 \label{sec:noneventtasks}
-The calculation of distances between non-event-tasks is unproblematic on very small subsets(ca.40 user sessions) of the case study.
-But once we included more sequences the index for the array we use for storing the scores in the substitution matrix hit the limit of Integer.MAX\_VALUE.
-A possible solution for this issue is not to calculate the distances between the non-event-tasks and thus saving computation time and ram usage.
+The calculation of distances between non-event-tasks is not an issue on very small subsets (ca.40 user sessions) of the case study.
+But once we included more sequences the index for the array we use for storing the scores in the substitution matrix hit the limit of \texttt{Integer.MAX\_VALUE}.
+A possible solution for this issue is not to calculate the distances between the non-event-tasks and thus saving computation time and memory usage.
 In this section we investigate if the calculation between non-event-tasks is neccessary by comparing the two generated task trees, one with the additional calculations and one where
 we set every score involving a non-event-task to zero. Table \ref{tab:resultsnoneventtasks} shows the results of this experiment.
 The number of found tasks is significantly higher when the distances between non-event-tasks are calculated.
 The time to generate the task tree increases drastically as well.
 The quality of the generated task trees also differs.
-Without the calculated distances the generated task trees have a flatter structure and are shorter.
-With the calculation of the distances long interactions e.g. login or account creation procedures can be found.
+One criterion of tasktrees is the deepness. Each level in a tree increases the depth by one.
+Without the calculated distances the generated task trees have a flatter structure (maximum depth is 6 with calculated distances, 4 without).
+
+
+
+With the calculation of the distances long interactions like login or account creation procedures can be found.
 Those long tasks do not always represent correct user interactions.
 Figure \ref{fig:noneventaccountcreation} shows a task tree for the first part of the account creation process.
 We can see several subtasks of the task where the subtask does not model user behaviour correctly.
-\texttt{Selection 2691} followed by by \texttt{optionality 2692} makes no sense since the text input of the optionality should just happen after the text input field has been clicked on.
-This happens in \texttt{iteration 1288}, the first child of \texttt{selection 2691}. So the optionality with the text input should actually be in a sequence with \texttt{iteration 1288} as its preceeding element.
-Another thing that is no real user behaviour in this example task is \texttt{sequence 1656}.
+\texttt{Selection} 2691 followed by by \texttt{optionality} 2692 makes no sense since the text input of the optionality should just happen after the text input field has been clicked on.
+This happens in \texttt{iteration} 1288, the first child of \texttt{selection} 2691. So the optionality with the text input should actually be in a sequence with \texttt{iteration} 1288 as its preceeding element.
+Another thing that is no real user behaviour in this example task is \texttt{sequence} 1656.
 The first selection in it gives the posibility to either click or double click on an input field.
 While double clicking a text field is not an effective behaviour of a user, it is still a valid action to achieve his goal to enter his email address.
 The meaningless part is the text input on the email input field, followed by the same event again. This should either be just one event at all or be found in an iteration.
