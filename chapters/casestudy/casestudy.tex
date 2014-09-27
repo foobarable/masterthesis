@@ -24,30 +24,25 @@ The data of the traces is XML structured. Figure \ref{fig:xml} shows the format 
 \label{fig:xml}
 \end{figure}
 
-
-
 \begin{table}
 	\centering
-	 \begin{tabular}{|r|c|}
-		   \hline
-		   & \textbf{Application Portal }\\
-		     \hline
-		       Start of Recording & 25 October 2013 \\
-		       End of Recordning & 7 March 2014 \\
-		       Recorded Users & 555 \\
-		       Recorded User Sessions & 4,129 \\
-		       Considered User Sessions & 3,602 \\
-		       \hline
-		         \textbf{Recorded Events} & 350,368 \\
-		         Relevant Events & 306,568 \\
-		         Double Clicks & 6,437 \\
-		         Focus Changes & 89,825 \\
-		         \hline
-			   \textbf{Considered Events} & 210,306 \\
-			   Different Events & 1,897 \\
-			   \hline
-			    \end{tabular}
-			    \caption{Case study overview}
+	\begin{tabular}{c r r}
+		\toprule
+		\multirow{5}{*}{\textbf{Date, Users \& Sessions}} & Start of Recording & 25 October 2013 \\
+		      & End of Recordning & 7 March 2014 \\
+		      & Recorded Users & 555 \\
+		      & Recorded User Sessions & 4,129 \\
+		      & Considered User Sessions & 3,602 \\
+		\midrule
+		\multirow{6}{*}{\textbf{Events}} & Recorded Events & 350,368 \\
+		      & Relevant Events & 306,568 \\
+		      & Double Clicks & 6,437 \\
+		      & Focus Changes & 89,825 \\
+			   & Considered Events & 210,306 \\
+			   & Different Events & 1,897 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Case study overview}
 	\label{tab:casestudy2}
 \end{table}
 
@@ -153,7 +148,7 @@ A parallel computation of the distances and a clever storage of all already calc
 		Selections& 328 & 21 \\
 		Optionals & 6   & 8  \\
 		\midrule
-		\textbf{Performance indicator} & & \\
+		\textbf{Performance indicator} & \\
 		\midrule
 		Time (s)     & 72.2 & 1.9 \\
 		Number of repetitions & 35 & 7\\
@@ -210,10 +205,10 @@ If a good solution for the large computation time of the distances is found, thi
 \section{Performance Evaluation}
 To evaluate the performance of both the alignment approach and the n-gram approach we run each task tree generation algorithms against different sized subsets of the case study.
 We chose user session sets with the size of 10, 100, 1000 and the full case study. Figure \ref{fig:performance} and table \ref{tab:comparisontasktreegenerations} show the results
-of this experiment. 
-We can see that the alignment approach is slower on any size of input data. 
+of this experiment.
+We can see that the alignment approach is slower on any size of input data.
 But with the increasing number of user sessions we can observe that the computation time increases notebly.
-As a side note the memory consumption of the alignment approach for the full case study was 46.9GB at its maximum. 
+As a side note the memory consumption of the alignment approach for the full case study was 46.9GB at its maximum.
 The n-gram approach used TODO: INSERT HERE GB memory for the same data set.
 The memory usage of the other data set sizes were not tracked.
 
