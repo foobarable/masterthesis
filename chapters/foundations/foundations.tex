@@ -4,7 +4,7 @@ We will cover the definitions of a GUI and GUI-Model as well as the basic termin
 In the last section we describe the state of the art task tree generation based on n-grams\cite{harms2013}.
 
 
-\section{GUI Model}
+\section{GUI-Model}
 \label{sec:foundationguiandguimodel}
 A GUI-model is the structure of a graphical user interface. It consists of different elements those itself can have elements as children.
 A GUI-model can be displayed as a tree. Figure \ref{fig:guimodel} shows a part of the GUI-model of the case study we will use in chapter \ref{chap:casestudy}.
@@ -62,7 +62,7 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
         node {Login}
         child{ node {Click on textfield "username"}}
         child{
-            node {Enter user name into textfield "username"}
+            node {Enter username into textfield "username"}
         }
         child{
             node {Click on textfield "password"}
@@ -125,7 +125,7 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 A task tree consists of three different kinds of nodes:
 \begin{description}
 	\item[Root node]\hfill\\ Represents the overall task which contains all subtasks, the user wants to achieve this goal by his actions/his input. In figure \ref{fig:booktree} the overall task is to buy books at an online shop.
-	\item[Leaf nodes]\hfill\\ Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called \textit{event tasks}. Event tasks do not have any further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
+	\item[Leaf nodes]\hfill\\ Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called \textit{event-tasks}. Event tasks do not have any further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
 	\item[Intermediate nodes]\hfill\\ Subtasks which are steps towards the overall task. All tasks above the leave nodes are called non-event-tasks. In figure \ref{fig:booktree} the intermediate nodes are login, search, basket and order.
 \end{description}
 Another relevant point is that the order of the executed actions is important.
@@ -151,7 +151,7 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		      child { node {Selection 1}
 		        child { node {Sequence 2}
 				child { node {Click        on   textfield "username"}}
-		          child { node {Enter user name    into textfield "username"}}
+		          child { node {Enter username    into textfield "username"}}
 		      child [missing] {}
 		          child [missing] {}
 		    }
@@ -178,7 +178,7 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		    child [missing] {}
 		    child { node {Click        on   button "login"}};
 		    \end{tikzpicture}
-		\caption{An example for a task tree with temporal relations\cite{harms2013}.TODO: More explanations here}
+		\caption{An example for a task tree with temporal relations. Adopted from Harms et al.\cite{harms2013}.}
 		\label{fig:exampletasktree}
 	\end{figure}
 	\begin{figure}
@@ -194,7 +194,7 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		      child { node { Instance of Selection 1}
 		        child { node { Instance of Sequence 2}
 			  child { node {Click        on   textfield "username"}}
-		          child { node {Enter user name    into textfield "username"}}
+		          child { node {Enter username    into textfield "username"}}
 		          child [missing] {}
 		          child [missing] {}
 		        }
@@ -219,13 +219,13 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		    child { node { Instance of Optional 1}}
 		    child { node {Click        on   button "login"}};
 		    \end{tikzpicture}
-		\caption{An example for one task tree instance of the task tree in figure \ref{fig:exampletasktree}\cite{harms2013}.}
+		\caption{An example for one task tree instance of the task tree in figure \ref{fig:exampletasktree} Adopted from Harms et al.\cite{harms2013}.}
 		\label{fig:exampletaskinstancetree}
 	\end{figure}
 
 \section{State Of The Art Of Trace Based Task Tree Generation}
 The current procedure to generate task trees\cite{harms2013} starts with iterating through the events in the traces and creates an event task instance for each.
-Those event task instances are stored in the order they were triggered.  This structure is a so called \textit{user session}.
+Those event-task instances are stored in the order they were triggered.  This structure is a so called \textit{user session}.
 
 The user sessions used for task tree generation are available in a non-harmonized form,
 meaning equal task instances may not have the same corresponding task assigned. TODO: Maybe write about the different levels of equality here?
@@ -244,7 +244,7 @@ For this, the user sessions are scanned for identical subsequences. This is done
 The longest subsequence that occured most often is then added to a newly created \textit{sequence} task and again replaced in
 all other user sessions as well. After that, the next most occuring subsequence is replaced. The minimal length of a subsequence is two.
 If there is more than one subsequence with equal occurrence count, just the longest subsequence is replaced.
-If both occurences match in count an length, Harms et al. just replace the subsequence occuring first in the ordered list.
+If both occurrences match in count an length, Harms et al. just replace the subsequence occuring first in the ordered list.
 Both steps, iteration detection and sequence detection are repeated until no more iterations or sequences are found.
 Figure \ref{fig:exampletasktreeharms} shows an example of the first repetition of the task tree generation.
 

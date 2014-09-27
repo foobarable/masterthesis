@@ -114,9 +114,9 @@ Figure \ref{fig:guimodeldistance} shows a GUI model with two elements and their 
 
 \subsection{Event-Task To Non-Event-Task Similarity}
 It takes a bit more effort to calculate the substitution score if one task is a non-event-task.
-The reason is that the non-event tasks do not represent a simple event anymore.
+The reason is that the non-event-tasks do not represent a simple event anymore.
 Therefore, they do not possess a target in the GUI.
-A possible solution is to recursively visit every child of the non-event-task, gather all event tasks and then calculate the mean distance from each of those tasks to the event-task the distance shall be calculated to.
+A possible solution is to recursively visit every child of the non-event-task, gather all event-tasks and then calculate the mean distance from each of those tasks to the event-task the distance shall be calculated to.
 Formally, definition \ref{def:guimodeldistanceee} has to be modified so that it covers non-events as well:
 
 \begin{definition}
@@ -132,7 +132,7 @@ Formally, definition \ref{def:guimodeldistanceee} has to be modified so that it 
 \label{def:guimodeldistanceene}
 \end{definition}
 
-\subsection{Non-Event To Non-Event Similarity}
+\subsection{Non-Event-Task To Non-Event-Task Similarity}
 With Definition \ref{def:guimodeldistanceene} it is simple to compute the distance for two tasks since all that is to do now is to repeat the procedure of finding all event-task children of one task, calculate the distances to the other task and use the mean distances as the total distance.
 The definition of d can be extended so it accepts two non-event-tasks:
 
@@ -165,7 +165,7 @@ A large k may be chosen for very deeply, nested GUI models whereas for flat GUI 
 At last this parameter has to be evaluated and carefully adjusted to the given input data.
 
 The maximal score is reached if the distance between two elements is zero. This happens if we compare two equal elements.
-A problem can occur when the score of a non-event-task to an event task is equal to maximal score.
+A problem can occur when the score of a non-event-task to an event-task is equal to maximal score.
 This happens if a non-event-task has just one event-task as child and the distance of this child to the same event-task is calculated.
 Since it is preferred that the score of two equal event-tasks is always larger than the score of this event-task with a non-event-task we add the penalty term $L$ to the score equation.
 
@@ -424,8 +424,8 @@ There are some rules that have to be fulfilled to consider a match as found:
 
 \paragraph{Match Sorting}
 Once all matches have been retrieved they have to be sorted to have an order they will be replaced in the sequences. The sorting criteria are the following:
-First we sort by the number of occurence in all sequences.
-The reason for this is that we want to prefer the most occurring match over all other match properties because it is likely that a task with a high occurence represents
+First we sort by the number of occurrence in all sequences.
+The reason for this is that we want to prefer the most occurring match over all other match properties because it is likely that a task with a high occurrence represents
 the average user behaviour. If two matches have the same occurrence count, the length of the matches is considered. Longer matches will be replaced first.
 The next two sort properties are introduced for a deterministic behaviour of the algorithm.
 %The reason why is that we need an explicit order of all matches.
@@ -433,7 +433,7 @@ If two matches have the same occurrence count and the length, the sum of the use
 
 
 \subsection{Task Generation}
-After sorting the matches, the actual task is created from each match that has a minimum occurence of f.
+After sorting the matches, the actual task is created from each match that has a minimum occurrence of $f$.
 This parameter is introduced to exclude those matches that just have been performed by a small number of users and therefore are not representative for a general interaction with the software.
 \begin{definition}
 	\item Let f be the number of occurrences a task must have in all user sessions in order to be replaced.
