@@ -209,7 +209,13 @@ If a good solution for the large computation time of the distances is found, thi
 
 \section{Performance Evaluation}
 To evaluate the performance of both the alignment approach and the n-gram approach we run each task tree generation algorithms against different sized subsets of the case study.
-We chose user session sets with the size of 10, 100, 1000 and the full case study. Figure 
+We chose user session sets with the size of 10, 100, 1000 and the full case study. Figure \ref{fig:performance} and table \ref{tab:comparisontasktreegenerations} show the results
+of this experiment. 
+We can see that the alignment approach is slower on any size of input data. 
+But with the increasing number of user sessions we can observe that the computation time increases notebly.
+As a side note the memory consumption of the alignment approach for the full case study was 46.9GB at its maximum. 
+The n-gram approach used TODO: INSERT HERE GB memory for the same data set.
+The memory usage of the other data set sizes were not tracked.
 
 \begin{table}[h]
 	\centering
