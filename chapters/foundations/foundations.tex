@@ -1,5 +1,5 @@
-In this chapter we will provide and explain the concepts and terms that are used throughout this thesis. 
-We will cover the definitions of a GUI and GUI-Model as well as the basic terminology of a task tree, followed by 
+In this chapter we will provide and explain the concepts and terms that are used throughout this thesis.
+We will cover the definitions of a GUI and GUI-Model as well as the basic terminology of a task tree, followed by
  information on alignment algorithms and substitution matrixes.
 In the last section we describe the state of the art task tree generation based on n-grams\cite{harms2013}.
 
@@ -20,13 +20,13 @@ A GUI-model can be displayed as a tree. Figure \ref{fig:guimodel} shows a part o
 Harms et al.\cite{harms2013} have created a set of definitions and the respective vocabulary that help dealing with task trees.
 We will adopt their definitions and summarize them in this section.
 
-To understand tasks and task trees we have to look at how users interact with software. 
-Users, perfoming actions like clicking or typing, trigger so called events. 
-Those events consist of a type and a target. 
+To understand tasks and task trees we have to look at how users interact with software.
+Users, perfoming actions like clicking or typing, trigger so called events.
+Those events consist of a type and a target.
 The type describes the type of the action that triggered this event (e.g. onclick), the target describes the element in which the GUI the event occurred on.
-The events a user creates can be traced, which is the basic step to gather data that is needed to generate task trees. 
-A trace is a list of events in the order they occurred. Table \ref{tab:trace} shows an example of such a trace. 
-All events in this list and their corresponding actions represent the users intention to achieve a goal, while using the software e.g. buying a book 
+The events a user creates can be traced, which is the basic step to gather data that is needed to generate task trees.
+A trace is a list of events in the order they occurred. Table \ref{tab:trace} shows an example of such a trace.
+All events in this list and their corresponding actions represent the users intention to achieve a goal, while using the software e.g. buying a book
 in an online shop. From now on this goal is named task. This task can consist of several subtasks such as logging in or putting a book into the basket.
 Each subtask itself can again contain further subtasks. From figure \ref{fig:booktree} one can see this results in a tree structure, a so called \textit{task tree}.
 
@@ -38,7 +38,7 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 	 \hline
 	   1. & Left mouse button click &  Textfield with id username \\
 	   2. & Text input "usr" &  Textfield with id username \\
-	   3. & Left mouse button click &  Textfield with id username \\
+	   3. & Left mouse button click &  textfield with id username \\
 	   4. & Text input "user" &  Textfield with id username \\
 	   5. &Left mouse button click &  Textfield with id password \\
 	   6. & Text input "" &  Textfield with id password \\
@@ -60,15 +60,15 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 \node {Buy a book} [-]
     child{
         node {Login}
-        child{ node {Click on Textfield "username"}}
+        child{ node {Click on textfield "username"}}
         child{
-            node {Enter user name into Textfield "username"}
+            node {Enter user name into textfield "username"}
         }
         child{
-            node {Click on Textfield "password"}
+            node {Click on textfield "password"}
         }
         child{
-            node {Enter password  into Textfield "password"}
+            node {Enter password  into textfield "password"}
         }
         child{
             node {Click on button "login"}
@@ -82,7 +82,7 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
     child{
         node {Search}
         child{
-            node {Click into Textfield "search"}
+            node {Click into textfield "search"}
         }
         child{
             node {Type book name}
@@ -123,31 +123,31 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 \end{figure}
 
 A task tree consists of three different kinds of nodes:
-\begin{description} 
+\begin{description}
 	\item[Root node]\hfill\\ Represents the overall task which contains all subtasks, the user wants to achieve this goal by his actions/his input. In figure \ref{fig:booktree} the overall task is to buy books at an online shop.
 	\item[Leaf nodes]\hfill\\ Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called \textit{event tasks}. Event tasks do not have any further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
 	\item[Intermediate nodes]\hfill\\ Subtasks which are steps towards the overall task. All tasks above the leave nodes are called non-event-tasks. In figure \ref{fig:booktree} the intermediate nodes are login, search, basket and order.
 \end{description}
-Another relevant point is that the order of the executed actions is important. 
-Therefore, this information has to be represented in the task tree as well. 
-For this, Harms et al. defined the so called \textit{temporal relationships} for all non-event-tasks. 
-There are four types of temporal relationships, each with different properties. 
-The \textit{sequence} temporal relationship dictates that children have to be executed in specific order to fulfil the task. 
-An \textit{iteration} can just have one child, which is executed once or several times. 
-Just one child of a \textit{selection} is allowed to be executed, whereas the one child of an \textit{optional} may or may not be executed. 
-Figure \ref{fig:exampletasktree} shows a task tree that represents a login procedure and contains all possible temporal relationships. 
+Another relevant point is that the order of the executed actions is important.
+Therefore, this information has to be represented in the task tree as well.
+For this, Harms et al. defined the so called \textit{temporal relationships} for all non-event-tasks.
+There are four types of temporal relationships, each with different properties.
+The \textit{sequence} temporal relationship dictates that children have to be executed in specific order to fulfil the task.
+An \textit{iteration} can just have one child, which is executed once or several times.
+Just one child of a \textit{selection} is allowed to be executed, whereas the one child of an \textit{optional} may or may not be executed.
+Figure \ref{fig:exampletasktree} shows a task tree that represents a login procedure and contains all possible temporal relationships.
 At last, Harms et al. differentiate between a task and an executed task, a task instance.
 Figure \ref{fig:exampletaskinstancetree} shows the main differences between a task and its instance: \textit{Selection} instances can have only one child with the task instance that was executed. \textit{Optional} instances have one child if the task was executed and none if the task was not executed. Instances of \textit{iterations} have as many children as often as the task was executed.
 	\begin{figure}
 		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
 		        text centered, anchor=west, text=black, fill=blue!30]
-		
+
 		\begin{tikzpicture}[%
 		  grow via three points={one child at (0.5,-0.7) and
 		  two children at (0.5,-0.7) and (0.5,-1.4)},
 		  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
 		  \node {Sequence 1}
-		    child { node {Iteration 1}       
+		    child { node {Iteration 1}
 		      child { node {Selection 1}
 		        child { node {Sequence 2}
 				child { node {Click        on   textfield "username"}}
@@ -171,12 +171,12 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		    child [missing] {}
 		    child { node {Optional 1}
 			    child { node {Iteration 2}
-				child{ node{Scroll on Page}}
+				child{ node{Scroll on page}}
 			}
 		    }
 		    child [missing] {}
 		    child [missing] {}
-		    child { node {Click        on   Button "login"}};
+		    child { node {Click        on   button "login"}};
 		    \end{tikzpicture}
 		\caption{An example for a task tree with temporal relations\cite{harms2013}.TODO: More explanations here}
 		\label{fig:exampletasktree}
@@ -184,13 +184,13 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 	\begin{figure}
 		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
 		        text centered, anchor=west, text=black, fill=green!30]
-		
+
 		\begin{tikzpicture}[%
 		  grow via three points={one child at (0.5,-0.7) and
 		  two children at (0.5,-0.7) and (0.5,-1.4)},
 		  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
 		  \node {Instance of Sequence 1}
-		    child { node {Instance of Iteration 1}       
+		    child { node {Instance of Iteration 1}
 		      child { node { Instance of Selection 1}
 		        child { node { Instance of Sequence 2}
 			  child { node {Click        on   textfield "username"}}
@@ -202,12 +202,12 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		      child [missing] {}
 		      child [missing] {}
 		      child [missing] {}
-		      child { node { Instance of Selection 1} 
+		      child { node { Instance of Selection 1}
 			  child { node {Sequence 3}}
 		          child { node {Click        on   textfield "password"}}
 		          child { node {Enter password  into textfield "password"}}
 		       }
-	            }	
+	            }
 		    child [missing] {}
 		    child [missing] {}
 		    child [missing] {}
@@ -216,15 +216,15 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		    child [missing] {}
 		    child [missing] {}
 		    child [missing] {}
-		    child { node { Instance of Optional 1}} 
-		    child { node {Click        on   Button "login"}};
+		    child { node { Instance of Optional 1}}
+		    child { node {Click        on   button "login"}};
 		    \end{tikzpicture}
 		\caption{An example for one task tree instance of the task tree in figure \ref{fig:exampletasktree}\cite{harms2013}.}
 		\label{fig:exampletaskinstancetree}
 	\end{figure}
 
-\section{State Of The Art Of Trace Based Task Tree Generation}
-The current procedure to generate task trees\cite{harms2013} starts with iterating through the events in the traces and creates an event task instance for each. 
+\section{State of the Art of Trace Based Task Tree Generation}
+The current procedure to generate task trees\cite{harms2013} starts with iterating through the events in the traces and creates an event task instance for each.
 Those event task instances are stored in the order they were triggered.  This structure is a so called \textit{user session}.
 
 The user sessions used for task tree generation are available in a non-harmonized form,
@@ -233,10 +233,10 @@ The now following harmonization process sets the correct task to those task inst
 Fixing the issue of non-harmonized input data before starting any further steps is crucial since it reduces the number of occuring tasks and makes task instances
 comparable by their tasks. Figure \ref{fig:nonharmonized} shows a non-harmonized user session, figure \ref{fig:harmonized} a session where the tasks of equal task instances have been set accordingly.
 
-After the harmonization step follows the iteration detection, which detects any identical task instances that are direcly adjacent task instances in the user sessions. They occur if a user repeatedly does the same action (e.g. multiple clicks on the same button). 
-Once those subsequent instances have been detected, a new task of type iteration is generated. 
+After the harmonization step follows the iteration detection, which detects any identical task instances that are direcly adjacent task instances in the user sessions. They occur if a user repeatedly does the same action (e.g. multiple clicks on the same button).
+Once those subsequent instances have been detected, a new task of type iteration is generated.
 We recall from the previous section that a task with a temporal relationship \textit{iteration} can just have one child, so the task of the detected iterated instance is added to this newly created iteration task.
-Afterwards, this task is replaced in every other place it occurs as well. 
+Afterwards, this task is replaced in every other place it occurs as well.
 In contradiction to the task, the iteration instance has, after the replacement, as many children of the instance as often the iterated instance occured.
 
 The next part of the task tree generation algorithm is the sequence detection.
@@ -260,10 +260,10 @@ Figure \ref{fig:exampletasktreeharms} shows an example of the first repetition o
 \begin{array}{r|ccccc}
 	Task & 1 & 2 & 3 & 4 & 5\\
 	\hline
-	TaskInstance & A & B & C & A & B\\
-\end{array} 
+	Task instance & A & B & C & A & B\\
+\end{array}
 \]
-\caption{Non-harmonized user session}
+\caption{Non-harmonized user session.}
 \label{fig:nonharmonized}
 \end{figure}
 
@@ -272,24 +272,24 @@ Figure \ref{fig:exampletasktreeharms} shows an example of the first repetition o
 \begin{array}{r|ccccc}
 	Task & 1 & 2 & 3 & \textbf{1} & \textbf{2}\\
 	\hline
-	TaskInstance & A & B & C & A & B\\
-\end{array} 
+	Task instance & A & B & C & A & B\\
+\end{array}
 \]
-\caption{Harmonized user session. TaskInstance A now always has 1 as its task, TaskInstance B always 2.}
+\caption{Harmonized user session. Task instance A now always has 1 as its task, task instance B always 2.}
 \label{fig:harmonized}
 \end{figure}
 
 \section{Alignments}
 \label{sec:alignments}
-Alignments are a method in bioinformatics to compare strings or sequences of DNA/RNA/Amino acids and score their similarity. 
-It is a very basic method to find out if two sequences are related. 
+Alignments are a method in bioinformatics to compare strings or sequences of DNA/RNA/Amino acids and score their similarity.
+It is a very basic method to find out if two sequences are related.
 This is done by arranging those sequences in a way that similar elements of each sequence are aligned together. The biological background of this approach is that
-both sequences have diverged from a common ancestor by a process of mutation and selection\cite{durbin1998}, hence still have common regions. Those regions are called conserved regions, meaning they were resistant to mutation. 
+both sequences have diverged from a common ancestor by a process of mutation and selection\cite{durbin1998}, hence still have common regions. Those regions are called conserved regions, meaning they were resistant to mutation.
 
 In contrast to the persistent regions, differences between sequences can be explained by three processes: \textit{Substitution}, which replaces one element with another,  \textit{deletion}, which removes an element and \textit{insertion}, which adds a new element to a sequence.
-Both insertion and deletion produce a so called gap in the alignment, since the change just appeared in one of the two aligned sequences. Figure \ref{fig:alignmentbasic} illustrates all possible modifications.
+Both, insertion and deletion, produce a so called gap in the alignment, since the change just appeared in one of the two aligned sequences. Figure \ref{fig:alignmentbasic} illustrates all possible modifications.
 Each modification can be scored individually but it is common practise to score substitutions with substitution matrixes and have a general gap penalty. The sum of all single scores is the score of the total alignment.
-Alignment algorithms try to maximize this score. 
+Alignment algorithms try to maximize this score.
 
 \begin{figure}[h]
 	\centering
@@ -298,14 +298,14 @@ Alignment algorithms try to maximize this score.
 		1: &A&B&C&D\\
 		2: &A&B&C&A\\
 	\end{tabular}
-	\caption{Subsitution of D} 
+	\caption{Substitution of D}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.3\textwidth}
 	\begin{tabular}{c|cccc}
 		1:&A&B&C&D\\
 		2:&A&B&-&D\\
 	\end{tabular}
-	\caption{Deletion of C} 
+	\caption{Deletion of C}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.3\textwidth}
 	\begin{tabular}{c|cccc}
@@ -314,35 +314,35 @@ Alignment algorithms try to maximize this score.
 	\end{tabular}
 	\caption{Insertion of D}
 	\end{subfigure}
-	\caption{Three possible modifications of sequence 2}
+	\caption{Three possible modifications of sequence 2.}
 	\label{fig:alignmentbasic}
 \end{figure}
 
-Alignments can be categorized into global and local alignments. Global alignment algorithms try to match one sequence with the other from start to end, whereas local alignment algorithms try to find the best alignment of subsequences. 
+Alignments can be categorized into global and local alignments. Global alignment algorithms try to match one sequence with the other from start to end, whereas local alignment algorithms try to find the best alignment of subsequences.
 A popular global alignment algorithm is the Needleman-Wunsch algorithm\cite{needleman1970}. For basic local alignments the common algorithm is from Smith and Waterman\cite{waterman1981}.
 
 \section{Substitution Matrixes}
 \label{sec:foundationsubstitutionmatrix}
 In the last section we stated that alignment algorithms maximize the total alignment score. Therefore, the underlying scoring model has to be adjusted very carefully, since it practically determines the outcome of the algorithm.
-There are usually two parameters which have to be set: the substitution score and the gap penalty. 
+There are usually two parameters which have to be set: the substitution score and the gap penalty.
 
 \begin{definition}
 	\item Let g be the gap penalty with $g>0$.
 	\label{def:gappenalty}
 \end{definition}
 
-The gap penalty in its most basic version is a constant that has to be manually adjusted so that it fits the problem well. 
+The gap penalty in its most basic version is a constant that has to be manually adjusted so that it fits the problem well.
 A large gap penalty leads to less insertion and deletion occurrences and more substitutions.
-This type of gap scoring is called linear affine gap penalty. 
-The total gap penalty is $n*g$ with n being the number of gaps and g the gap penalty constant. 
-There are different gap penalty models like a different g for opening a new gap and extending an already open gap. 
-In this thesis I will just use the linear affine gap penalty. 
+This type of gap scoring is called linear affine gap penalty.
+The total gap penalty is $n*g$ with n being the number of gaps and g the gap penalty constant.
+There are different gap penalty models like a different g for opening a new gap and extending an already open gap.
+In this thesis we will just use the linear affine gap penalty.
 
 The substitution score is a representation of how similar two elements are. The more similar they are, the higher the score will be.
-The score is usually stored in symmetric matrixes, where each cell represents how good or bad it is to substitute element a with element b. 
+The score is usually stored in symmetric matrixes, where each cell represents how good or bad it is to substitute element a with element b.
 The formal definition of the substitution matrix will follow in chapter approach.
-%In biology 
-%	In Biology popular matrices are generated from real DNA data (PAM, BLOSUM) (cite)
+%In biology
+%	In Biology popular matrixes are generated from real DNA data (PAM, BLOSUM) (cite)
 \begin{figure}
 \centering
 %\footnotesize
@@ -371,6 +371,6 @@ Y     1    1    2    1    3    1    1    1    3    2    2    1    2   15    1   
 V     7    4    4    4    4    4    4    4    5    4   15   10    4   10    5    5    5   72    4   17
 	\end{verbatim}
 \normalsize
-	\caption{An example for substitution matrixes: The PAM250 substitution matrix for amino acids\cite{dayhoff1978}. Note that biological substitution matrixes may not be symmetric. }
+	\caption{An example for substitution matrixes: The PAM250 substitution matrix for amino acids\cite{dayhoff1978}. Note that biological substitution matrixes may not be symmetric.}
 	\label{fig:submatexample}
 \end{figure}
