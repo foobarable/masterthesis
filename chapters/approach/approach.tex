@@ -214,7 +214,7 @@ The goal of the alignment algorithm is now to detect the conserved regions and e
 Since alignment algorithms also find approximate and not only exact similarities, this step of the sequence detection is the main difference to Harms method.
 
 The first step of the search for significant patterns is to align every user session with any other user session with the Smith-Waterman algorithm for repeated matches.
-For the rest of this section the user session will be represented by a sequence of numbers. Each number in a sequence corresponds with the unique id of the task at this position in the user sessions.
+For the rest of this section the user session will be represented by a sequence of numbers. Each number in a sequence corresponds with the unique ID of the task at this position in the user sessions.
 We now describe the algignment algorithm in detail.
 
 \subsubsection{Smith Waterman Algorithm for Repeated Matches}
@@ -350,7 +350,7 @@ Figure \ref{fig:matchexample} shows an example of a match, containing one gap in
 Each of those matches is searched in all user sessions.
 For this, each position in the user sessions is checked if the match in question fits at this position.
 Before we can do this, we have to explain what it means that a match is found since we have to take into account how a match will be transformed into a task later.
-When a match is found we store the id of the user session it occured in as well as its position in the user session.
+When a match is found we store the ID of the user session it occured in as well as its position in the user session.
 There are some rules that have to be fulfilled to consider a match as found:
 
 	\begin{rules}
@@ -430,7 +430,7 @@ The reason for this is that we want to prefer the most occurring match over all 
 the average user behaviour. If two matches have the same occurrence count, the length of the matches is considered. Longer matches will be replaced first.
 The next two sort properties are introduced for a deterministic behaviour of the algorithm.
 %The reason why is that we need an explicit order of all matches.
-If two matches have the same occurrence count and the length, the sum of the user session ids is considered and after that the sum of the task ids.
+If two matches have the same occurrence count and the length, the sum of the user session IDs is considered and after that the sum of the task IDs.
 
 
 \subsection{Task generation}
@@ -444,7 +444,7 @@ We will now see why we had to search the matches according to the rules enlisted
 We start with an empty task of temporal relationship type \textit{sequence}.
 This is the root node of the task we will convert the match to.
 For this, the procedure is to evaluate each position of the match and apply some rules again.
-If both elements in the match are equal, the task with this id is added to the sequence. This is the equivalent to search rule 1.
+If both elements in the match are equal, the task with this ID is added to the sequence. This is the equivalent to search rule 1.
 Search rule 2 transferred to task generation leads to the creation of tasks with temporal relationship type \textit{optional}.
 The created optional task has the task that is "aligned" with the gap as its child.
 If the algorithm observes a position where search rule 3 is applied, a single selection with two children is created.
