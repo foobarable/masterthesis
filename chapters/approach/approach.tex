@@ -43,12 +43,11 @@ To calculate the score, three cases have to be considered:
 
 \subsection{Event-Task To Event-Task Similarity}
 The first idea was to calculate the score of the matrix based on the distance between the absolute coordinates of the event-tasks.
-There are a few problems with this approach: First, not all event-tasks may have absolute coordinates.
+There are a few problems with this approach: first, not all event-tasks may have absolute coordinates.
 The second problem with this method is that in graphical user interfaces events may still be very similar, even if they have a large absolute distance.
 An example for such a case would be a web formular with many fields to fill out.
-TODO: Maybe Screenshot here?
 Those fields take space which would result in large distances between them although the event-tasks all belong to a single formular.
-The solution to this problems is to make use of a grouping of elements the designer of the GUI already did: The GUI-Model (see section \ref{sec:foundationguiandguimodel}).
+The solution to this problems is to make use of a grouping of elements the designer of the GUI already did: the GUI-Model (see section \ref{sec:foundationguiandguimodel}).
 Elements of a GUI that belong to one semantic task can usually be found in some kind of container that groups those elements together.
 Therefore, the basis for our distance calculation is the distance in the GUI-Model, as defined in \ref{def:guimodeldistanceee}.
 
@@ -217,7 +216,7 @@ The first step of the search for significant patterns is to align every user ses
 For the rest of this section the user session will be represented by a sequence of numbers. Each number in a sequence corresponds with the unique ID of the task at this position in the user sessions.
 We now describe the algignment algorithm in detail.
 
-\subsubsection{Smith Waterman Algorithm for Repeated Matches}
+\subsubsection{Smith Waterman Algorithm For Repeated Matches}
 The Smith-Waterman algorithm for repeated matches\cite{durbin1998} is a modified version of the original Smith-Waterman algorithm\cite{waterman1981}.
 The original Smith-Waterman finds the best local similarity between two sequences.
 Since we need all relevant similarities and not just the one with the best score, we define a threshold score $T$.
@@ -267,7 +266,7 @@ As we can see, it is possible to fill the whole matrix by once the trivial score
 	\label{fig:basicalignmentoperations}
 \end{figure}
 
-\paragraph{Repeated matches}
+\paragraph{Repeated Matches}
 In the improved version of the algorithm a cell in $F$ has a slight different meaning and its computation is a bit more complex.
 The first difference is that this algorithm is asymmetric in the sense of aligning sequence x to sequence y produces a different outcome than aligning sequence y to sequence x.
 Hence, we define y as the pattern we want to search and x as the sequence in which we search all subsequences of y repeatedly.
@@ -330,7 +329,7 @@ Figure \ref{fig:durbindpmatrixtraceback} shows a completely filled dynamic progr
 \label{fig:durbindpmatrixtraceback}
 \end{figure}
 
-\subsection{Match retrival}
+\subsection{Match Retrival}
 To find similar user behaviour we are only interested in the matches that reached the threshold score.
 After aligning every user session with each other we extract all matches from those alignments.
 We consider every subset of the alignment that is not an unmatched region as a match.
@@ -433,7 +432,7 @@ The next two sort properties are introduced for a deterministic behaviour of the
 If two matches have the same occurrence count and the length, the sum of the user session IDs is considered and after that the sum of the task IDs.
 
 
-\subsection{Task generation}
+\subsection{Task Generation}
 After sorting the matches, the actual task is created from each match that has a minimum occurence of f.
 This parameter is introduced to exclude those matches that just have been performed by a small number of users and therefore are not representative for a general interaction with the software.
 \begin{definition}
