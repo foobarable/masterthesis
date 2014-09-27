@@ -26,7 +26,7 @@ This would save further time, given enough processors.
 
 \subsection{Updating}
 	The procedure of updating the substitution matrix is implemented but has just been tested on a very small data set.
-	Since the Matrix grows with \textit{O}$(n*(n+1)/2)$ for large data sets the calculation of non event-tasks is switched off because each generated task increases \texttt{n}.
+	Since the Matrix grows with \textit{O}$(n*(n+1)/2)$ for large data sets the calculation of non-event-tasks is switched off because each generated task increases \texttt{n}.
 	Also, the computation of non-event-tasks is complex itself.
 	First, for each task all event-tasks have to be searched. This is done by implementing the visitor pattern.
 	Then for each found event-task distances have to be calculated or read from the substitution matrix.
