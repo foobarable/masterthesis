@@ -269,19 +269,38 @@ To evaluate the performance of the alignment approach we run
 \section{Generated Task Trees}
 \begin{table}
 	\centering
- \begin{tabular}{|r|c|c|}
-	   \hline
-	      & \textbf{n-gram approach} & \textbf{alignment approach} \\
-	     \hline
-	       \textbf{Generated Tasks} & 10,634 & 6,532 \\
-	       Sequences & 9,530 & 2,759 \\
-	       Iterations & 1,104 & 619 \\
-	       Selections & -& 1,156 \\
-	       Optionals & -& 101 \\
-	       \hline
+	\begin{tabular}{ r r r }
+	   \toprule
+	    & \multicolumn{2}{c}{\textbf{Number of tasks}} \\
+		\cmidrule{2-3}
+		\textbf{Type of task}& \textbf{n-gram approach} & \textbf{alignment approach} \\
+	   \midrule
+	   All non-event-tasks 	& 10,634 			& 6,532 \\
+		\midrule
+	   Sequences 				& 9,530 				& 2,759 \\
+	   Iterations 				& 1,104 				& 619 \\
+	   Selections 				& -\hspace{12pt}	& 1,156 \\
+	   Optionals 				& -\hspace{12pt} 	& 101 \\
+	   \bottomrule
 \end{tabular}
-
+%TODO caption
+%TODO label
 \end{table}
+
+% \begin{table}
+% 	\centering
+% \begin{tabular}{|r|c|c|}
+% 		\hline
+% 			& \textbf{n-gram approach} & \textbf{alignment approach} \\
+% 		\hline
+% 			\textbf{Generated Tasks} & 10,634 & 6,532 \\
+% 			Sequences & 9,530 & 2,759 \\
+% 			Iterations & 1,104 & 619 \\
+% 			Selections & -& 1,156 \\
+% 			Optionals & -& 101 \\
+% 			\hline
+% \end{tabular}
+% \end{table}
 
 
 \begin{itemize}
