@@ -7,13 +7,13 @@
 %    DIVcalc,%            typearea has to calculate DIV for good linewidth
     headsepline,%      use headinclude also! (see M. Kohm)
     footsepline,%      use footinclude also! (see M. Kohm)
-    headinclude,%      count head to text body (not to margin) 
-    footinclude,%      count foot to text body (not to margin) 
+    headinclude,%      count head to text body (not to margin)
+    footinclude,%      count foot to text body (not to margin)
     bibtotoc,%         write bibliography-chapter to table of contents
 %    idxtotoc,           % Stichwortverzeichnis ebenso
 %    liststotoc,%       abbildungs- und tabellenverzeichnis ebenso
     cleardoubleplain,% \cleardoublepage generates pages with pagestyle plain
-    tablecaptionabove,% setzt tabel caption besser ab 
+    tablecaptionabove,% setzt tabel caption besser ab
 %    final%            final version
 %    draft%            draft version
 ]{scrreprt}
@@ -98,6 +98,8 @@
 \setcounter{secnumdepth}{2} % Numerierung auch für \subsubsection
 \setcounter{tocdepth}{1}    % nimm auch \subsubsections ins Inhaltsverz. auf
 
+%Abstand der caption zur Table
+\setlength\belowcaptionskip{4pt}
 
 % Trennhinweise fuer Woerter hier beschreiben
 %\hyphenation{
@@ -136,7 +138,7 @@
 
 \begin{document}
 
-\Number{2014-01} % enter here the actual year and number of your thesis. 
+\Number{2014-01} % enter here the actual year and number of your thesis.
 \Title{Improving automatic task tree \mbox{generation} with alignment algorithms}
 \Authors{Ralph Krimmel}
 %\DepartmentType{}% use only if it is not "Lehrstuhl" or "Institut"
