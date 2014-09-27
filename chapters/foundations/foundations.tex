@@ -125,7 +125,7 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 A task tree consists of three different kinds of nodes:
 \begin{description}
 	\item[Root node]\hfill\\ Represents the overall task which contains all subtasks, the user wants to achieve this goal by his actions/his input. In figure \ref{fig:booktree} the overall task is to buy books at an online shop.
-	\item[Leaf nodes]\hfill\\ Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called \textit{event tasks}. Event tasks do not have any further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
+	\item[Leaf nodes]\hfill\\ Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called \textit{event-tasks}. Event tasks do not have any further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
 	\item[Intermediate nodes]\hfill\\ Subtasks which are steps towards the overall task. All tasks above the leave nodes are called non-event-tasks. In figure \ref{fig:booktree} the intermediate nodes are login, search, basket and order.
 \end{description}
 Another relevant point is that the order of the executed actions is important.
@@ -225,7 +225,7 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 
 \section{State Of The Art Of Trace Based Task Tree Generation}
 The current procedure to generate task trees\cite{harms2013} starts with iterating through the events in the traces and creates an event task instance for each.
-Those event task instances are stored in the order they were triggered.  This structure is a so called \textit{user session}.
+Those event-task instances are stored in the order they were triggered.  This structure is a so called \textit{user session}.
 
 The user sessions used for task tree generation are available in a non-harmonized form,
 meaning equal task instances may not have the same corresponding task assigned. TODO: Maybe write about the different levels of equality here?
