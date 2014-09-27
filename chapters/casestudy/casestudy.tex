@@ -209,9 +209,9 @@ of this experiment.
 We can see that the alignment approach is slower on any size of input data.
 But with the increasing number of user sessions we can observe that the computation time increases notebly.
 As a side note the memory consumption of the alignment approach for the full case study was 46.9GB at its maximum.
-The n-gram approach used TODO: INSERT HERE GB memory for the same data set.
+The n-gram approach used 1.3 GB memory for the same data set.
 The memory usage of the other data set sizes were not tracked.
-
+In summary the alignment approach is definitely more resource intensive than the n-gram approach.  
 \begin{table}[h]
 	\centering
 	\begin{tabular}{ r r r }
@@ -237,6 +237,8 @@ The memory usage of the other data set sizes were not tracked.
 	\caption{Scaling behaviour of both approaches.}
 	\label{fig:performance}
 \end{figure}
+
+
 \section{Generated Task Trees}
 \begin{table}
 	\centering
@@ -258,25 +260,8 @@ The memory usage of the other data set sizes were not tracked.
 %TODO label
 \end{table}
 
-% \begin{table}
-% 	\centering
-% \begin{tabular}{|r|c|c|}
-% 		\hline
-% 			& \textbf{n-gram approach} & \textbf{alignment approach} \\
-% 		\hline
-% 			\textbf{Generated Tasks} & 10,634 & 6,532 \\
-% 			Sequences & 9,530 & 2,759 \\
-% 			Iterations & 1,104 & 619 \\
-% 			Selections & -& 1,156 \\
-% 			Optionals & -& 101 \\
-% 			\hline
-% \end{tabular}
-% \end{table}
 
 
-\begin{itemize}
-	\item Show some meaningful generated task trees
-	\item Show also task trees that are not useful
 \begin{figure}
 	\centering
 	\includegraphics[]{chapters/casestudy/mixedtasktree.png}
