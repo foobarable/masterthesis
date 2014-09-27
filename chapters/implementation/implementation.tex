@@ -5,20 +5,20 @@ of software. AutoQUESTs internal algorithms operate on
 abstract events, which makes AutoQUEST independent of
 the platform of an assessed software"} \cite{herbold2013}. 
 Another feature of AutoQUEST is that it is modular and extensible via plugins.
-AutoQUEST is written in Java 1.7 and is published and licensed under the Apache License Version 2.0.
+AutoQUEST is written in Java 1.7 and is published and licensed under the Apache License Version 2.0\footnote{http://www.apache.org/licenses/LICENSE-2.0.html}.
 In this chapter we will document how we extended AutoQUEST by our task tree generation method.
 
 %The most time spent developing for AutoQUEST was to get eclipse running.
 The alignment sequence detection was implemented in one subversion branch of the autoquest-core-tasktree package. 
 In AutoQUEST this module is responsible for the task tree generation. 
-The most issues we had to solve existed due to the complexity of the problem, which is $O(n^2)$ for most of the utilized algorithms.
+The most issues we had to solve existed due to the complexity of the problem, which is \textit{O}$(n^2)$ for most of the utilized algorithms.
 
 \section{Substitution Matrix}
 \subsection{Generation}
 The generation of the substitution matrix is a step we just need to do once at the beginning of the sequence detection.
-For a reasonable number of unique tasks no problems were to expect but for a large number an efficient storage had to be implemented.
-Since the substitution matrix is symmetrical it is common practise to just store $\frac{n(n+1)}{2}$ entries and not the whole matrix. 
-Another improvement is that just a single array of primitive floats has been used which saves space again, namely n times the size of a float array.
+For a reasonable number of unique tasks no problems were expected but for a large number an efficient storage had to be implemented.
+Since the substitution matrix is symmetrical it is common practise to just store \begin{equation*} \frac{n(n+1)}{2}\end{equation*} entries and not the whole matrix. 
+Another improvement is that just a single array of primitive floats has been used which saves space again, namely \texttt{n} times the size of a float array.
 The generation of the substitution matrix is so far not parallelized but it is possible to do so. 
 The calculation of one cell in the matrix is nearly completly indepedent from another cell. 
 This would save further time, given enough processors.
@@ -26,39 +26,41 @@ This would save further time, given enough processors.
 
 \subsection{Updating}
 	The procedure of updating the substitution matrix is implemented but has just been tested on a very small data set. 
-%	\item This step is implemented, but not used due to problem size. Thus, all non-EventTask-Tasks have a score of 0 to any other Task/EventTask
-	Since the Matrix grows with O(n*(n+1)/2) for large data sets the calculation of non EventTasks is switched off because each generated task increases n.
-	Also, the computation of non-EventTasks is complex itself. 
-	First, for each Task all EventTasks have to be searched. This is done via visitor pattern. 
-	Then for each found EventTask distances have to be calculated or read from substitution matrix. 
-	To solve the issue of retrieving the EventTasks for each task again, they are stored 
+	Since the Matrix grows with \textit{O}$(n*(n+1)/2)$ for large data sets the calculation of non event-tasks is switched off because each generated task increases \texttt{n}.
+	Also, the computation of non-event-tasks is complex itself. 
+	First, for each task all event-tasks have to be searched. This is done by implementing the visitor pattern. 
+	Then for each found event-task distances have to be calculated or read from the substitution matrix.
+	To solve the issue of retrieving the event-tasks for each task again they are stored to hav
 	This process could as well be parallelized but still, storing in the matrix has to be synchronous. 
-	Another point is when the matrix is updated, it's size has to be enlarged. If the substitution matrix update is switched on, the matrix preallocates 10 times the initial unique tasks and doubles each time the size limit is reached.
+	Another point is when the matrix is updated, its size has to be enlarged. 
+	We could not use dynamic structures like the Java Collection ArrayList because its memory consumption becomes very inefficient when storing a large number of 
+	float values. The solution was to keep using simple arrays and reserve more memory than initialy needed.
+	So if the substitution matrix update is switched on, the matrix preallocates 10 times the initial unique tasks and doubles each time the size limit is reached.
 	This increase of the size is very expensive since the whole matrix has to be copied to the newly created, larger sized matrix.
 
 \section{Alignments}
-Current available and popular alignment tools are usually developed for the use in biological context. 
-The problem with this is that those tools are just working on sequences with a limited alphabet like the bases in DNA (A,C,T,G), RNA (A,C,U,G) or polypeptides (alphabet size 20).
-This was a proplem for us so we could not reuse well tested implementations of common or more complex algorithms. 
+Currently available and popular alignment tools are usually developed for the use in a biological context. 
+The problem with these is that those tools are just working on sequences with a limited alphabet like the bases in DNA (A,C,T,G), RNA (A,C,U,G) or polypeptides (alphabet size 20).
+Because of this issue we could not reuse well tested implementations of common or more complex algorithms. 
 
-The Smith Waterman algorithm and its modified version are $O(n^2)$ algorithms, with n being the length the sequences being aligned.
+The Smith Waterman algorithm and its modified version are \textit{O}$(n^2)$ algorithms with \texttt{n} being the length the sequences being aligned.
 This may not be an issue because the user session itself may not be too long. 
 The actual problem is that we have a large number of sequences which we have to align against each other. 
-We solve this issue by dividing the workload to as much pieces as cpu cores are detected. 
-For each piece a thread that computes the assigned alignments and stores the extracted matches into a shared data structure is created.
+We solve this issue by dividing the workload to as much pieces as processors are detected. Each piece consists of a series of user sessions e.g. user session 1-10,11-20.. and so on. 
+For each piece we create a thread that computes the assigned alignments with all other user sessions and stores the extracted matches into a shared data structure.
 
 
 \section{Match search, Sorting and Replacement}
-Same as the alignment process the search, sort and replace steps take a lot of time and have to be performed in each iteration of the algorithm.
+Like the alignment process, the search, sort and replace steps take a lot of time and have to be performed in each iteration of the algorithm.
 Again the solution to those problems is parallelism. The collection of all matches is divided into smaller collections and assigned to a worker thread. These threads
 search "their" matches in all user sessions. 
 
-The sorting routing is the standard Java Collections.sort method. This function does not perform a parallel search, which could speed up the algorithm again.
+The sorting routine is the standard Java \textit{Collections} sort method. This function does not perform a parallel search, which could speed up the algorithm again.
 In Java 8 a new Sort API has been introduced, which allows parallel sorting on arrays. The implementation would  benefit from using this API but so far AutoQUEST is written for Java 7. 
 
-The replacement step is done in two steps. First all replacements are planned, meaning they are added to a user session specific queues. 
+The replacement step is divided in two steps. First all replacements are planned, meaning they are added to a user session specific queues. 
 Those queues contain all replacements that will be performed in this user session in their correct order. 
-Once the replacments are planned all further steps can again be parallelized well, gaining a great speedup of the algorithm.
+Once the replacments are planned all further steps can again be parallelized well, gaining a huge speedup of the whole algorithm.
 
 
 
