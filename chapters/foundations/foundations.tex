@@ -123,11 +123,11 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 \end{figure}
 
 A task tree consists of three different kinds of nodes:
-\begin{itemize} 
-	\item Root node: Represents the overall task which contains all subtasks, the user wants to achieve this goal by his actions/his input. In figure \ref{fig:booktree} the overall task is to buy books at an online shop.
-	\item Leaf nodes: Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called \textit{event tasks}. Event tasks do not have any further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
-	\item Intermediate nodes: Subtasks which are steps towards the overall task. All tasks above the leave nodes are called non-event-tasks. In figure \ref{fig:booktree} the intermediate nodes are login, search, basket and order.
-\end{itemize}
+\begin{description} 
+	\item[Root node]\hfill\\ Represents the overall task which contains all subtasks, the user wants to achieve this goal by his actions/his input. In figure \ref{fig:booktree} the overall task is to buy books at an online shop.
+	\item[Leaf nodes]\hfill\\ Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called \textit{event tasks}. Event tasks do not have any further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
+	\item[Intermediate nodes]\hfill\\ Subtasks which are steps towards the overall task. All tasks above the leave nodes are called non-event-tasks. In figure \ref{fig:booktree} the intermediate nodes are login, search, basket and order.
+\end{description}
 Another relevant point is that the order of the executed actions is important. 
 Therefore, this information has to be represented in the task tree as well. 
 For this, Harms et al. defined the so called \textit{temporal relationships} for all non-event-tasks. 
