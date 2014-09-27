@@ -71,16 +71,22 @@ All parameters are described in the approach chapter. Table \ref{tab:parameters}
 we used in this case study. Those parameters were manually chosen by trial and error and do not guarantee the best possible results.
 
 \begin{table}
-	\begin{tabularx}{\textwidth}{|c|X|c|c|}
-	   \hline
-	   \textbf{Parameter} & \textbf{Function} & \textbf{Definition} & \textbf{Value in case study}\\
-	     \hline
-	       k & The value of the maximum score in the substitution matrix& \ref{def:scorewithmaximalscore}& 6 \\
-	       L & Penalty for the score between non-event-tasks & \ref{def:scoreadjusted} & 3\\
-	       T & Threshold score for determination of match importance & \ref{def:treshold} &9\\
-	       g & Gap penalty for inserting gaps & \ref{def:gappenalty} &3\\
-	       f & Number of occurrences a task must at least have in all user sessions to be replaced & \ref{def:minoccurrencecount} &3\\
-	       \hline
+	\begin{tabularx}{\textwidth}{ r X r r}
+% \renewcommand{\arraystretch}{1.5}
+	   \toprule
+		\multirow{2}{*}{\textbf{Parameter}} & \multirow{2}{*}{\textbf{Function}} & \multirow{2}{*}{\textbf{Definition}} & \textbf{Value in} \\
+		& & &\textbf{case study}\\
+	     \midrule
+	       \emph{k} & The value of the maximum score in the substitution matrix& \ref{def:scorewithmaximalscore}& 6  \\
+			 \noalign{\medskip}
+	       \emph{L} & Penalty for the score between non-event-tasks & \ref{def:scoreadjusted} & 3 \\
+	      \noalign{\medskip}
+			 \emph{T} & Threshold score for determination of match importance & \ref{def:treshold} & 9\\
+	      \noalign{\medskip}
+			\emph{g} & Gap penalty for inserting gaps & \ref{def:gappenalty} & 3 \\
+	      \noalign{\medskip}
+			 \emph{f} & Number of occurrences a task must at least have in all user sessions to be replaced & \ref{def:minoccurrencecount} &3\\
+	       \bottomrule
  \end{tabularx}
  \caption{Table of all parameters of the alignment alignment approach for the tasktree generation.}
  \label{tab:parameters}
