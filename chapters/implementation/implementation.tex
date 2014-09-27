@@ -46,7 +46,7 @@ Because of this issue we could not reuse well tested implementations of common o
 The Smith Waterman algorithm and its modified version are \textit{O}$(n^2)$ algorithms with \texttt{n} being the length the sequences being aligned.
 This may not be an issue because the user session itself may not be too long.
 The actual problem is that we have a large number of sequences which we have to align against each other.
-We solve this issue by dividing the workload to as much pieces as processors are detected. Each piece consists of a series of user sessions e.g. user session 1-10,11-20.. and so on.
+We solve this issue by dividing the workload to as much pieces as processors are detected. Each piece consists of a series of user sessions e.g. user session 1-10, 11-20,\ldots and so on.
 For each piece we create a thread that computes the assigned alignments with all other user sessions and stores the extracted matches into a shared data structure.
 
 
