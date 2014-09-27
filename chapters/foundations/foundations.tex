@@ -137,7 +137,7 @@ An \textit{iteration} can just have one child, which is executed once or several
 Just one child of a \textit{selection} is allowed to be executed, whereas the one child of an \textit{optional} may or may not be executed.
 Figure \ref{fig:exampletasktree} shows a task tree that represents a login procedure and contains all possible temporal relationships.
 At last, Harms et al. differentiate between a task and an executed task, a task instance.
-Figure \ref{fig:exampletaskinstancetree} shows the main differences between a task and its instance: \textit{Selection} instances can have only one child with the task instance that was executed. \textit{Optional} instances have one child if the task was executed and none if the task was not executed. Instances of \textit{iterations} have as many children as often as the task was executed.
+Figure \ref{fig:exampletaskinstancetree} shows the main differences between a task and its instance: \textit{selection} instances can have only one child with the task instance that was executed. \textit{Optional} instances have one child if the task was executed and none if the task was not executed. Instances of \textit{iterations} have as many children as often as the task was executed.
 	\begin{figure}
 		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
 		        text centered, anchor=west, text=black, fill=blue!30]
@@ -286,7 +286,7 @@ It is a very basic method to find out if two sequences are related.
 This is done by arranging those sequences in a way that similar elements of each sequence are aligned together. The biological background of this approach is that
 both sequences have diverged from a common ancestor by a process of mutation and selection\cite{durbin1998}, hence still have common regions. Those regions are called conserved regions, meaning they were resistant to mutation.
 
-In contrast to the persistent regions, differences between sequences can be explained by three processes: \textit{Substitution}, which replaces one element with another,  \textit{deletion}, which removes an element and \textit{insertion}, which adds a new element to a sequence.
+In contrast to the persistent regions, differences between sequences can be explained by three processes: \textit{substitution}, which replaces one element with another,  \textit{deletion}, which removes an element and \textit{insertion}, which adds a new element to a sequence.
 Both, insertion and deletion, produce a so called gap in the alignment, since the change just appeared in one of the two aligned sequences. Figure \ref{fig:alignmentbasic} illustrates all possible modifications.
 Each modification can be scored individually but it is common practise to score substitutions with substitution matrixes and have a general gap penalty. The sum of all single scores is the score of the total alignment.
 Alignment algorithms try to maximize this score.
@@ -371,6 +371,6 @@ Y     1    1    2    1    3    1    1    1    3    2    2    1    2   15    1   
 V     7    4    4    4    4    4    4    4    5    4   15   10    4   10    5    5    5   72    4   17
 	\end{verbatim}
 \normalsize
-	\caption{An example for substitution matrixes: The PAM250 substitution matrix for amino acids\cite{dayhoff1978}. Note that biological substitution matrixes may not be symmetric.}
+	\caption{An example for substitution matrixes: the PAM250 substitution matrix for amino acids\cite{dayhoff1978}. Note that biological substitution matrixes may not be symmetric.}
 	\label{fig:submatexample}
 \end{figure}
