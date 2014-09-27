@@ -216,7 +216,7 @@ The first step of the search for significant patterns is to align every user ses
 For the rest of this section the user session will be represented by a sequence of numbers. Each number in a sequence corresponds with the unique ID of the task at this position in the user sessions.
 We now describe the algignment algorithm in detail.
 
-\subsubsection{Smith Waterman Algorithm for Repeated Matches}
+\subsubsection{Smith Waterman Algorithm For Repeated Matches}
 The Smith-Waterman algorithm for repeated matches\cite{durbin1998} is a modified version of the original Smith-Waterman algorithm\cite{waterman1981}.
 The original Smith-Waterman finds the best local similarity between two sequences.
 Since we need all relevant similarities and not just the one with the best score, we define a threshold score $T$.
@@ -266,7 +266,7 @@ As we can see, it is possible to fill the whole matrix by once the trivial score
 	\label{fig:basicalignmentoperations}
 \end{figure}
 
-\paragraph{Repeated matches}
+\paragraph{Repeated Matches}
 In the improved version of the algorithm a cell in $F$ has a slight different meaning and its computation is a bit more complex.
 The first difference is that this algorithm is asymmetric in the sense of aligning sequence x to sequence y produces a different outcome than aligning sequence y to sequence x.
 Hence, we define y as the pattern we want to search and x as the sequence in which we search all subsequences of y repeatedly.
@@ -329,7 +329,7 @@ Figure \ref{fig:durbindpmatrixtraceback} shows a completely filled dynamic progr
 \label{fig:durbindpmatrixtraceback}
 \end{figure}
 
-\subsection{Match retrival}
+\subsection{Match Retrival}
 To find similar user behaviour we are only interested in the matches that reached the threshold score.
 After aligning every user session with each other we extract all matches from those alignments.
 We consider every subset of the alignment that is not an unmatched region as a match.
@@ -432,7 +432,7 @@ The next two sort properties are introduced for a deterministic behaviour of the
 If two matches have the same occurrence count and the length, the sum of the user session IDs is considered and after that the sum of the task IDs.
 
 
-\subsection{Task generation}
+\subsection{Task Generation}
 After sorting the matches, the actual task is created from each match that has a minimum occurence of f.
 This parameter is introduced to exclude those matches that just have been performed by a small number of users and therefore are not representative for a general interaction with the software.
 \begin{definition}
