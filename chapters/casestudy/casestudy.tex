@@ -113,9 +113,9 @@ With the calculation of the distances long interactions like login or account cr
 Those long tasks do not always represent correct user interactions.
 Figure \ref{fig:noneventaccountcreation} shows a task tree for the first part of the account creation process.
 We can see several subtasks of the task where the subtask does not model user behaviour correctly.
-\texttt{Selection} 2691 followed by by \texttt{optionality} 2692 makes no sense since the text input of the optionality should just happen after the text input field has been clicked on.
-This happens in \texttt{iteration} 1288, the first child of \texttt{selection} 2691. So the optionality with the text input should actually be in a sequence with \texttt{iteration} 1288 as its preceeding element.
-Another thing that is no real user behaviour in this example task is \texttt{sequence} 1656.
+\texttt{Selection 2691} followed by by \texttt{optionality 2692} makes no sense since the text input of the optionality should just happen after the text input field has been clicked on.
+This happens in \texttt{iteration 1288}, the first child of \texttt{selection 2691}. So the optionality with the text input should actually be in a sequence with \texttt{iteration 1288} as its preceeding element.
+Another thing that is no real user behaviour in this example task is \texttt{sequence 1656}.
 The first selection in it gives the posibility to either click or double click on an input field.
 While double clicking a text field is not an effective behaviour of a user, it is still a valid action to achieve his goal to enter his email address.
 The meaningless part is the text input on the email input field, followed by the same event again. This should either be just one event at all or be found in an iteration.
@@ -129,7 +129,7 @@ A parallel computation of the distances and a clever storage of all already calc
 \begin{figure}[h]
 	\centering
 	%\includegraphics[scale=0.7]{chapters/casestudy/noneventcreateaccount.png}
-	\includegraphics[width=\textwidth]{chapters/casestudy/noneventcreateaccount.png}
+	\includegraphics[scale=0.75]{chapters/casestudy/noneventcreateaccount.png}
 	\caption{An example for a task found by alignment task tree generation with distance calculation between non-event-tasks.}
 	\label{fig:noneventaccountcreation}
 \end{figure}
@@ -195,7 +195,8 @@ If a good solution for the large computation time of the distances is found, thi
 		   \label{tab:timesandmatchesperiteration} %TODO labelanpassen -> repetition
 	\end{table}
 	\begin{figure}[h!]
-		\includegraphics[width=\textwidth]{chapters/casestudy/hasehase.png}
+		\centering
+		\includegraphics[]{chapters/casestudy/hasehase.pdf}
 		\caption{Graph with matches found per repetition and the time per repetition.}
 		\label{fig:hasehase}
 	\end{figure}
@@ -203,8 +204,7 @@ If a good solution for the large computation time of the distances is found, thi
 
 \section{Performance Evaluation}
 To evaluate the performance of both the alignment approach and the n-gram approach we run each task tree generation algorithms against different sized subsets of the case study.
-We chose user session sets with the size of 10, 100, 1000 and the full case study. Figure \ref{fig:performance} and table \ref{tab:comparisontasktreegenerations} show the results
-of this experiment.
+We chose user session sets with the size of 10, 100, 1000 and the full case study. Figure \ref{fig:performance} and table \ref{tab:comparisontasktreegenerations} show the results of this experiment.
 We can see that the alignment approach is slower on any size of input data.
 But with the increasing number of user sessions we can observe that the computation time increases notebly.
 As a side note the memory consumption of the alignment approach for the full case study was 46.9GB at its maximum.
@@ -232,7 +232,8 @@ In summary the alignment approach is definitely more resource intensive than the
 
 
  \begin{figure}[h]
-	\includegraphics{chapters/casestudy/performance.pdf}
+	\centering
+	\includegraphics[]{chapters/casestudy/performance.pdf}
 	\caption{Scaling behaviour of both approaches.}
 	\label{fig:performance}
 \end{figure}
@@ -261,51 +262,60 @@ We find around 6000 tasks less than Harms et al. but are able to create tasks of
 	   Optionals 				& -\hspace{12pt} 	& 101 \\
 	   \bottomrule
 \end{tabular}
-\caption{}
+\caption{Comparison of the n-gram approach from Harms et al. and the alignment approach. The alignment approach finds less task but is able to detect sequences and optionals.}
 \label{tab:taskquantity}
 \end{table}
 
 The created tasks differ in quality as well. 
-Figure \ref{fig:mixedtasktree} shows a task tree that constists of two different interactions: A login and an account create procedure.
+Figure \ref{fig:mixedtasktree} shows a task tree that constists of two different interactions: A login and a password reset.
 The task starts with the tab key pressed on a textfield that is for entering user names. 
 We can see that the actual entering of the username follows at the end of this task tree. 
-First the textfield for the user name is clicked on in \texttt{iteration} 210306 and then input is entered in \texttt{iteration} 210312. 
-The task tree should have \texttt{iteration} 210306 as the first element in \texttt{sequence} 2098703.
+First the textfield for the user name is clicked on in \texttt{iteration 210306} and then input is entered in \texttt{iteration 210312}. 
+The task tree should have \texttt{iteration 210306} as the first element in \texttt{sequence 2098703}.
 The wrong order of some interactions can be observerd in other examples too.  
 
 Another notable point in this task tree is that it combines two different user interactions. 
-The input of the email address is a text input field of the page where users can create a new account while the login button allows to enter the personal area 
-after the entering the users credentials. It is not correct to merge both tasks into one task trees.  
+The input of the email address is a text input field of the page where users can reset their password while the login button allows to enter the personal area 
+after the entering the users credentials. It is not correct to merge both tasks into one task tree since they are on different pages.
+The alignment approach identifies the different actions correctly as a selection (\texttt{selection 2098704}) though. 
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
-	\includegraphics[]{chapters/casestudy/mixedtasktree.png}
+	\includegraphics[scale=0.75]{chapters/casestudy/mixedtasktree.png}
 	\caption{Example for a task tree consisting of two different interactions made by the user. }
 	\label{fig:mixedtasktree}
 \end{figure}
+
+The alignment approach for task tree generation creates tasks like shown in figure \ref{fig:preprocessing_needed}.
+It is basically a selection of two sequences, each sequence has two event-tasks. 
+The order of the event-tasks in one sequence is reversed in the other sequence.
+We find numberous tasks of this kind.
+The main issue with tasks like this is that a \texttt{ValueSelection} on an \texttt{input\_checkbox} and a click on this checkbox are just one action by the user but two events are created for this action.
+This task is an example for further preprocessing of the input data. 
+Similar as in the \texttt{condenseMouseClicks} preprocessing command, all clicks on an \texttt{input\_checkbox} before or after a value selection should be discarded.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.75]{chapters/casestudy/preprocessing_needed.png}
+	\caption{Example for a created task that shows that further data preprocessing is required.}
+	\label{fig:preprocessing_needed}
+\end{figure}
+The last issue we address in this section is the missing detection and merging of similar or equal tasks.
+Figure \ref{fig:newpassword} and figure \ref{fig:newpassword-1} both describe the same user interaction of setting a new password. 
+The tasks itself represent correct user behaviour and are positive examples for tasks generated by the alignment approach.
+The only difference is the order of the children in \texttt{selection 2611158}. 
+But since the order in a selection does not matter, both generated task trees are semantically equal.
 \begin{figure}
 	\centering
-	\includegraphics[]{chapters/casestudy/newpassword.png}
+	\includegraphics[scale=0.75]{chapters/casestudy/newpassword.png}
 	\caption{Example for a task for setting a new password (Version 1).}
 	\label{fig:newpassword}
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[]{chapters/casestudy/newpassword-1.png}
+	\includegraphics[scale=0.75]{chapters/casestudy/newpassword-1.png}
 	\caption{Example for a task for setting a new password (Version 2).}
 	\label{fig:newpassword-1}
-\end{figure}
-\begin{figure}
-	\centering
-	\includegraphics[]{chapters/casestudy/preprocessing_needed.png}
-	\caption{Example for a created task that shows that further data preprocessing is required.}
-	\label{fig:preprocessing_needed}
-\end{figure}
-\begin{figure}
-	\centering
-	\includegraphics[]{chapters/casestudy/login_process_repeated.png}
-	\caption{Example for a task in the middle of a login process.}
-	\label{fig:login_process_repeated}
 \end{figure}
 
 \section{Discussion}
