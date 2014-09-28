@@ -265,7 +265,17 @@ We find around 6000 tasks less than Harms et al. but are able to create tasks of
 \label{tab:taskquantity}
 \end{table}
 
+The created tasks differ in quality as well. 
+Figure \ref{fig:mixedtasktree} shows a task tree that constists of two different interactions: A login and an account create procedure.
+The task starts with the tab key pressed on a textfield that is for entering user names. 
+We can see that the actual entering of the username follows at the end of this task tree. 
+First the textfield for the user name is clicked on in \texttt{iteration} 210306 and then input is entered in \texttt{iteration} 210312. 
+The task tree should have \texttt{iteration} 210306 as the first element in \texttt{sequence} 2098703.
+The wrong order of some interactions can be observerd in other examples too.  
 
+Another notable point in this task tree is that it combines two different user interactions. 
+The input of the email address is a text input field of the page where users can create a new account while the login button allows to enter the personal area 
+after the entering the users credentials. It is not correct to merge both tasks into one task trees.  
 
 \begin{figure}
 	\centering

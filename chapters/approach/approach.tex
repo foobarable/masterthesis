@@ -45,12 +45,17 @@ To calculate the score, three cases have to be considered:
 The first idea was to calculate the score of the matrix based on the distance between the absolute coordinates of the event-tasks.
 There are a few problems with this approach: first, not all event-tasks may have absolute coordinates.
 The second problem with this method is that in graphical user interfaces events may still be very similar, even if they have a large absolute distance.
-An example for such a case would be a web formular with many fields to fill out.
+An example for such a case would be a web formular with many fields to fill out. Figure \ref{fig:webformlargedistance} shows such an example.
 Those fields take space which would result in large distances between them although the event-tasks all belong to a single formular.
 The solution to this problems is to make use of a grouping of elements the designer of the GUI already did: the GUI-Model (see section \ref{sec:foundationguiandguimodel}).
 Elements of a GUI that belong to one semantic task can usually be found in some kind of container that groups those elements together.
 Therefore, the basis for our distance calculation is the distance in the GUI-Model, as defined in \ref{def:guimodeldistanceee}.
 
+\begin{figure}[h]
+	\includegraphics[width=\textwidth]{chapters/approach/form.png}
+	\caption{Web form with multiple text input fields with large absolute distance inbetween.}
+	\label{fig:webformlargedistance}
+\end{figure}
 \begin{definition}
 	\item Let a and b be event-tasks
 \begin{equation*}d(a,b) = d(b,a) = \text{the distance in the GUI model of the targets of event-tasks a and b.}
