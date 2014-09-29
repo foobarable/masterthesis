@@ -1,21 +1,21 @@
 Usability has become a very important aspect of software development. 
 Once an interface is designed badly users tend to use the software inefficiently or stop using it at all due to frustrating experiences.
-Therefore, it is critical to test the usability during software design of the software but also evaluate the feedback given from users. 
+Therefore, it is critical to test the usability during software design but also evaluate the feedback given from users. 
 This feedback can be gathered automatically by observing how users actually use the software.
 In this work we will improve existing methods for evaluating collected user interactions.
 
-Task trees are a well method to describe and structure the process of users interacting with software. 
-The designer of the software can generate a task tree from the GUI model e.g. from HTML structure. 
-In contradiction to the task trees generated at design time they can also be derived from recorded user actions. 
-In this case, task trees offer the possibility to semi-automatically evaluate the usability of the software since it is then possible to compare expected with the actual user behaviour \citep{harms2013}.  
+Task trees are one well method to describe and structure the process of users interacting with software. 
+We define them as a type of task model which desribes user actions. There are two possibilities to create a task tree.
+First of all, the designer of the software can generate a task tree at design time to model the expected user behaviour\cite{harms2013}.
+The second option is to generate the task trees based on observed user interactions. 
+Those task trees represent the effective user behaviour.
+A comparison of the effective and the expected user behaviour offers the possibility to semi-automatically evaluate the usability of the software.  
+
+
+
 
 \begin{itemize}
-	\item Definition of a task tree: type of task model which describe user actions
-    	\begin{itemize}
-		\item  e.g. used in Goals, Operators, Methods and Selection Rules (GOMS), TaskMODL and ConcurTastTrees (Zitat?)
-	\end{itemize}
-	\item Aim: analyze and compare effective and expected user interactions, semi-automatic usability evaluation
-	\item two possible variants of task tree generation 
+	\item  e.g. used in Goals, Operators, Methods and Selection Rules (GOMS), TaskMODL and ConcurTastTrees (Zitat?)
  	\begin{itemize}
 		\item - generated from expected actions at design time
       		\begin{itemize}

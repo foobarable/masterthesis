@@ -1,4 +1,4 @@
-To validate our method we run the alignment approach of task tree generation against the same case study as Harms et al. did.
+To validate our method, we run the alignment approach of task tree generation against the same case study as Harms et al. did.
 The user traces were collected on an application portal of the university.
 Figure \ref{fig:screenshotmasterportal} shows a screenshot of the first page of the portal.
 After logging in, users can fill out multiple forms regarding their personal data as well as upload their CVs.
@@ -21,7 +21,7 @@ Figure \ref{fig:xml} shows the format of one \textit{onclick} event.
       <param name="X" value="662"/>
 </event>
 \end{verbatim}
-\caption{Example of one event in XML structure}
+\caption{Example of one event in XML structure.}
 \label{fig:xml}
 \end{figure}
 
@@ -30,7 +30,7 @@ Figure \ref{fig:xml} shows the format of one \textit{onclick} event.
 	\begin{tabular}{c r r}
 		\toprule
 		\multirow{5}{*}{\textbf{Date, Users \& Sessions}} & Start of Recording & 25 October 2013 \\
-		      & End of Recordning & 7 March 2014 \\
+		      & End of Recording & 7 March 2014 \\
 		      & Recorded Users & 555 \\
 		      & Recorded User Sessions & 4,129 \\
 		      & Considered User Sessions & 3,602 \\
@@ -43,18 +43,18 @@ Figure \ref{fig:xml} shows the format of one \textit{onclick} event.
 			   & Different Events & 1,897 \\
 		\bottomrule
 	\end{tabular}
-	\caption{Case study overview}
+	\caption{Case study overview.}
 	\label{tab:casestudy2}
 \end{table}
 
 We are interested in several aspects of the task tree creation with the alignment approach.
-First of all we want to examine the necessity of the calculation of the distance between non-event-tasks.
+First of all, we want to examine the necessity of the calculation of the distance between non-event-tasks.
 The calculations of those distances are very expensive operations so we want to know if this step could be left out and we still find approximately the same amount of tasks in the same quality.
-After that we study the algorithms termination conditions with the goal to find out if we can terminate the algorithm earlier than proposed in chapter \ref{chap:approach}.
+After that, we study the algorithms termination conditions with the goal to find out if we can terminate the algorithm earlier than proposed in chapter \ref{chap:approach}.
 
 Afterwards, we evaluate the performance of the alignment approach and compare it to the performance of the n-gram approach.
-At last we discuss the created task tree by means of representative task examples after running the alignment approach on the full case study.
-All experiments were executed on a AMD Opteron(TM) Processor 6276 (64 core) with 250GB of ram after we figured out, that a Intel(R) Core(TM) i5-2520M CPU @ 2.50GHz with 8GB of ram is not sufficient to run the alignment approach on large numbers of user sessions.
+At last, we discuss the created task tree by means of representative task examples after running the alignment approach on the full case study.
+All experiments were executed on an AMD Opteron(TM) Processor 6276 (64 core) with 250GB of ram after we figured out that an Intel(R) Core(TM) i5-2520M CPU @ 2.50GHz with 8GB of ram is not sufficient to run the alignment approach on large numbers of user sessions.
 The Java virtual machine was started with the following parameters:
 \begin{itemize}
 	\item -XX:+UseConcMarkSweepGC
@@ -99,7 +99,7 @@ The goal of the preprocessing is to fix several flaws the input data has.
 	\item[correctTabKeyNavigationOrder]\hfill\\ Iterates the provided sequences and corrects the order of events in case of tab key navigation. This is required, as from time to time the event of pressing the tab key for navigation in formulars comes before the text input event in a text input field out of which the tab key navigates.
 \end{description}
 
-\section{Calculation of distances between non-event-tasks}
+\section{Calculation Of Distances Between Non-Event-Tasks}
 \label{sec:noneventtasks}
 In this section we investigate if the calculation between non-event-tasks is neccessary by comparing the two generated task trees, one with the additional calculations and one where
 we set every score involving a non-event-task to zero. 
@@ -119,8 +119,9 @@ With the calculation of the distances long interactions like login or account cr
 Those long tasks do not always represent correct user interactions.
 Figure \ref{fig:noneventaccountcreation} shows a task tree for the first part of the account creation process.
 We can see several subtasks of the task where the subtask does not model user behaviour correctly.
-\texttt{Selection 2691} followed by by \texttt{optionality 2692} makes no sense since the text input of the optionality should just happen after the text input field has been clicked on.
-This happens in \texttt{iteration 1288}, the first child of \texttt{selection 2691}. So the optionality with the text input should actually be in a sequence with \texttt{iteration 1288} as its preceeding element.
+\texttt{Selection 2691} followed by \texttt{optionality 2692} makes no sense since the text input of the optionality should just happen after the text input field has been clicked on.
+This happens in \texttt{iteration 1288}, the first child of \texttt{selection 2691}. 
+The optionality with the text input should actually be in a sequence with \texttt{iteration 1288} as its preceeding element.
 Another part of the task tree that represents no real user behaviour in this example task is \texttt{sequence 1656}.
 The first selection in it gives the possibility to either click or double click on an input field.
 While double clicking a text field is not an effective behaviour of a user, it is still a valid action to achieve his goal to enter his email address.
@@ -163,7 +164,7 @@ A parallel computation of the distances and a clever storage of all already calc
 	\label{tab:resultsnoneventtasks}
 \end{table}
 
-\section{Evaluation of termination conditions}
+\section{Evaluation Of Termination Conditions}
 In this section we will investigate if the algorithm for the task tree generation can be terminated with other conditions than the condition mentioned in chapter \ref{chap:approach}.
 The described behaviour is that the algorithm stops if no further replacements could be performed.
 It has been observed that the most matches are found in the first few repetitions of the sequence detection phase.
@@ -214,7 +215,7 @@ We chose user session sets with the size of 10, 100, 1000 and the full case stud
 We can see that the alignment approach is slower on any size of input data.
 But with the increasing number of user sessions we can observe that the computation time increases notebly.
 As a side note the memory consumption of the alignment approach for the full case study was 46.9GB at its maximum.
-The n-gram approach used 1.3 GB memory for the same data set.
+The n-gram approach used 1.3GB memory for the same data set.
 The memory usage of the other data set sizes were not tracked.
 In summary the alignment approach is definitely more resource intensive than the n-gram approach.
 \begin{table}[h]
@@ -276,9 +277,9 @@ The created tasks differ in quality as well.
 Figure \ref{fig:mixedtasktree} shows a task tree that constists of two different interactions: A login and a password reset.
 The task starts with the tab key pressed on a textfield that is for entering user names. 
 We can see that the actual entering of the username follows at the end of this task tree. 
-First the textfield for the user name is clicked on in \texttt{iteration 210306} and then input is entered in \texttt{iteration 210312}. 
+First, the textfield for the user name is clicked on in \texttt{iteration 210306} and then input is entered in \texttt{iteration 210312}. 
 The task tree should have \texttt{iteration 210306} as the first element in \texttt{sequence 2098703}.
-The wrong order of some interactions can be observed in other examples too.  
+The wrong order of some interactions can be observed in other example, too.  
 
 Another notable point in this task tree is that it combines two different user interactions. 
 The input of the email address is a text input field of the page where users can reset their password while the login button allows users to enter the personal area 
@@ -295,7 +296,7 @@ The alignment approach identifies the different actions correctly as a selection
 The alignment approach for task tree generation creates tasks like shown in figure \ref{fig:preprocessing_needed}.
 It is basically a selection of two sequences, each sequence has two event-tasks. 
 The order of the event-tasks in one sequence is reversed in the other sequence.
-We find numberous tasks of this kind.
+We find numerous tasks of this kind.
 The main issue with tasks like this is that a \texttt{ValueSelection} on an \texttt{input\_checkbox} and a click on this checkbox are just one action by the user but two events are created for this action.
 This task is an example for the necessity of further preprocessing of the input data. 
 Similar as in the \texttt{condenseMouseClicks} preprocessing command, all clicks on an \texttt{input\_checkbox} before or after a value selection should be discarded.
@@ -326,14 +327,15 @@ But since the order in a selection does not matter, both generated task trees ar
 
 \section{Discussion}
 The results of all experiments show that the alignment approach still has to cope with some problems.
-First of all the performance and resource usage are a downside of this approach. 
+First of all, the performance and resource usage are a downside of this approach. 
 The alignment version of autoquest is no longer able to run its task tree generation on common bulk hardware. 
 Even on a server with 64 processors and a large amount of memory our approach is still slower than the n-gram approach implementation, which does not use any parallelisation.
 When calculating distances between non-event-tasks the expected performance is even worse, although it may be worthy calculating those.
 
 Another point is that the alignment approach is not able to identify and merge similar tasks. 
 This problem has also not been solved by Harms at al. yet. 
-There are several ways or metrics on how to determine if two tasks are equal, for example we could calculate the Levenshtein distance of two tasks. 
+There are several ways or metrics on how to determine if two tasks are equal.
+For example we could calculate the Levenshtein distance of two tasks. 
 The calculation of Levenshtein distance is very similar to the Needleman-Wunsch and Smith-Waterman algorithm. 
 It uses a very simple scoring scheme as it just counts the number of insertions, deletions or mismatches between two sequences.
 Once two equal tasks are found they should be merged. 
@@ -342,14 +344,14 @@ We do not propose an algorithm for merging tasks in this work.
 In our case study we also detected that more preprocessing of the input is needed in some cases in order to generate better task trees.
 Clicks on an \texttt{input\_checkbox} before or after a \texttt{ValueSelection} should always be discarded. 
 Further research is needed to find other similar necessary preprocessing steps. 
-An imaginable preprocessing function could be to remove clicks on radio buttons too if \texttt{ValueSelections} on that radio button pre- or succeed the click.
+An imaginable preprocessing function could be to remove clicks on radio button, too if \texttt{ValueSelections} on that radio button pre- or succeed the click.
 
 The last problem we discuss in this section is the wrong order of tasks in a task tree and its consequence of incomplete task trees.
 The task trees we generate are highly dependent on the scores we assign to different components such as substitution matrix and the gap penalty.
 The scores we calculate for substitutions in our substitution matrix are just one possibility of a metric of task similarity. 
 The distance in a GUI-Model is a good start to find similar or related tasks but may not be sufficient to completely model user interactions on specific graphical user interfaces.
 Further research is needed to improve the scoring for substitutions. 
-For example it could be possible to manually create a database of tasks that are usually related to each other.
+For example, it could be possible to manually create a database of tasks that are usually related to each other.
 This database could be used to add more knowledge to the substitution matrix.
 
 It is also interesting to find improvements for the values of the gap penalty, the maximal score of the substitution matrix and the alignment threshold score.
