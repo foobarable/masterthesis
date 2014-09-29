@@ -226,7 +226,7 @@ Since we need all relevant similarities and not just the one with the best score
 	Let T be the threshold score for subalignments.
 	\label{def:treshold}
 \end{definition}
-Once a local subalignment reachesi $T$ it is considered as relevant.
+Once a local subalignment reaches $T$ it is considered as relevant.
 
 We recall from the section \ref{sec:alignments} that alignment algorithms try to find the best possible score between two sequences using the underlying scoring model of substitution and gap scores.
 The most na\"ive approach is to test possible combinations both sequences could be aligned. As usual, this approach is not very feasible because there are
@@ -255,8 +255,8 @@ F(i,j) = max \left\{ \begin{array}{lr}0,&\\F(i-1,j-1)+S(x_i,y_j),&Substitution\\
 Figure \ref{fig:basicalignmentoperations} illustrates this formula.
 The diagonal choice means we align one element from each sequence with each other.
 Therefore, we have to look up the similarity of both elements in the substitution matrix.
-When the score from the upper cell minus the gap penalty is bigger than the diagonal choice a gap will appear at this position in sequence y.
-This is the same for when the option from the left cell is taken, just that the gap will be inserted in sequence x.
+When the score from the upper cell minus the gap penalty is bigger than the diagonal choice a gap will appear at this position in sequence $y$.
+This is the same for when the option from the left cell is taken, just that the gap will be inserted in sequence $x$.
 The option 0 in the equation is to prevent alignment scores to become negative.
 If a match cannot be extended with its score being a positive value, it is better to start a new one later.
 As we can see, it is possible to fill the whole matrix by once the trivial scores, the first row and the first column, have been initialized.

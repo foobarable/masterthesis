@@ -50,7 +50,7 @@ We solve this issue by dividing the workload to as much pieces as processors are
 For each piece we create a thread that computes the assigned alignments with all other user sessions and stores the extracted matches into a shared data structure.
 
 
-\section{Match search, Sorting and Replacement}
+\section{Match Search, Sorting and Replacement}
 Like the alignment process, the search, sort and replace steps take a lot of time and have to be performed in each iteration of the algorithm.
 Again, the solution to those problems is parallelism. The collection of all matches is divided into smaller collections and assigned to a worker thread. These threads
 search "their" matches in all user sessions.

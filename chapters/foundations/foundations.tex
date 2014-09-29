@@ -1,5 +1,5 @@
 In this chapter we will provide and explain the concepts and terms that are used throughout this thesis.
-We will cover the definitions of a GUI and GUI-Model as well as the basic terminology of a task tree, followed by
+We will cover the definitions of a GUI-Model as well as the basic terminology of a task tree, followed by
  information on alignment algorithms and substitution matrixes.
 In the last section we describe the state of the art task tree generation based on n-grams\cite{harms2013}.
 
@@ -10,7 +10,7 @@ A GUI-model is the structure of a graphical user interface. It consists of diffe
 A GUI-model can be displayed as a tree. Figure \ref{fig:guimodel} shows a part of the GUI-model of the case study we will use in chapter \ref{chap:casestudy}.
 \begin{figure}[h]
 	\includegraphics[scale=0.75]{chapters/foundations/guimodel.png}
-	\caption{Excerpt from a GUI Model of the website \texttt{www.app.informatik.uni-goettingen.de}.}
+	\caption{Excerpt from a GUI-Model of the website \texttt{www.app.informatik.uni-goettingen.de}.}
 	\label{fig:guimodel}
 \end{figure}
 
@@ -25,7 +25,7 @@ Users, perfoming actions like clicking or typing, trigger so called events.
 Those events consist of a type and a target.
 The type describes the type of the action that triggered this event (e.g. onclick), the target describes the element in which the GUI the event occurred on.
 The events a user creates can be traced, which is the basic step to gather data that is needed to generate task trees.
-A trace is a list of events in the order they occurred. 
+A trace is a list of events in the order they occured. 
 Table \ref{tab:trace} shows an example of such a trace.
 
 All events in this list and their corresponding actions represent the users intention to achieve a goal, while using the software e.g. buying a book in an online shop. 
@@ -40,6 +40,7 @@ A task tree consists of three different kinds of nodes, the root node, the leaf 
  \begin{tabular}{l|l|l}
 	   Order & Type & Target \\
 	 \hline
+	 
 	 \hline
 	   1. & Left mouse button click &  Textfield with ID username \\
 	   2. & Text input "usr" &  Textfield with ID username \\
@@ -234,7 +235,7 @@ Those event-task instances are stored in the order they were triggered.  This st
 The user sessions used for task tree generation are available in a non-harmonized form,
 meaning equal task instances may not have the same corresponding task assigned. 
 The now following harmonization process sets the correct task to those task instances.
-Fixing the issue of non-harmonized input data before starting any further steps is crucial since it reduces the number of occuring tasks and makes task instances
+Fixing the issue of non-harmonized input data before starting any further steps is crucial since it reduces the number of occurring tasks and makes task instances
 comparable by their tasks. Figure \ref{fig:nonharmonized} shows a non-harmonized user session, figure \ref{fig:harmonized} a session where the tasks of equal task instances have been set accordingly.
 
 After the harmonization step follows the iteration detection, which detects any identical task instances that are direcly adjacent task instances in the user sessions. They occur if a user repeatedly does the same action (e.g. multiple clicks on the same button).
@@ -246,9 +247,9 @@ In contradiction to the task, the iteration instance has, after the replacement,
 The next part of the task tree generation algorithm is the sequence detection.
 For this, the user sessions are scanned for identical subsequences. This is done with the help of a trie data structure.
 The longest subsequence that occured most often is then added to a newly created \textit{sequence} task and again replaced in
-all other user sessions as well. After that, the next most occuring subsequence is replaced. The minimal length of a subsequence is two.
+all other user sessions as well. After that, the next most occurring subsequence is replaced. The minimal length of a subsequence is two.
 If there is more than one subsequence with equal occurrence count, just the longest subsequence is replaced.
-If both occurrences match in count an length, Harms et al. just replace the subsequence occuring first in the ordered list.
+If both occurrences match in count an length, Harms et al. just replace the subsequence occurring first in the ordered list.
 Both steps, iteration detection and sequence detection are repeated until no more iterations or sequences are found.
 Figure \ref{fig:exampletasktreeharms} shows an example of the first repetition of the task tree generation.
 
@@ -284,7 +285,7 @@ Figure \ref{fig:exampletasktreeharms} shows an example of the first repetition o
 \clearpage
 \section{Alignments}
 \label{sec:alignments}
-Alignments are a method in bioinformatics to compare strings or sequences of DNA/RNA/Amino acids and score their similarity.
+Alignments are a method in bioinformatics to compare strings or sequences of DNA, RNA and amino acids and score their similarity.
 It is a very basic method to find out if two sequences are related.
 This is done by arranging those sequences in a way that similar elements of each sequence are aligned together. The biological background of this approach is that
 both sequences have diverged from a common ancestor by a process of mutation and selection\cite{durbin1998}, hence still have common regions. Those regions are called conserved regions, meaning they were resistant to mutation.
