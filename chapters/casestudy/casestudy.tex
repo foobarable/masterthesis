@@ -1,5 +1,5 @@
 To validate our method, we run the alignment approach of task tree generation against the same case study as Harms et al. did.
-The user traces were collected on an application portal of the university.
+The user traces were collected on an application portal of the university of G\"ottingen.
 Figure \ref{fig:screenshotmasterportal} shows a screenshot of the first page of the portal.
 After logging in, users can fill out multiple forms regarding their personal data as well as upload their CVs.
 In this case study 555 user created arround 3602 appropriate user sessions.
@@ -49,8 +49,8 @@ Figure \ref{fig:xml} shows the format of one \textit{onclick} event.
 
 We are interested in several aspects of the task tree creation with the alignment approach.
 First of all, we want to examine the necessity of the calculation of the distance between non-event-tasks.
-The calculations of those distances are very expensive operations so we want to know if this step could be left out and we still find approximately the same amount of tasks in the same quality.
-After that, we study the algorithms termination conditions with the goal to find out if we can terminate the algorithm earlier than proposed in chapter \ref{chap:approach}.
+The calculations of those distances are very expensive operations so we want to know if this step could be left out and if we still find approximately the same amount of tasks in the same quality.
+After that, we study the algorithms termination conditions with the goal is to find out if we can terminate the algorithm earlier than proposed in chapter \ref{chap:approach}.
 
 Afterwards, we evaluate the performance of the alignment approach and compare it to the performance of the n-gram approach.
 At last, we discuss the created task tree by means of representative task examples after running the alignment approach on the full case study.
@@ -101,7 +101,7 @@ The goal of the preprocessing is to fix several flaws the input data has.
 
 \section{Calculation Of Distances Between Non-Event-Tasks}
 \label{sec:noneventtasks}
-In this section we investigate if the calculation between non-event-tasks is neccessary by comparing the two generated task trees, one with the additional calculations and one where
+In this section we investigate if the calculation of the distances between non-event-tasks is neccessary by comparing the two generated task trees, one with the additional calculations and one where
 we set every score involving a non-event-task to zero. 
 Table \ref{tab:resultsnoneventtasks} shows the results of this experiment.
 The calculation of distances between non-event-tasks is not an issue on very small subsets (ca. 40 user sessions) of the case study. 
@@ -110,12 +110,12 @@ A possible solution for this issue is not to calculate the distances between the
 The number of found tasks is significantly higher when the distances between non-event-tasks are calculated but the drawback is that the time to generate the task tree increases drastically as well.
 The quality of the generated task trees also differs.
 One criterion of the quality of task trees is the depth. 
-Each level in a task tree increases the depth by one.
+The depth is defined as that each level in a task tree increases the depth by one,.
 Without the calculated distances the generated task trees have a flatter structure (maximum depth is 6 with calculated distances, 4 without).
 This flat structure can be explained by the reduced number of repetitions of the algorithm because we hit the termination condition earlier in the algorithm.
-An early stop decreases the possibility of inserting new levels into the tasks.
+An early stop decreases the possibility of inserting new levels into the tasks trees.
 
-With the calculation of the distances long interactions like login or account creation procedures can be found.
+With the calculation of the distances enabled longer interactions like login or account creation procedures can be found.
 Those long tasks do not always represent correct user interactions.
 Figure \ref{fig:noneventaccountcreation} shows a task tree for the first part of the account creation process.
 We can see several subtasks of the task where the subtask does not model user behaviour correctly.
@@ -129,7 +129,7 @@ The meaningless part is the text input on the email input field, followed by the
 There are several more examples where the non-event-task distance calculation did not improve the task tree quality.
 In summary, the amount of tasks created but not their quality can be increased by enabling the distance computing.
 
-With the large increase of computational time and the integer limitation of the Java array indexes in mind we will set the score to or from non-event-tasks to zero in all further experiments.
+With the large increase of computational time and the integer limitation of the Java array indexes in mind, we will set the score to or from non-event-tasks to zero in all further experiments.
 The reason for this is that we have an increase in time by over 3800\% even in this very small example and we cannot asume a linear scaling of this increase because nearly all algorithms we use have a complexity of $O(n^2)$.
 A parallel computation of the distances and a clever storage of all already calculated values could as well fix this issue but this could not be addressed in this thesis due to time issues.
 
@@ -211,13 +211,13 @@ If a good solution for the large computation time of the distances is found, thi
 
 \section{Performance Evaluation}
 To evaluate the performance of both the alignment approach and the n-gram approach we run each task tree generation algorithms against different sized subsets of the case study.
-We chose user session sets with the size of 10, 100, 1000 and the full case study. Figure \ref{fig:performance} and table \ref{tab:comparisontasktreegenerations} show the results of this experiment.
+We chose user session sets with the size of 10, 100, 1000 and the full case study (3602). Figure \ref{fig:performance} and table \ref{tab:comparisontasktreegenerations} show the results of this experiment.
 We can see that the alignment approach is slower on any size of input data.
 But with the increasing number of user sessions we can observe that the computation time increases notebly.
-As a side note the memory consumption of the alignment approach for the full case study was 46.9GB at its maximum.
-The n-gram approach used 1.3GB memory for the same data set.
+As a side note the memory consumption of the alignment approach for the full case study was 46.9 GB at its maximum.
+The n-gram approach used 1.3 GB memory for the same data set.
 The memory usage of the other data set sizes were not tracked.
-In summary the alignment approach is definitely more resource intensive than the n-gram approach.
+In summary, the alignment approach is definitely more resource intensive than the n-gram approach.
 \begin{table}[h]
 	\centering
 	\begin{tabular}{ r r r }
@@ -226,14 +226,14 @@ In summary the alignment approach is definitely more resource intensive than the
 		\cmidrule{2-3}
 		\textbf{Number of user sessions} & \textbf{n-gram approach} & \textbf{alignment approach} \\
 		\midrule
-		10 	& 2.655	& 3.141 $\simeq \pi$ \\
+		10 	& 2.655	& 3.141  \\
 		100 	& 5.681	& 12.019\\
-		1000 	& 60.775	& 419.063\\
+		1000 	& 60.77	& 419.063\\
 		\midrule
 		3602 	& 1,417.370 & 5,780.050\\
 		\bottomrule
 	\end{tabular}
-	\caption{Comparison between execution times (seconds) of n-gram approach and alignment supported task tree generation.}
+	\caption{Comparison between execution times (seconds) of n-gram approach and alignment supported task tree generation. Note that the execution time of the alignment approach for 10 user sessions seems to be an approximation of $\pi$. }
 	\label{tab:comparisontasktreegenerations}
 \end{table}
 
@@ -273,7 +273,7 @@ We find around 6000 tasks less than Harms et al. but are able to create tasks of
 \label{tab:taskquantity}
 \end{table}
 
-The created tasks differ in quality as well. 
+The created tasks in the alignment approach differ from those of the n-gram approach in quality as well. 
 Figure \ref{fig:mixedtasktree} shows a task tree that constists of two different interactions: A login and a password reset.
 The task starts with the tab key pressed on a textfield that is for entering user names. 
 We can see that the actual entering of the username follows at the end of this task tree. 
