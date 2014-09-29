@@ -6,10 +6,10 @@ In the last section we describe the state of the art task tree generation based 
 
 \section{GUI-Model}
 \label{sec:foundationguiandguimodel}
-A GUI-model is the structure of a graphical user interface. It consists of different elements those itself can have elements as children.
+A GUI-model is the structure of a graphical user interface. It consists of different elements which themselves can have elements as children.
 A GUI-model can be displayed as a tree. Figure \ref{fig:guimodel} shows a part of the GUI-model of the case study we will use in chapter \ref{chap:casestudy}.
-\begin{figure}
-	\includegraphics[width=\textwidth]{chapters/foundations/guimodel.png}
+\begin{figure}[h]
+	\includegraphics[scale=0.75]{chapters/foundations/guimodel.png}
 	\caption{Excerpt from a GUI Model of the website \texttt{www.app.informatik.uni-goettingen.de}.}
 	\label{fig:guimodel}
 \end{figure}
@@ -25,12 +25,17 @@ Users, perfoming actions like clicking or typing, trigger so called events.
 Those events consist of a type and a target.
 The type describes the type of the action that triggered this event (e.g. onclick), the target describes the element in which the GUI the event occurred on.
 The events a user creates can be traced, which is the basic step to gather data that is needed to generate task trees.
-A trace is a list of events in the order they occurred. Table \ref{tab:trace} shows an example of such a trace.
-All events in this list and their corresponding actions represent the users intention to achieve a goal, while using the software e.g. buying a book
-in an online shop. From now on this goal is named task. This task can consist of several subtasks such as logging in or putting a book into the basket.
-Each subtask itself can again contain further subtasks. From figure \ref{fig:booktree} one can see this results in a tree structure, a so called \textit{task tree}.
+A trace is a list of events in the order they occurred. 
+Table \ref{tab:trace} shows an example of such a trace.
 
-\begin{table}
+All events in this list and their corresponding actions represent the users intention to achieve a goal, while using the software e.g. buying a book in an online shop. 
+From now on this goal is named task. 
+This task can consist of several subtasks such as logging in or putting a book into the basket.
+Each subtask itself can again contain further subtasks. 
+In figure \ref{fig:booktree} we can see this results in a tree structure, a so called \textit{task tree}.
+A task tree consists of three different kinds of nodes, the root node, the leaf nodes and the intermediate nodes.
+
+\begin{table}[h]
 \begin{center}
  \begin{tabular}{l|l|l}
 	   Order & Type & Target \\
@@ -121,8 +126,6 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 	\caption{Simplified and not complete visit of an online book shop as a task tree.}
 	\label{fig:booktree}
 \end{figure}
-
-A task tree consists of three different kinds of nodes:
 \begin{description}
 	\item[Root node]\hfill\\ Represents the overall task which contains all subtasks, the user wants to achieve this goal by his actions/his input. In figure \ref{fig:booktree} the overall task is to buy books at an online shop.
 	\item[Leaf nodes]\hfill\\ Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput)). The tasks at this level are called \textit{event-tasks}. Event-tasks do not have any further children. Some event-tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
@@ -138,7 +141,7 @@ Just one child of a \textit{selection} is allowed to be executed, whereas the on
 Figure \ref{fig:exampletasktree} shows a task tree that represents a login procedure and contains all possible temporal relationships.
 At last, Harms et al. differentiate between a task and an executed task, a task instance.
 Figure \ref{fig:exampletaskinstancetree} shows the main differences between a task and its instance: \textit{selection} instances can have only one child with the task instance that was executed. \textit{Optional} instances have one child if the task was executed and none if the task was not executed. Instances of \textit{iterations} have as many children as often as the task was executed.
-	\begin{figure}
+\begin{figure}[h]
 		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
 		        text centered, anchor=west, text=black, fill=blue!30]
 
@@ -181,7 +184,7 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		\caption{An example for a task tree with temporal relations. Adopted from Harms et al.\cite{harms2013}.}
 		\label{fig:exampletasktree}
 	\end{figure}
-	\begin{figure}
+	\begin{figure}[h]
 		\tikzstyle{every node}=[rectangle, draw=none, rounded corners=1mm,
 		        text centered, anchor=west, text=black, fill=green!30]
 
@@ -223,6 +226,7 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		\label{fig:exampletaskinstancetree}
 	\end{figure}
 
+\clearpage
 \section{State Of The Art Of Trace Based Task Tree Generation}
 The current procedure to generate task trees\cite{harms2013} starts with iterating through the events in the traces and creates an event-task instance for each.
 Those event-task instances are stored in the order they were triggered.  This structure is a so called \textit{user session}.
@@ -248,41 +252,36 @@ If both occurrences match in count an length, Harms et al. just replace the subs
 Both steps, iteration detection and sequence detection are repeated until no more iterations or sequences are found.
 Figure \ref{fig:exampletasktreeharms} shows an example of the first repetition of the task tree generation.
 
+\begin{figure}[h!]
+	\centering
+\begin{subfigure}[hbt]{0.49\textwidth}
+\begin{tabular}{r|ccccc}
+	\text{Task} & 1 & 2 & 3 & 4 & 5\\
+	\hline
+	\text{Task instance} & A & B & C & A & B\\
+\end{tabular}
+
+\caption{Non-harmonized user session.}
+\label{fig:nonharmonized}
+\end{subfigure}
+\begin{subfigure}[hbt]{0.49\textwidth}
+\begin{tabular}{r|ccccc}
+	\text{Task} & 1 & 2 & 3 & \textbf{1} & \textbf{2}\\
+	\hline
+	\text{Task instance} & A & B & C & A & B\\
+\end{tabular}
+\caption{Harmonized user session. Task instance A now always has 1 as its task, task instance B always 2.}
+\label{fig:harmonized}
+\end{subfigure}
+\end{figure}
+
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.85]{chapters/foundations/TaskDetection.pdf}
 	\caption{Example for one repetition of the iteration and sequence detection for task tree generation. Figure from Harms et al.}
 	\label{fig:exampletasktreeharms}
 \end{figure}
-
-\begin{figure}
-	\centering
-\begin{subfigure}[b]{0.4\textwidth}
-
-\[
-\begin{array}{r|ccccc}
-	\text{Task} & 1 & 2 & 3 & 4 & 5\\
-	\hline
-	\text{Task instance} & A & B & C & A & B\\
-\end{array}
-\]
-\caption{Non-harmonized user session.}
-\label{fig:nonharmonized}
-\end{subfigure}
-
-\begin{subfigure}[b]{0.4\textwidth}
-\[
-\begin{array}{r|ccccc}
-	\text{Task} & 1 & 2 & 3 & \textbf{1} & \textbf{2}\\
-	\hline
-	\text{Task instance} & A & B & C & A & B\\
-\end{array}
-\]
-\caption{Harmonized user session. Task instance A now always has 1 as its task, task instance B always 2.}
-\label{fig:harmonized}
-\end{subfigure}
-\end{figure}
-
+\clearpage
 \section{Alignments}
 \label{sec:alignments}
 Alignments are a method in bioinformatics to compare strings or sequences of DNA/RNA/Amino acids and score their similarity.
@@ -325,7 +324,7 @@ Alignment algorithms try to maximize this score.
 
 Alignments can be categorized into global and local alignments. Global alignment algorithms try to match one sequence with the other from start to end, whereas local alignment algorithms try to find the best alignment of subsequences.
 A popular global alignment algorithm is the Needleman-Wunsch algorithm\cite{needleman1970}. For basic local alignments the common algorithm is from Smith and Waterman\cite{waterman1981}.
-
+%\clearpage
 \section{Substitution Matrixes}
 \label{sec:foundationsubstitutionmatrix}
 In the last section we stated that alignment algorithms maximize the total alignment score. Therefore, the underlying scoring model has to be adjusted very carefully, since it practically determines the outcome of the algorithm.
@@ -335,7 +334,6 @@ There are usually two parameters which have to be set: the substitution score an
 	\item Let g be the gap penalty with $g>0$.
 	\label{def:gappenalty}
 \end{definition}
-
 The gap penalty in its most basic version is a constant that has to be manually adjusted so that it fits the problem well.
 A large gap penalty leads to less insertion and deletion occurrences and more substitutions.
 This type of gap scoring is called linear affine gap penalty.

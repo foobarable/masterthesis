@@ -20,7 +20,6 @@ Algorithm \ref{alg:tasktreeoverview} shows the main building blocks and will fun
 \caption{Overview over the task tree generation}
 \label{alg:tasktreeoverview}
 \end{algorithm}
-
 \section{Task Distance Substitution Matrix}
 The harmonization process performed by Harms et al. is also applied to the user sessions in this approach.
 A useful side product of the harmonization is the set of unique tasks.
@@ -188,8 +187,7 @@ Since it is preferred that the score of two equal event-tasks is always larger t
 \end{eqnarray*}
 \label{def:scoreadjusted}
 \end{definition}
-
-
+\clearpage
 \section{Iteration Detection And Substitution Matrix Update}
 The iteration detection from Harms is also suitable for our algorithm and was not altered in any way. It reliably detects iterations and replaces them in the user sessions.
 Before the sequence detection can come into play, the substitution matrix should be updated since there were new iteration tasks created during iteration detection. Those new tasks are stored in a set that contains all newly created tasks.
@@ -198,7 +196,6 @@ After the matrix has been updated, the newly created tasks are merged with the s
 
 The update process is a very expensive procedure. An alternative to this is to set each score between an event-task to a non-event-task and therefore all scores between non-event-tasks to zero.
 Both variants are evaluated in chapter \ref{chap:casestudy}.
-
 \section{Sequence Detection}
 As we figured out at the beginning of this chapter the sequence detection is the part of the algorithm that varies the most from Harms approach.
 It is itself separated in four steps:
@@ -383,7 +380,7 @@ There are some rules that have to be fulfilled to consider a match as found:
 			\caption{Example for rule 2. Will match user session subsequences 16 4 6 and 16 6.}
 		\label{fig:rule2}
 	\end{figure}
-
+	\clearpage
 	\begin{rules}
 	\item If both elements are not equal and the next position contains two equal elements (a) or a gap (b), either of the unequal elements can occur at this position.
 	\end{rules}
