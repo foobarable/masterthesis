@@ -30,7 +30,7 @@ This would save further time, given enough processors.
 	Also, the computation of non-event-tasks is complex itself.
 	First, for each task all event-tasks have to be searched. This is done by implementing the visitor pattern.
 	Then for each found event-task distances have to be calculated or read from the substitution matrix.
-	To solve the issue of retrieving the event-tasks for each task again they are stored to hav
+	To solve the issue of retrieving the event-tasks for each task again they are stored.
 	This process could as well be parallelized but still, storing in the matrix has to be synchronous.
 	Another point is when the matrix is updated, its size has to be enlarged.
 	We could not use dynamic structures like the Java Collection ArrayList because its memory consumption becomes very inefficient when storing a large number of

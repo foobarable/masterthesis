@@ -110,7 +110,7 @@ A possible solution for this issue is not to calculate the distances between the
 The number of found tasks is significantly higher when the distances between non-event-tasks are calculated but the drawback is that the time to generate the task tree increases drastically as well.
 The quality of the generated task trees also differs.
 One criterion of the quality of task trees is the depth. 
-The depth is defined as that each level in a task tree increases the depth by one,.
+The depth is defined as that each level in a task tree increases the depth by one.
 Without the calculated distances the generated task trees have a flatter structure (maximum depth is 6 with calculated distances, 4 without).
 This flat structure can be explained by the reduced number of repetitions of the algorithm because we hit the termination condition earlier in the algorithm.
 An early stop decreases the possibility of inserting new levels into the tasks trees.
@@ -343,7 +343,7 @@ When calculating distances between non-event-tasks the expected performance is e
 Another point is that the alignment approach is not able to identify and merge similar tasks. 
 This problem has also not been solved by Harms at al. yet. 
 There are several ways or metrics on how to determine if two tasks are equal.
-For example we could calculate the Levenshtein distance of two tasks. 
+For example, we could calculate the Levenshtein distance of two tasks. 
 The calculation of Levenshtein distance is very similar to the Needleman-Wunsch and Smith-Waterman algorithm. 
 It uses a very simple scoring scheme as it just counts the number of insertions, deletions or mismatches between two sequences.
 Once two equal tasks are found they should be merged. 

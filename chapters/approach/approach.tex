@@ -57,12 +57,12 @@ Therefore, the basis for our distance calculation is the distance in the GUI-Mod
 \end{figure}
 \begin{definition}
 	\item Let a and b be event-tasks
-\begin{equation*}d(a,b) = d(b,a) = \text{the distance in the GUI model of the targets of event-tasks a and b.}
+\begin{equation*}d(a,b) = d(b,a) = \text{the distance in the GUI-model of the targets of event-tasks a and b.}
 \end{equation*}
 \label{def:guimodeldistanceee}
 \end{definition}
 
-Since the GUI model is a tree, the distance of two targets in a GUI can easily be calculated by finding the common ancestor of the targets and summing up the number of nodes from both the events to this ancestor, including the ancestor.
+Since the GUI-model is a tree, the distance of two targets in a GUI can easily be calculated by finding the common ancestor of the targets and summing up the number of nodes from both the events to this ancestor, including the ancestor.
 \begin{figure}
 \begin{center}
 \begin{tikzpicture}[
@@ -109,11 +109,11 @@ Since the GUI model is a tree, the distance of two targets in a GUI can easily b
 
 \end{tikzpicture}
 \end{center}
-\caption{A HTML GUI model with two nodes (green) the distance will be calculated for.  The number of red nodes is the distance between the green nodes. The common anchestor is the \texttt{<body>} element.}
+\caption{A HTML GUI-model with two nodes (green) the distance will be calculated for.  The number of red nodes is the distance between the green nodes. The common anchestor is the \texttt{<body>} element.}
 \label{fig:guimodeldistance}
 
 \end{figure}
-Figure \ref{fig:guimodeldistance} shows a GUI model with two elements and their common ancestor.
+Figure \ref{fig:guimodeldistance} shows a GUI-model with two elements and their common ancestor.
 
 
 \subsection{Event-Task To Non-Event-Task Similarity}
@@ -164,8 +164,8 @@ To transform a distance into a score we multiply all distance values with $-1$ a
 \end{equation*}
 \label{def:scorewithmaximalscore}
 \end{definition}
-The $k$ constant should be chosen dependent on the underlying GUI model.
-A large $k$ may be chosen for very deeply, nested GUI models whereas for flat GUI models a smaller $k$ seems better.
+The $k$ constant should be chosen dependent on the underlying GUI-model.
+A large $k$ may be chosen for very deeply, nested GUI-models whereas for flat GUI-models a smaller $k$ seems better.
 At last this parameter has to be evaluated and carefully adjusted to the given input data.
 
 The maximal score is reached if the distance between two elements is zero. This happens if we compare two equal elements.
@@ -327,7 +327,7 @@ Figure \ref{fig:durbindpmatrixtraceback} shows a completely filled dynamic progr
 \begin{figure}
 \centering
 \includegraphics[scale=0.4]{chapters/approach/smithwatermanrepeated.png}
-\caption{Figure from Durbin et al.\cite{durbin1998}. The repeat dynamic programming matrix for two example sequences, for $T = 20$. Below the optimal alignment, with total score \mbox{$9 = 29-20$}. There are two separate match regions, with scores 1 and 8. Dots are used to indicate unmatched regions of $x$. The arrows show the traceback process, going back from the total score to the start.}
+\caption{Figure from Durbin et al.\cite{durbin1998}. The repeat dynamic programming matrix for two example sequences, for \mbox{$T = 20$}. Below the optimal alignment, with total score \mbox{$9 = 29-20$}. There are two separate match regions, with scores 1 and 8. Dots are used to indicate unmatched regions of $x$. The arrows show the traceback process, going back from the total score to the start.}
 \label{fig:durbindpmatrixtraceback}
 \end{figure}
 
