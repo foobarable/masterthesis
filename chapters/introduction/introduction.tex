@@ -7,28 +7,16 @@ In this work we will improve existing methods for evaluating collected user inte
 Task trees are one well method to describe and structure the process of users interacting with software. 
 We define them as a type of task model which desribes user actions. There are two possibilities to create a task tree.
 First of all, the designer of the software can generate a task tree at design time to model the expected user behaviour\cite{harms2013}.
+This approach is used by ConcurTaskTrees\cite{paterno2003}, a notation for task model specification and and ReverseAllUI\cite{bandelloni2008}. 
+With those methods it is possible to extract task models from several markup languages like HTML, XHTML or TERESA XML.
 The second option is to generate the task trees based on observed user interactions. 
-Those task trees represent the effective user behaviour.
+Those task trees represent the effective user behaviour. 
+There are several approaches to generate task models automatically from user traces e.g. CRITIQUE\cite{Hudson1999}, which creates GOMS (Goals, Operators, Methods, and Selection rules) models.
+Harms et al. described a method to create task trees from observerd user interactions\cite{harms2013}.
 A comparison of the effective and the expected user behaviour offers the possibility to semi-automatically evaluate the usability of the software.  
 
-The method of task trees to model tasks is used in Goals, Operators, Methods and Selection Rules (GOMS),
-
-
-\begin{itemize}
-	\item  e.g. used in TaskMODL and ConcurTastTrees (Zitat?)
- 	\begin{itemize}
-		\item - generated from expected actions at design time
-      		\begin{itemize}
-			\item Tools/Software: Critique, ReverseAllUI (based on models of GUI) (sources...)
-     			\item Problem: simplified or complete task tree
-		\end{itemize}
-		\item Actual user interactions (e.g. from event driven software)
-     		\begin{itemize} 
-			\item Programming by example: effective user actions recorded
-			\item Problem: usability improved only on a local area
-		\end{itemize}
-	\end{itemize}
-	\item Harms tries to get a more global view on software: usability could be improved by that (cite) 
-\end{itemize}
-
+In this work we try to improve the approach from Harms et al. by applying methods usually common in bioinformatics. 
+We will first cover the foundations needed in the following chapters and then describe our approach in \ref{chap:approach}. 
+After that, we will give some details about the implementation of our approach. 
+In chapter \ref{chap:casestudy} we will evaluate our method by applying it on real data and discuss our results.
 
