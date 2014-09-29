@@ -10,7 +10,7 @@ A GUI-model is the structure of a graphical user interface. It consists of diffe
 A GUI-model can be displayed as a tree. Figure \ref{fig:guimodel} shows a part of the GUI-model of the case study we will use in chapter \ref{chap:casestudy}.
 \begin{figure}
 	\includegraphics[width=\textwidth]{chapters/foundations/guimodel.png}
-	\caption{Excerpt from a GUI Model of the website \texttt{www.app.informatik.uni-goettingen.de}}
+	\caption{Excerpt from a GUI Model of the website \texttt{www.app.informatik.uni-goettingen.de}.}
 	\label{fig:guimodel}
 \end{figure}
 
@@ -45,7 +45,7 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 	   7. &Left mouse button click &  Button with name "login" \\
 	  \end{tabular}
   \end{center}
-  \caption{Example for a trace of the login process of a user.\cite{harms2013}}
+  \caption{Example for a trace of the login process of a user\cite{harms2013}.}
   \label{tab:trace}
   \end{table}
 
@@ -125,7 +125,7 @@ Each subtask itself can again contain further subtasks. From figure \ref{fig:boo
 A task tree consists of three different kinds of nodes:
 \begin{description}
 	\item[Root node]\hfill\\ Represents the overall task which contains all subtasks, the user wants to achieve this goal by his actions/his input. In figure \ref{fig:booktree} the overall task is to buy books at an online shop.
-	\item[Leaf nodes]\hfill\\ Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput). The tasks at this level are called \textit{event-tasks}. Event tasks do not have any further children. Some events tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
+	\item[Leaf nodes]\hfill\\ Actions (e.g. clicking, scrolling, textinput) cause an event (e.g. \textit{onclick} (click) or \textit{onchange} (textinput)). The tasks at this level are called \textit{event-tasks}. Event-tasks do not have any further children. Some event-tasks of \ref{fig:booktree} are for example Input A, Input B and Input C.
 	\item[Intermediate nodes]\hfill\\ Subtasks which are steps towards the overall task. All tasks above the leave nodes are called non-event-tasks. In figure \ref{fig:booktree} the intermediate nodes are login, search, basket and order.
 \end{description}
 Another relevant point is that the order of the executed actions is important.
@@ -217,14 +217,14 @@ Figure \ref{fig:exampletaskinstancetree} shows the main differences between a ta
 		    child [missing] {}
 		    child [missing] {}
 		    child { node { Instance of Optional 1}}
-		    child { node {Click        on   button "login"}};
-		    \end{tikzpicture}
+		    child { node { Click        on   button "login"}};
+		   \end{tikzpicture}
 		\caption{An example for one task tree instance of the task tree in figure \ref{fig:exampletasktree} Adopted from Harms et al.\cite{harms2013}.}
 		\label{fig:exampletaskinstancetree}
 	\end{figure}
 
 \section{State Of The Art Of Trace Based Task Tree Generation}
-The current procedure to generate task trees\cite{harms2013} starts with iterating through the events in the traces and creates an event task instance for each.
+The current procedure to generate task trees\cite{harms2013} starts with iterating through the events in the traces and creates an event-task instance for each.
 Those event-task instances are stored in the order they were triggered.  This structure is a so called \textit{user session}.
 
 The user sessions used for task tree generation are available in a non-harmonized form,
@@ -256,28 +256,31 @@ Figure \ref{fig:exampletasktreeharms} shows an example of the first repetition o
 \end{figure}
 
 \begin{figure}
+	\centering
+\begin{subfigure}[b]{0.4\textwidth}
 
 \[
 \begin{array}{r|ccccc}
-	Task & 1 & 2 & 3 & 4 & 5\\
+	\text{Task} & 1 & 2 & 3 & 4 & 5\\
 	\hline
-	Task instance & A & B & C & A & B\\
+	\text{Task instance} & A & B & C & A & B\\
 \end{array}
 \]
 \caption{Non-harmonized user session.}
 \label{fig:nonharmonized}
-\end{figure}
+\end{subfigure}
 
-\begin{figure}
+\begin{subfigure}[b]{0.4\textwidth}
 \[
 \begin{array}{r|ccccc}
-	Task & 1 & 2 & 3 & \textbf{1} & \textbf{2}\\
+	\text{Task} & 1 & 2 & 3 & \textbf{1} & \textbf{2}\\
 	\hline
-	Task instance & A & B & C & A & B\\
+	\text{Task instance} & A & B & C & A & B\\
 \end{array}
 \]
 \caption{Harmonized user session. Task instance A now always has 1 as its task, task instance B always 2.}
 \label{fig:harmonized}
+\end{subfigure}
 \end{figure}
 
 \section{Alignments}
@@ -288,10 +291,8 @@ This is done by arranging those sequences in a way that similar elements of each
 both sequences have diverged from a common ancestor by a process of mutation and selection\cite{durbin1998}, hence still have common regions. Those regions are called conserved regions, meaning they were resistant to mutation.
 
 In contrast to the persistent regions, differences between sequences can be explained by three processes: \textit{substitution}, which replaces one element with another,  \textit{deletion}, which removes an element and \textit{insertion}, which adds a new element to a sequence.
-Both, insertion and deletion, produce a so called gap in the alignment, since the change just appeared in one of the two aligned sequences. Figure \ref{fig:alignmentbasic} illustrates all possible modifications.
-Each modification can be scored individually but it is common practise to score substitutions with substitution matrixes and have a general gap penalty. The sum of all single scores is the score of the total alignment.
-Alignment algorithms try to maximize this score.
-
+Both, insertion and deletion, produce a so called gap in the alignment, since the change just appeared in one of the two aligned sequences. 
+Figure \ref{fig:alignmentbasic} illustrates all possible modifications.
 \begin{figure}[h]
 	\centering
 	\begin{subfigure}[b]{0.3\textwidth}
@@ -318,6 +319,9 @@ Alignment algorithms try to maximize this score.
 	\caption{Three possible modifications of sequence 2.}
 	\label{fig:alignmentbasic}
 \end{figure}
+Each modification can be scored individually but it is common practise to score substitutions with substitution matrixes and have a general gap penalty. The sum of all single scores is the score of the total alignment.
+Alignment algorithms try to maximize this score.
+
 
 Alignments can be categorized into global and local alignments. Global alignment algorithms try to match one sequence with the other from start to end, whereas local alignment algorithms try to find the best alignment of subsequences.
 A popular global alignment algorithm is the Needleman-Wunsch algorithm\cite{needleman1970}. For basic local alignments the common algorithm is from Smith and Waterman\cite{waterman1981}.
@@ -335,12 +339,12 @@ There are usually two parameters which have to be set: the substitution score an
 The gap penalty in its most basic version is a constant that has to be manually adjusted so that it fits the problem well.
 A large gap penalty leads to less insertion and deletion occurrences and more substitutions.
 This type of gap scoring is called linear affine gap penalty.
-The total gap penalty is $n*g$ with n being the number of gaps and g the gap penalty constant.
-There are different gap penalty models like a different g for opening a new gap and extending an already open gap.
+The total gap penalty is $n*g$ with n being the number of gaps and $g$ the gap penalty constant.
+There are different gap penalty models like a different $g$ for opening a new gap and extending an already open gap.
 In this thesis we will just use the linear affine gap penalty.
 
 The substitution score is a representation of how similar two elements are. The more similar they are, the higher the score will be.
-The score is usually stored in symmetric matrixes, where each cell represents how good or bad it is to substitute element a with element b.
+The score is usually stored in symmetric matrixes, where each cell represents how good or bad it is to substitute an element $a$ with an element $b$.
 The formal definition of the substitution matrix will follow in chapter approach.
 %In biology
 %	In Biology popular matrixes are generated from real DNA data (PAM, BLOSUM) (cite)

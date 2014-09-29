@@ -138,8 +138,8 @@ Formally, definition \ref{def:guimodeldistanceee} has to be modified so that it 
 \end{definition}
 
 \subsection{Non-Event-Task To Non-Event-Task Similarity}
-With Definition \ref{def:guimodeldistanceene} it is simple to compute the distance for two tasks since all that is to do now is to repeat the procedure of finding all event-task children of one task, calculate the distances to the other task and use the mean distances as the total distance.
-The definition of d can be extended so it accepts two non-event-tasks:
+With definition \ref{def:guimodeldistanceene} it is simple to compute the distance for two tasks since all that is to do now is to repeat the procedure of finding all event-task children of one task, calculate the distances to the other task and use the mean distances as the total distance.
+The definition of $d$ can be extended so it accepts two non-event-tasks:
 
 \begin{definition}
 	\item Let c and d be non-event-tasks.
@@ -166,7 +166,7 @@ To transform a distance into a score we multiply all distance values with $-1$ a
 \label{def:scorewithmaximalscore}
 \end{definition}
 The $k$ constant should be chosen dependent on the underlying GUI model.
-A large k may be chosen for very deeply, nested GUI models whereas for flat GUI models a smaller $k$ seems better.
+A large $k$ may be chosen for very deeply, nested GUI models whereas for flat GUI models a smaller $k$ seems better.
 At last this parameter has to be evaluated and carefully adjusted to the given input data.
 
 The maximal score is reached if the distance between two elements is zero. This happens if we compare two equal elements.
@@ -229,7 +229,7 @@ Since we need all relevant similarities and not just the one with the best score
 	Let T be the threshold score for subalignments.
 	\label{def:treshold}
 \end{definition}
-Once a local subalignment reaches T it is considered as relevant.
+Once a local subalignment reachesi $T$ it is considered as relevant.
 
 We recall from the section \ref{sec:alignments} that alignment algorithms try to find the best possible score between two sequences using the underlying scoring model of substitution and gap scores.
 The most na\"ive approach is to test possible combinations both sequences could be aligned. As usual, this approach is not very feasible because there are
@@ -251,7 +251,7 @@ Each cell is computed by getting the best score out of four choices. Prior to en
 	\item Let x,y be two sequences.
 	\item Let F be a matrix with F(i,j) being the best score of aligning $x_1\dots x_i$ with $y_1\dots y_j$.
 \end{definition}
-Then we can compute F by repeatedly applying the following equation:
+Then we can compute $F$ by repeatedly applying the following equation:
 \begin{equation}
 F(i,j) = max \left\{ \begin{array}{lr}0,&\\F(i-1,j-1)+S(x_i,y_j),&Substitution\\F(i-1,j)-g,&Gap\\F(i,j-1)-g.&Gap\\\end{array} \right.
 \end{equation}
@@ -273,9 +273,9 @@ As we can see, it is possible to fill the whole matrix by once the trivial score
 
 \paragraph{Repeated Matches}
 In the improved version of the algorithm a cell in $F$ has a slight different meaning and its computation is a bit more complex.
-The first difference is that this algorithm is asymmetric in the sense of aligning sequence x to sequence y produces a different outcome than aligning sequence y to sequence x.
-Hence, we define y as the pattern we want to search and x as the sequence in which we search all subsequences of y repeatedly.
-This results in a final alignment where x has matched and unmatched regions.
+The first difference is that this algorithm is asymmetric in the sense of aligning sequence $x$ to sequence $y$ produces a different outcome than aligning sequence $y$ to sequence $x$.
+Hence, we define $y$ as the pattern we want to search and $x$ as the sequence in which we search all subsequences of $y$ repeatedly.
+This results in a final alignment where $x$ has matched and unmatched regions.
 
 The algorithm itself is partitioned into three parts:
 
@@ -287,12 +287,12 @@ The algorithm itself is partitioned into three parts:
 
 \subparagraph{Intialization}
 	The initialization step is simple: \\
-	Let m be the length of y
+	Let $m$ be the length of $y$.
 
 	\begin{equation*}
 		F(0,j) = 0 \text{ for } j=0\dotsc m
 	\end{equation*}
-	This differs from the Smith-Waterman algorithm described by Durbin et al.\cite{durbin1998} who just initialize F(0,0) and do not fill the first column. There is no need to initialize the first row because a subalignment will never start with a gap. For the sake of an easy implementation it was better to initialize the first row though.
+	This differs from the Smith-Waterman algorithm described by Durbin et al.\cite{durbin1998} who just initialize $F(0,0)$ and do not fill the first column. There is no need to initialize the first row because a subalignment will never start with a gap. For the sake of an easy implementation it was better to initialize the first row though.
 
 \subparagraph{Recursion}
 The recursion formula for filling the matrix also has the three options for insertion, deletion and substitution as illustrated in figure \ref{fig:basicalignmentoperations}.
@@ -300,14 +300,14 @@ But as we see there are some more options.
 For the first row (equation \ref{eq:firstrow}), which does not represent a real alignment of sequences but denotes the sum of completed match scores, we have two options.
 The first one is to take the value from the last column so we always keep track of the total score.
 This leads to the fact that the value in this line will always stay the same or increase, but never decrease.
-The second choice is taken when a match reaches its maximum and has a minimum score of T.
+The second choice is taken when a match reaches its maximum and has a minimum score of $T$.
 This is the consequence of an ending match meaning this choice is just taken when we calculate the cell for an unmatched region.
-To summarize the equation for the first row we can say the algorithm choses the maximum value of the last column minus T or adopts the value of the preceding cell in the first row, depending which one was larger.
+To summarize the equation for the first row we can say the algorithm choses the maximum value of the last column minus $T$ or adopts the value of the preceding cell in the first row, depending which one was larger.
 
-Equation \ref{eq:otherrows} for the fields aside of the first row is amended by the posibility to begin its alignment score with the value standing in the first row of its own column.
+Equation \ref{eq:otherrows} for the fields aside of the first row is amended by the possibility to begin its alignment score with the value standing in the first row of its own column.
 Durbin et al. do not mention the fact that this makes it easier for subalignments of long sequences to reach the threshold score once a few matches have been found before.
 This issue has not been investigated in this work.
-The total score of the whole alignment is stored in F(i+1,0). This cell lies in an unmatched region of x and contains the sum of all completed match scores.
+The total score of the whole alignment is stored in $F(i+1,0)$. This cell lies in an unmatched region of $x$ and contains the sum of all completed match scores.
 
 
 \begin{equation}
@@ -323,14 +323,14 @@ F(i,j) = max \left\{ \begin{array}{lr}F(i,0),\\F(i-1,j-1)+S(x_i,y_i),\\F(i-1,j)-
 A very important point in dynamic programming algorithms is that we not just calculate and store the maximum score for each subproblem but additionally have to store which choice of the formula produced the highest value.
 This makes it possible to go back from the total best score to the start and find the actual alignment of the whole sequences.
 This process is called traceback.
-The procedure is to go back the path that led to the final score (here in F(i+1,0)).
-After going back, again take the path that led to the previous cell. Repeat this procedure until F(0,0) is reached.
+The procedure is to go back the path that led to the final score (here in $F(i+1,0)$).
+After going back, again take the path that led to the previous cell. Repeat this procedure until $F(0,0)$ is reached.
 Figure \ref{fig:durbindpmatrixtraceback} shows a completely filled dynamic programmic matrix and the traceback path.
 
 \begin{figure}
 \centering
 \includegraphics[scale=0.4]{chapters/approach/smithwatermanrepeated.png}
-\caption{Figure from Durbin et al.\cite{durbin1998}. The repeat dynamic programming matrix for two example sequences, for T = 20. Below the optimal alignment, with total score \mbox{$9 = 29-20$}. There are two separate match regions, with scores 1 and 8. Dots are used to indicate unmatched regions of x. The arrows show the traceback process, going back from the total score to the start.}
+\caption{Figure from Durbin et al.\cite{durbin1998}. The repeat dynamic programming matrix for two example sequences, for $T = 20$. Below the optimal alignment, with total score \mbox{$9 = 29-20$}. There are two separate match regions, with scores 1 and 8. Dots are used to indicate unmatched regions of $x$. The arrows show the traceback process, going back from the total score to the start.}
 \label{fig:durbindpmatrixtraceback}
 \end{figure}
 
