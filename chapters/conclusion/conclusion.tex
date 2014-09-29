@@ -1,5 +1,18 @@
 With the alignment approach for sequence detection we created a valuable framework for task tree generation. 
-The 
+It is able to detect common interactions with a software of multiple users, to weight the importance of each found interaction and to create a task tree that represents
+the users behaviour.
+For the creation of the task tree we use methods adopted from bioinformatics that are able to perform an approximate comparison of sequences of tasks. 
+This alignment method is well configurable by several parameters that influence the quality and amount of created task trees.
+Disadvantages of this approach are performance and resource intensity issues as well as a missing merging of similar task trees.
+
+Further research should focus on the evaluation of the alignment and substitution matrix parameters. 
+It is thinkable that those parameters can be automatically learned or adjusted to the processed data.
+This may allow to find good results on any kind of data. 
+For the learning of the parameters we would need to have a definition of what a ideal task tree for a specific task looks like.
+This leads to the overall question what a good task is in the perspective of usability.
+If such a definition existed, one could optimize the parameters to create a task tree that converges to the ideal task tree.
+
+In summary we can say that once the automatic adjustment of the alignment and substitution matrix parameters is researched the overall goal to have a method for semi-automatic usability evaluation can be achieved.
 
 
 
